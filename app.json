@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Rilaxy",
+    "slug": "rilaxy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0f172a"
+    },
+    "favicon": "./src/assets/favicon.png",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rilaxy.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Rilaxy precisa da câmera para videochamadas e fotos",
+        "NSMicrophoneUsageDescription": "Rilaxy precisa do microfone para chamadas de áudio e vídeo",
+        "NSPhotoLibraryUsageDescription": "Rilaxy precisa da galeria para enviar fotos"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0f172a"
+      },
+      "package": "com.rilaxy.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "plugins": [
+      "expo-audio",
+      "expo-image-picker",
+      "expo-dev-client"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "30a73d67-6fb1-4189-9d3a-9765c19fd3d2"
+      }
+    },
+    "owner": "claudio_faciil"
+  }
+}
