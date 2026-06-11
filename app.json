@@ -6,12 +6,11 @@
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "backgroundColor": "#0f172a"
     },
-    "favicon": "./src/assets/favicon.png",
-    "ios": {
+        "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.rilaxy.app",
       "infoPlist": {
