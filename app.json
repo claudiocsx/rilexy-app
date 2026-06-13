@@ -6,11 +6,11 @@
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "splash": {
       "backgroundColor": "#0f172a"
     },
-        "ios": {
+    "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.rilaxy.app",
       "infoPlist": {
@@ -34,7 +34,8 @@
     "plugins": [
       "expo-audio",
       "expo-image-picker",
-      "expo-dev-client"
+      "expo-dev-client",
+      "expo-video"
     ],
     "extra": {
       "eas": {
