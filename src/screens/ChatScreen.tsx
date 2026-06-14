@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  Image,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +13,10 @@ import {
   Animated,
   AccessibilityInfo,
   PanResponder,
+  Modal,
+  ScrollView,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { AudioRecorder, requestRecordingPermissionsAsync, setAudioModeAsync, RecordingPresets } from 'expo-audio';
 import { Ionicons } from '@expo/vector-icons';
 import { db } from '../services/firebase';
@@ -24,12 +26,19 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useMediaPicker } from '../hooks/useMediaPicker';
-import { uploadChatMedia } from '../services/storage';
+import { uploadEncryptedChatMedia, uploadChatMedia } from '../services/storage';
 import { getMediaUri } from '../services/mediaCache';
 import { colors } from '../theme/colors';
 import { useSettingsStore } from '../store/settingsStore';
+import AvatarImage from '../components/AvatarImage';
 import MediaViewer from '../components/MediaViewer';
 import AudioMessage from '../components/AudioMessage';
+import { decryptAndCache } from '../services/crypto';
+import { useDecryptedMedia } from '../hooks/useDecryptedMedia';
+import LottieView from 'lottie-react-native';
+import StickerPicker from '../components/StickerPicker';
+import ReactionBar from '../components/ReactionBar';
+import { Sticker, getStickerById } from '../data/stickers';
 
 const EMOJIS = ['😀', '😂', '🥰', '😎', '🎉', '❤️', '🔥', '👍', '👏', '💪', '🙏', '✨', '🌟', '💫', '⭐', '🌈', '🎨', '🎵', '🎶', '💜', '🦋', '🌺', '🌸', '🌻', '🍀', '🌊', '⛰️'];
 
@@ -87,11 +96,33 @@ interface MessageBubbleProps {
   onViewOnceMedia: (msg: Message) => void;
   onReply: (msg: Message | null) => void;
   onViewMedia: (uri: string) => void;
+  onReact: (msgId: string, emoji: string, currentReactions: { [emoji: string]: string[] } | undefined) => void;
 }
 
-function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris, onLongPress, onViewOnceMedia, onReply, onViewMedia }: MessageBubbleProps) {
+function DownloadProgress() {
+  const anim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(anim, { toValue: 1, duration: 1200, useNativeDriver: false }),
+        Animated.timing(anim, { toValue: 0, duration: 1200, useNativeDriver: false }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [anim]);
+  const width = anim.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] });
+  return (
+    <View style={styles.downloadingBarTrack}>
+      <Animated.View style={[styles.downloadingBarFill, { width }]} />
+    </View>
+  );
+}
+
+function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris, onLongPress, onViewOnceMedia, onReply, onViewMedia, onReact }: MessageBubbleProps) {
   const mountedRef = useRef(true);
   useEffect(() => { return () => { mountedRef.current = false; }; }, []);
+  const [showReactions, setShowReactions] = useState(false);
 
   const itemRef = useRef(item);
   itemRef.current = item;
@@ -137,7 +168,17 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
   const localUri = uploadingMessages[item.id];
   const cachedUri = cachedUris[item.id];
   const isRemoteUrl = item.mediaUrl && !item.mediaUrl.startsWith('file://') && item.mediaUrl !== '__uploading__';
-  const displayUri = isUploading && localUri ? localUri : isRemoteUrl && cachedUri ? cachedUri : item.mediaUrl;
+  const { uri: decryptedUri, loading: decrypting } = useDecryptedMedia({
+    mediaUrl: isRemoteUrl ? item.mediaUrl : null,
+    mediaKey: item.mediaKey,
+    mediaIv: item.mediaIv,
+    mediaType: item.mediaType,
+  });
+  const hasEncryption = !!(item.mediaKey && item.mediaIv);
+  const displayUri = isUploading && localUri ? localUri
+    : !isUploading && decryptedUri ? decryptedUri
+    : isRemoteUrl && !hasEncryption && cachedUri ? cachedUri
+    : item.mediaUrl;
 
   const isViewOnceMedia = item.viewOnce && item.mediaUrl && item.mediaUrl !== '__uploading__';
   const wasViewedOnce = isViewOnceMedia && item.viewedOnceBy?.includes(user.uid) && item.senderId !== user.uid;
@@ -166,8 +207,24 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
     extrapolate: 'clamp',
   });
 
+  const userReactions = item.reactions
+    ? Object.entries(item.reactions)
+        .filter(([, userIds]) => userIds.includes(user.uid))
+        .map(([emoji]) => emoji)
+    : [];
+
+  const handleReactionTap = (emoji: string) => {
+    onReact(item.id, emoji, item.reactions);
+    setShowReactions(false);
+  };
+
   return (
     <View style={styles.swipeContainer} {...panResponder.panHandlers}>
+      {showReactions && (
+        <View style={[styles.reactionBarOverlay, isMine ? styles.reactionBarOverlayMine : styles.reactionBarOverlayOther]}>
+          <ReactionBar onReact={handleReactionTap} userReactions={userReactions} />
+        </View>
+      )}
       <Animated.View style={[styles.replyIndicator, { opacity: replyIndicatorOpacity }]}>
         <Ionicons name="arrow-forward" size={20} color="#fff" />
         <Text style={styles.replyIndicatorText}>Responder</Text>
@@ -175,15 +232,19 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
       <Animated.View style={{ transform: [{ translateX: swipeTranslate }] }}>
     <TouchableOpacity
       style={[styles.messageRow, isMine && styles.myMessageRow]}
-      onLongPress={() => onLongPress(itemRef.current)}
+      onLongPress={() => { setShowReactions(true); onLongPress(itemRef.current); }}
       delayLongPress={400}
       activeOpacity={0.8}
     >
-      <View style={[styles.messageBubble, isMine ? styles.myBubble : styles.otherBubble, isEmojiMsg && styles.emojiBubble]}>
+      <View style={[styles.messageBubble, isMine ? styles.myBubble : styles.otherBubble, isEmojiMsg && styles.emojiBubble, item.sticker && styles.stickerBubble, item.mediaUrl && styles.mediaBubble]}>
         {item.replyTo && renderReplyPreview()}
+        {item.forwarded && (
+          <Text style={styles.forwardedLabel}>Encaminhada</Text>
+        )}
         {wasViewedOnce ? (
           <View style={styles.viewOncePlaceholder}>
-            <Text style={styles.viewOncePlaceholderText}>Visualização única</Text>
+            <Text style={{ fontSize: 16 }}>👁️</Text>
+            <Text style={styles.viewOncePlaceholderText}>Aberta</Text>
           </View>
         ) : isViewOnceMedia && item.senderId !== user.uid ? (
           <TouchableOpacity onPress={() => onViewOnceMedia(item)} activeOpacity={0.7}>
@@ -194,11 +255,12 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
           </TouchableOpacity>
         ) : displayUri && displayUri !== '__uploading__' ? (
           <View>
-            <TouchableOpacity onPress={() => onViewMedia(displayUri)} activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => onViewMedia(decryptedUri || displayUri)} activeOpacity={0.8}>
               <Image
-                source={{ uri: displayUri }}
+                source={displayUri}
                 style={styles.mediaImage}
-                resizeMode="cover"
+                contentFit="cover"
+                transition={200}
               />
             </TouchableOpacity>
             {(item.viewOnce || isViewOnceMedia) && isMine && (
@@ -212,16 +274,16 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
                 <Text style={styles.sendingText}>Enviando...</Text>
               </View>
             )}
-            {isRemoteUrl && !cachedUri && (
-              <View style={styles.sendingOverlay}>
-                <ActivityIndicator color={colors.white} />
-                <Text style={styles.sendingText}>Baixando...</Text>
+            {isRemoteUrl && decrypting && (
+              <View style={styles.downloadingOverlay}>
+                <DownloadProgress />
+                <Text style={styles.downloadingText}>Baixando...</Text>
               </View>
             )}
           </View>
         ) : isUploading ? (
           <ActivityIndicator color={colors.accent} style={styles.uploadingIndicator} />
-        ) : isRemoteUrl && !cachedUri ? (
+        ) : isRemoteUrl && decrypting ? (
           <ActivityIndicator color={colors.accent} style={styles.uploadingIndicator} />
         ) : null}
         {item.audioUrl && item.audioUrl !== '__uploading__' ? (
@@ -229,7 +291,17 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
         ) : item.audioUrl === '__uploading__' ? (
           <ActivityIndicator color={colors.accent} style={styles.uploadingIndicator} />
         ) : null}
-        {item.deletedForEveryone ? (
+        {item.sticker ? (
+          <View style={styles.stickerContainer}>
+            <LottieView
+              source={{ uri: item.sticker.lottieUrl }}
+              style={styles.stickerAnim}
+              autoPlay
+              loop
+              resizeMode="contain"
+            />
+          </View>
+        ) : item.deletedForEveryone ? (
           <Text style={styles.deletedText}>Mensagem apagada</Text>
         ) : item.text ? (
           isEmojiOnly(item.text) ? (
@@ -242,6 +314,29 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
         ) : null}
         {item.viewOnce && !item.mediaUrl && (
           <Text style={styles.viewOnceHint}>Visualização única</Text>
+        )}
+        {item.reactions && (
+          <View style={styles.reactionBadgeRow}>
+            {Object.entries(item.reactions)
+              .filter(([, userIds]) => userIds.length > 0)
+              .sort(([, a], [, b]) => b.length - a.length)
+              .slice(0, 4)
+              .map(([emoji, userIds]) => (
+                <View key={emoji} style={styles.reactionBadge}>
+                  <Text style={styles.reactionBadgeEmoji}>{emoji}</Text>
+                  {userIds.length > 1 && (
+                    <Text style={styles.reactionBadgeCount}>{userIds.length}</Text>
+                  )}
+                </View>
+              ))}
+          </View>
+        )}
+        {isMine && (
+          <View style={styles.readStatusRow}>
+            <Text style={[styles.readStatusText, (item.readBy || []).length > 1 ? styles.readStatusRead : undefined]}>
+              {(item.readBy || []).filter((id) => id !== user.uid).length > 0 ? '✓✓' : '✓'}
+            </Text>
+          </View>
         )}
       </View>
     </TouchableOpacity>
@@ -256,23 +351,31 @@ interface Message {
   id: string;
   text?: string;
   mediaUrl?: string;
+  mediaKey?: string;
+  mediaIv?: string;
   mediaType?: string;
   senderId: string;
   senderName?: string;
   timestamp: any;
   participants: string[];
+  forwarded?: boolean;
+  readBy?: string[];
   deletedFor?: string[];
   deletedForEveryone?: boolean;
   viewOnce?: boolean;
   viewedOnceBy?: string[];
   audioUrl?: string;
   duration?: number;
+  reactions?: { [emoji: string]: string[] };
+  sticker?: { id: string; emoji: string; name: string; lottieUrl: string };
   replyTo?: {
     id: string;
     text?: string;
     senderId: string;
     senderName: string;
     mediaUrl?: string;
+    mediaKey?: string;
+    mediaIv?: string;
     audioUrl?: string;
   };
 }
@@ -296,9 +399,25 @@ export default function ChatScreen() {
   const [uploadingMessages, setUploadingMessages] = useState<Record<string, string>>({});
   const [cachedUris, setCachedUris] = useState<Record<string, string>>({});
   const [viewerUri, setViewerUri] = useState<string | null>(null);
+  const [peerPhoto, setPeerPhoto] = useState<string | null>(null);
+  const [isPeerTyping, setIsPeerTyping] = useState(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [viewOnceMode, setViewOnceMode] = useState(false);
   const [selectedMsgId, setSelectedMsgId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const searchInputRef = useRef<TextInput>(null);
+  const [forwardMsg, setForwardMsg] = useState<Message | null>(null);
+  const [forwardChats, setForwardChats] = useState<{ id: string; name: string }[]>([]);
+  const [chatDocName, setChatDocName] = useState<string | null>(null);
+  const [showGroupInfo, setShowGroupInfo] = useState(false);
+  const [participantNames, setParticipantNames] = useState<Record<string, string>>({});
+  const [groupSearchQuery, setGroupSearchQuery] = useState('');
+  const [groupSearchResults, setGroupSearchResults] = useState<{ uid: string; name: string }[]>([]);
+  const [editingGroupName, setEditingGroupName] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
   const autoDownload = useSettingsStore((s) => s.autoDownload);
   const flatListRef = useRef<FlatList>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -308,12 +427,33 @@ export default function ChatScreen() {
     const chatRef = db.collection('chats').doc(chatId);
     chatRef.get().then((doc) => {
       if (doc.exists) {
-        setParticipants(doc.data()?.participants || []);
+        const data = doc.data()!;
+        setParticipants(data.participants || []);
+        if (data.name) setChatDocName(data.name);
+        if (!data.participants || data.participants.length === 0) tryInferParticipants();
+      } else {
+        db.collection('groups').doc(chatId).get().then((gDoc) => {
+          if (gDoc.exists) {
+            const gData = gDoc.data()!;
+            setParticipants(gData.participants || []);
+            if (gData.name) setChatDocName(gData.name);
+            if (!gData.participants || gData.participants.length === 0) tryInferParticipants();
+          } else {
+            tryInferParticipants();
+          }
+        }).catch(() => { tryInferParticipants(); });
       }
     }).catch((e) => {
       console.error('Chat doc fetch error:', e);
-      setError('Erro ao carregar conversa');
+      tryInferParticipants();
     });
+    function tryInferParticipants() {
+      const ids = chatId.split('_');
+      if (ids.length >= 2) {
+        const uids = ids.filter((id) => id.length > 10);
+        if (uids.length >= 2) setParticipants(uids);
+      }
+    }
   }, [chatId]);
 
   useEffect(() => {
@@ -335,12 +475,35 @@ export default function ChatScreen() {
   }, [chatId]);
 
   const peerId = participants.find((p) => p !== user?.uid);
+  const isGroup = participants.length > 2;
 
   useEffect(() => {
     if (!user || !peerId) return;
+    db.collection('users').doc(peerId).get().then((doc) => {
+      if (doc.exists) setPeerPhoto(doc.data()?.photoURL || null);
+    }).catch(() => {});
     navigation.setOptions({
+      headerTitle: () => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <AvatarImage photoURL={peerPhoto} name={peerName} size={36} />
+          <View>
+            <Text style={{ color: colors.text, fontSize: 17, fontWeight: '600' }}>{peerName}</Text>
+            {isPeerTyping && (
+              <Text style={{ color: colors.accent, fontSize: 12 }}>digitando...</Text>
+            )}
+          </View>
+        </View>
+      ),
       headerRight: () => (
         <View style={{ flexDirection: 'row', gap: 16, marginRight: 4 }}>
+          <TouchableOpacity onPress={() => { setIsSearching((s) => !s); if (!isSearching) setTimeout(() => searchInputRef.current?.focus(), 100); }}>
+            <Ionicons name={isSearching ? 'close-outline' : 'search-outline'} size={22} color={colors.accent} />
+          </TouchableOpacity>
+          {isGroup && (
+            <TouchableOpacity onPress={() => setShowGroupInfo(true)}>
+              <Ionicons name="information-circle-outline" size={22} color={colors.accent} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('Call', { peerId, peerName, audioOnly: true })
@@ -358,7 +521,48 @@ export default function ChatScreen() {
         </View>
       ),
     });
-  }, [user, peerId, peerName, navigation]);
+  }, [user, peerId, peerName, navigation, peerPhoto, isPeerTyping, isSearching, isGroup]);
+
+  const chatDocRef = db.collection('chats').doc(chatId);
+
+  const emitTyping = useCallback(() => {
+    chatDocRef.update({ [`typing.${user?.uid}`]: new Date().toISOString() }).catch(() => {});
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      chatDocRef.update({ [`typing.${user?.uid}`]: firebase.firestore.FieldValue.delete() }).catch(() => {});
+    }, 2000);
+  }, [chatId, user?.uid]);
+
+  useEffect(() => {
+    const peerUid = participants.find((p) => p !== user?.uid);
+    if (!peerUid) return;
+    const unsub = chatDocRef.onSnapshot((snap) => {
+      const typing = snap.data()?.typing || {};
+      const peerTypingAt = typing[peerUid];
+      if (peerTypingAt) {
+        const diff = Date.now() - new Date(peerTypingAt).getTime();
+        setIsPeerTyping(diff < 3000);
+      } else {
+        setIsPeerTyping(false);
+      }
+    }, () => {});
+    return unsub;
+  }, [chatId, participants, user?.uid]);
+
+  useEffect(() => {
+    if (participants.length === 0) return;
+    const fetchNames = async () => {
+      const map: Record<string, string> = {};
+      const chunks: string[][] = [];
+      for (let i = 0; i < participants.length; i += 10) chunks.push(participants.slice(i, i + 10));
+      for (const chunk of chunks) {
+        const snap = await db.collection('users').where('uid', 'in', chunk).get();
+        snap.docs.forEach((d) => { map[d.id] = d.data().displayName || 'Usuário'; });
+      }
+      setParticipantNames(map);
+    };
+    fetchNames();
+  }, [participants]);
 
   useEffect(() => {
     setUploadingMessages((prev) => {
@@ -372,6 +576,26 @@ export default function ChatScreen() {
       return next;
     });
   }, [messages]);
+
+  const markAsRead = useCallback((msgIds: string[]) => {
+    if (!user || msgIds.length === 0) return;
+    const batch = db.batch();
+    msgIds.forEach((id) => {
+      batch.update(db.collection('chats').doc(chatId).collection('messages').doc(id), {
+        readBy: firebase.firestore.FieldValue.arrayUnion(user.uid),
+      });
+    });
+    batch.commit().catch(() => {});
+  }, [user, chatId]);
+
+  useEffect(() => {
+    const unread = messages
+      .filter((m) => m.senderId !== user?.uid && !(m.readBy || []).includes(user?.uid || ''))
+      .map((m) => m.id);
+    if (unread.length > 0 && unread.length <= 20) {
+      markAsRead(unread);
+    }
+  }, [messages, user?.uid]);
 
   useEffect(() => {
     return () => {
@@ -403,7 +627,7 @@ export default function ChatScreen() {
   }, [messages, autoDownload]);
 
   const sendMessage = async () => {
-    if (!text.trim() || !user || participants.length === 0) return;
+    if (!text.trim() || !user) return;
     setSending(true);
     try {
       const replyData = replyTo ? {
@@ -418,6 +642,7 @@ export default function ChatScreen() {
         text: text.trim(),
         senderId: user.uid,
         participants,
+        readBy: [user.uid],
         timestamp: new Date(),
         replyTo: replyData,
       });
@@ -431,7 +656,7 @@ export default function ChatScreen() {
   };
 
   const sendMediaWithText = useCallback(async () => {
-    if (!selectedMedia || !user || participants.length === 0) return;
+    if (!selectedMedia || !user) return;
 
     setSending(true);
     const media = selectedMedia;
@@ -457,6 +682,7 @@ export default function ChatScreen() {
         mediaType: media.type,
         senderId: user.uid,
         participants,
+        readBy: [user.uid],
         viewOnce: isViewOnce || undefined,
         timestamp: new Date(),
         replyTo: replyData,
@@ -464,9 +690,13 @@ export default function ChatScreen() {
 
       setUploadingMessages((prev) => ({ ...prev, [docRef.id]: media.uri }));
 
-      const publicUrl = await uploadChatMedia(chatId, docRef.id, media.uri);
-      if (publicUrl) {
-        await db.collection('chats').doc(chatId).collection('messages').doc(docRef.id).update({ mediaUrl: publicUrl });
+      const result = await uploadEncryptedChatMedia(chatId, docRef.id, media.uri);
+      if (result) {
+        await db.collection('chats').doc(chatId).collection('messages').doc(docRef.id).update({
+          mediaUrl: result.mediaUrl,
+          mediaKey: result.mediaKey,
+          mediaIv: result.mediaIv,
+        });
       }
     } catch (error: any) {
       Alert.alert('Erro', error?.message || 'Não foi possível enviar a mídia');
@@ -478,41 +708,103 @@ export default function ChatScreen() {
   const handlePickMedia = useCallback(async () => {
     const media = await pickFromGallery();
     if (media) {
-      setSelectedMedia(media);
+      if (media.type === 'image') {
+        navigation.navigate('EditImage', { imageUri: media.uri, chatId, name: peerName });
+      } else {
+        setSelectedMedia(media);
+      }
     }
-  }, [pickFromGallery]);
+  }, [pickFromGallery, navigation, chatId, peerName]);
 
   const handleCancelMedia = useCallback(() => {
     setSelectedMedia(null);
     setViewOnceMode(false);
   }, []);
 
+  useEffect(() => {
+    const editedUri = (route.params as any).editedImageUri;
+    if (editedUri) {
+      setSelectedMedia({ uri: editedUri, type: 'image' });
+      navigation.setParams({ editedImageUri: undefined } as any);
+    }
+  }, [(route.params as any).editedImageUri]);
+
   const handleLongPress = useCallback((msg: Message) => {
     const isMine = msg.senderId === user?.uid;
-    if (!isMine) return;
-
     setSelectedMsgId(msg.id);
-    const options = ['Apagar para mim'];
-    if (!msg.viewOnce) {
-      options.push('Apagar para todos');
-    }
-    options.push('Cancelar');
 
-    Alert.alert('Apagar mensagem', '', [
-      { text: 'Apagar para mim', onPress: () => handleDeleteForMe(msg.id) },
-      ...(msg.viewOnce ? [] : [{ text: 'Apagar para todos' as const, onPress: () => {
-        Alert.alert(
-          'Apagar para todos?',
-          'Esta mensagem será apagada para todos os participantes. Esta ação não pode ser desfeita.',
-          [
-            { text: 'Cancelar', style: 'cancel' },
-            { text: 'Apagar', style: 'destructive', onPress: () => handleDeleteForEveryone(msg.id) },
-          ]
-        );
-      }}]),
-      { text: 'Cancelar', style: 'cancel' },
-    ]);
+    const actions: { text: string; style?: 'destructive' | 'cancel'; onPress: () => void }[] = [
+      { text: 'Encaminhar', onPress: () => handleForward(msg) },
+    ];
+    if (isMine) {
+      actions.push({ text: 'Apagar para mim', style: 'destructive', onPress: () => handleDeleteForMe(msg.id) });
+      if (!msg.viewOnce) {
+        actions.push({ text: 'Apagar para todos', style: 'destructive', onPress: () => {
+          Alert.alert(
+            'Apagar para todos?',
+            'Esta mensagem será apagada para todos. Esta ação não pode ser desfeita.',
+            [
+              { text: 'Cancelar', style: 'cancel' },
+              { text: 'Apagar', style: 'destructive', onPress: () => handleDeleteForEveryone(msg.id) },
+            ]
+          );
+        }});
+      }
+    }
+    actions.push({ text: 'Cancelar', style: 'cancel', onPress: () => {} });
+
+    Alert.alert('Ações', '', actions);
   }, [user]);
+
+  const handleForward = useCallback(async (msg: Message) => {
+    if (!user) return;
+    setForwardMsg(msg);
+    try {
+      const snap = await db.collection('chats')
+        .where('participants', 'array-contains', user.uid)
+        .get();
+      const chats = await Promise.all(snap.docs.map(async (doc) => {
+        const data = doc.data();
+        const otherId = (data.participants || []).find((p: string) => p !== user.uid);
+        let name = data.name || '';
+        if (!name && otherId) {
+          const userSnap = await db.collection('users').doc(otherId).get();
+          name = userSnap.data()?.displayName || 'Usuário';
+        }
+        return { id: doc.id, name };
+      }));
+      setForwardChats(chats.filter((c) => c.id !== chatId));
+    } catch {
+      Alert.alert('Erro', 'Não foi possível carregar os chats');
+    }
+  }, [user, chatId]);
+
+  const executeForward = useCallback(async (targetChatId: string) => {
+    if (!forwardMsg || !user) return;
+    try {
+      const { text, mediaUrl, mediaKey, mediaIv, mediaType, audioUrl, duration, sticker } = forwardMsg;
+      await db.collection('chats').doc(targetChatId).collection('messages').add({
+        text: text || '',
+        mediaUrl: mediaUrl || null,
+        mediaKey: mediaKey || null,
+        mediaIv: mediaIv || null,
+        mediaType: mediaType || null,
+        audioUrl: audioUrl || null,
+        duration: duration || null,
+        sticker: sticker || null,
+        senderId: user.uid,
+        senderName: user.displayName || 'Usuário',
+        participants: [],
+        readBy: [user.uid],
+        forwarded: true,
+        timestamp: new Date(),
+      });
+    } catch {
+      Alert.alert('Erro', 'Não foi possível encaminhar a mensagem');
+    }
+    setForwardMsg(null);
+    setForwardChats([]);
+  }, [forwardMsg, user]);
 
   const handleDeleteForMe = async (messageId: string) => {
     try {
@@ -602,7 +894,7 @@ export default function ChatScreen() {
   };
 
   const sendAudio = async (uri: string, duration: number) => {
-    if (!user || participants.length === 0) return;
+    if (!user) return;
     setSending(true);
     const replyData = replyTo ? {
       id: replyTo.id,
@@ -618,6 +910,7 @@ export default function ChatScreen() {
         duration,
         senderId: user.uid,
         participants,
+        readBy: [user.uid],
         timestamp: new Date(),
         replyTo: replyData,
       });
@@ -633,6 +926,45 @@ export default function ChatScreen() {
     }
   };
 
+  const sendSticker = useCallback(async (sticker: Sticker) => {
+    if (!user) return;
+    setSending(true);
+    setShowStickerPicker(false);
+    useSettingsStore.getState().incrementStickerUsage(sticker.id);
+    try {
+      await db.collection('chats').doc(chatId).collection('messages').add({
+        sticker: { id: sticker.id, emoji: sticker.emoji, name: sticker.name, lottieUrl: sticker.lottieUrl },
+        senderId: user.uid,
+        participants,
+        readBy: [user.uid],
+        timestamp: new Date(),
+      });
+    } catch (error: any) {
+      Alert.alert('Erro', error?.message || 'Não foi possível enviar figurinha');
+    } finally {
+      setSending(false);
+    }
+  }, [user, participants, chatId]);
+
+  const handleReact = useCallback(async (msgId: string, emoji: string, currentReactions: { [emoji: string]: string[] } | undefined) => {
+    if (!user) return;
+    const existing = currentReactions?.[emoji] || [];
+    const alreadyReacted = existing.includes(user.uid);
+    try {
+      if (alreadyReacted) {
+        await db.collection('chats').doc(chatId).collection('messages').doc(msgId).update({
+          [`reactions.${emoji}`]: firebase.firestore.FieldValue.arrayRemove(user.uid),
+        });
+      } else {
+        await db.collection('chats').doc(chatId).collection('messages').doc(msgId).update({
+          [`reactions.${emoji}`]: firebase.firestore.FieldValue.arrayUnion(user.uid),
+        });
+      }
+    } catch (e: any) {
+      console.error('React error:', e?.message);
+    }
+  }, [user, chatId]);
+
   const renderMessage = ({ item }: { item: Message }) => (
     <MessageBubble
       item={item}
@@ -644,6 +976,7 @@ export default function ChatScreen() {
       onViewOnceMedia={handleViewOnceMedia}
       onReply={setReplyTo}
       onViewMedia={setViewerUri}
+      onReact={handleReact}
     />
   );
 
@@ -651,15 +984,37 @@ export default function ChatScreen() {
     (m) => !(m.deletedFor?.includes(user?.uid || ''))
   );
 
+  const filteredMessages = searchQuery.trim()
+    ? visibleMessages.filter((m) => m.text?.toLowerCase().includes(searchQuery.toLowerCase()))
+    : visibleMessages;
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
+      {isSearching && (
+        <View style={styles.searchBar}>
+          <Ionicons name="search-outline" size={18} color={colors.textMuted} />
+          <TextInput
+            ref={searchInputRef}
+            style={styles.searchInput}
+            placeholder="Buscar mensagens..."
+            placeholderTextColor={colors.textMuted}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
       <FlatList
         ref={flatListRef}
-        data={visibleMessages}
+        data={filteredMessages}
         keyExtractor={(item) => item.id}
         renderItem={loading ? () => null : renderMessage}
         style={styles.messageList}
@@ -700,10 +1055,16 @@ export default function ChatScreen() {
         </View>
       )}
       <View style={styles.inputContainer}>
+        {showStickerPicker && (
+          <StickerPicker
+            onSelect={sendSticker}
+            onClose={() => setShowStickerPicker(false)}
+          />
+        )}
         {showEmojiPicker && (
           <View style={styles.emojiGrid}>
             {EMOJIS.map((emoji, idx) => (
-              <TouchableOpacity key={idx} style={styles.emojiItem} onPress={() => { setText((prev) => prev + emoji); setShowEmojiPicker(false); }}>
+              <TouchableOpacity key={idx} style={styles.emojiItem} onPress={() => setText((prev) => prev + emoji)}>
                 <Text style={styles.emojiText}>{emoji}</Text>
               </TouchableOpacity>
             ))}
@@ -712,40 +1073,47 @@ export default function ChatScreen() {
         <TouchableOpacity style={styles.attachButton} onPress={handlePickMedia} disabled={mediaLoading}>
           <Text style={styles.attachText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.emojiButton} onPress={() => setShowEmojiPicker(!showEmojiPicker)}>
+        <TouchableOpacity style={styles.emojiButton} onPress={() => { setShowEmojiPicker(!showEmojiPicker); setShowStickerPicker(false); }}>
           <Text style={styles.emojiButtonText}>😊</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.emojiButton} onPress={() => { setShowStickerPicker(!showStickerPicker); setShowEmojiPicker(false); }}>
+          <Text style={styles.emojiButtonText}>🎯</Text>
         </TouchableOpacity>
         {selectedMedia ? (
           <View style={styles.mediaPreviewContainer}>
-            <Image source={{ uri: selectedMedia.uri }} style={styles.mediaPreview} />
-            <TouchableOpacity style={styles.cancelMediaButton} onPress={handleCancelMedia}>
-              <Text style={styles.cancelMediaText}>X</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.viewOnceButtonMedia, viewOnceMode && styles.viewOnceButtonActive]}
-              onPress={() => setViewOnceMode(!viewOnceMode)}
-            >
-              <Text style={[styles.viewOnceButtonText, viewOnceMode && styles.viewOnceButtonTextActive]}>👁️</Text>
-            </TouchableOpacity>
-            <TextInput
-              style={styles.mediaInput}
-              placeholder="Adicione uma legenda..."
-              placeholderTextColor={colors.textMuted}
-              value={text}
-              onChangeText={setText}
-              multiline
-            />
-            <TouchableOpacity
-              style={[styles.sendMediaButton, sending && styles.disabled]}
-              onPress={sendMediaWithText}
-              disabled={sending}
-            >
-              {sending ? (
-                <ActivityIndicator size="small" color={colors.bg} />
-              ) : (
-                <Ionicons name="send" size={20} color={colors.text} />
-              )}
-            </TouchableOpacity>
+            <View style={styles.mediaPreviewImageWrap}>
+              <Image source={selectedMedia.uri} style={styles.mediaPreviewImage} contentFit="cover" transition={200} />
+              <TouchableOpacity style={styles.mediaPreviewCancel} onPress={handleCancelMedia}>
+                <Ionicons name="close" size={20} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.viewOnceToggleBtn, viewOnceMode && styles.viewOnceToggleBtnActive]}
+                onPress={() => setViewOnceMode(!viewOnceMode)}
+              >
+                <Text style={[styles.viewOnceToggleNum, viewOnceMode && styles.viewOnceToggleNumActive]}>1</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.mediaInputRow}>
+              <TextInput
+                style={styles.mediaInput}
+                placeholder="Adicione uma legenda..."
+                placeholderTextColor={colors.textMuted}
+                value={text}
+                onChangeText={(val) => { setText(val); emitTyping(); }}
+                multiline
+              />
+              <TouchableOpacity
+                style={[styles.sendMediaButton, sending && styles.disabled]}
+                onPress={sendMediaWithText}
+                disabled={sending}
+              >
+                {sending ? (
+                  <ActivityIndicator size="small" color={colors.bg} />
+                ) : (
+                  <Ionicons name="send" size={20} color={colors.text} />
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         ) : isRecording ? (
           <View style={styles.recordingContainer}>
@@ -764,7 +1132,9 @@ export default function ChatScreen() {
               placeholder="Mensagem"
               placeholderTextColor={colors.textMuted}
               value={text}
-              onChangeText={setText}
+              onChangeText={(val) => { setText(val); emitTyping(); }}
+
+              
               multiline
             />
             {text.trim() ? (
@@ -788,6 +1158,149 @@ export default function ChatScreen() {
         )}
       </View>
       <MediaViewer visible={!!viewerUri} uri={viewerUri} onClose={() => setViewerUri(null)} />
+      <Modal visible={forwardMsg !== null} transparent animationType="slide" onRequestClose={() => { setForwardMsg(null); setForwardChats([]); }}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.forwardModal}>
+            <View style={styles.forwardModalHeader}>
+              <Text style={styles.forwardModalTitle}>Encaminhar para</Text>
+              <TouchableOpacity onPress={() => { setForwardMsg(null); setForwardChats([]); }}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            {forwardChats.length === 0 ? (
+              <View style={styles.forwardEmpty}>
+                <ActivityIndicator color={colors.accent} />
+              </View>
+            ) : (
+              <ScrollView>
+                {forwardChats.map((c) => (
+                  <TouchableOpacity key={c.id} style={styles.forwardChatItem} onPress={() => executeForward(c.id)}>
+                    <View style={styles.forwardAvatar}>
+                      <Text style={styles.forwardAvatarText}>{c.name[0]?.toUpperCase() || '?'}</Text>
+                    </View>
+                    <Text style={styles.forwardChatName}>{c.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={showGroupInfo} transparent animationType="slide" onRequestClose={() => setShowGroupInfo(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.forwardModal}>
+            <View style={styles.forwardModalHeader}>
+              <Text style={styles.forwardModalTitle}>{chatDocName || 'Informações do grupo'}</Text>
+              <TouchableOpacity onPress={() => setShowGroupInfo(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.groupInfoSection}>
+              <Text style={styles.groupInfoLabel}>Participantes ({participants.length})</Text>
+              {participants.map((pid) => {
+                const pName = pid === user?.uid ? 'Você' : participantNames[pid] || 'Carregando...';
+                const isRemovable = isGroup && pid !== user?.uid;
+                return (
+                  <View key={pid} style={styles.groupParticipantRow}>
+                    <View style={styles.forwardAvatar}>
+                      <Text style={styles.forwardAvatarText}>{(pName[0] || '?').toUpperCase()}</Text>
+                    </View>
+                    <Text style={styles.forwardChatName}>{pName}</Text>
+                    {isRemovable && (
+                      <TouchableOpacity style={styles.removeParticipantBtn} onPress={() => {
+                        Alert.alert('Remover participante?', `${pName} será removido do grupo.`, [
+                          { text: 'Cancelar', style: 'cancel' },
+                          { text: 'Remover', style: 'destructive', onPress: async () => {
+                            try {
+                              await db.collection('chats').doc(chatId).update({
+                                participants: firebase.firestore.FieldValue.arrayRemove(pid),
+                              });
+                              setParticipants((prev) => prev.filter((p) => p !== pid));
+                            } catch { Alert.alert('Erro', 'Não foi possível remover'); }
+                          }},
+                        ]);
+                      }}>
+                        <Ionicons name="close-outline" size={20} color={colors.textMuted} />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                );
+              })}
+              {isGroup && (
+                <>
+                  <TextInput
+                    style={styles.groupSearchInput}
+                    placeholder="Adicionar participante (digite o nome)..."
+                    placeholderTextColor={colors.textMuted}
+                    value={groupSearchQuery}
+                    onChangeText={async (val) => {
+                      setGroupSearchQuery(val);
+                      if (val.trim().length < 2) { setGroupSearchResults([]); return; }
+                      const snap = await db.collection('users')
+                        .where('displayNameLower', '>=', val.toLowerCase())
+                        .where('displayNameLower', '<=', val.toLowerCase() + '\uf8ff')
+                        .limit(5).get();
+                      setGroupSearchResults(snap.docs.map((d) => ({ uid: d.id, name: d.data().displayName || 'Usuário' })));
+                    }}
+                  />
+                  {groupSearchResults.map((r) => (
+                    <TouchableOpacity key={r.uid} style={styles.groupParticipantRow} onPress={async () => {
+                      try {
+                        await db.collection('chats').doc(chatId).update({
+                          participants: firebase.firestore.FieldValue.arrayUnion(r.uid),
+                        });
+                        await db.collection('groups').doc(chatId).update({
+                          participants: firebase.firestore.FieldValue.arrayUnion(r.uid),
+                        }).catch(() => {});
+                        setParticipants((prev) => [...prev, r.uid]);
+                        setGroupSearchQuery('');
+                        setGroupSearchResults([]);
+                      } catch { Alert.alert('Erro', 'Não foi possível adicionar'); }
+                    }}>
+                      <View style={styles.forwardAvatar}>
+                        <Text style={styles.forwardAvatarText}>{(r.name[0] || '?').toUpperCase()}</Text>
+                      </View>
+                      <Text style={styles.forwardChatName}>{r.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </>
+              )}
+              {isGroup && (
+                <TouchableOpacity style={styles.addParticipantBtn} onPress={() => {
+                  setEditingGroupName(true);
+                  setNewGroupName(chatDocName || '');
+                }}>
+                  <Ionicons name="pencil-outline" size={20} color={colors.accent} />
+                  <Text style={styles.addParticipantText}>Editar nome do grupo</Text>
+                </TouchableOpacity>
+              )}
+              {editingGroupName && (
+                <View style={styles.editNameRow}>
+                  <TextInput
+                    style={styles.groupSearchInput}
+                    value={newGroupName}
+                    onChangeText={setNewGroupName}
+                    placeholder="Novo nome do grupo"
+                    placeholderTextColor={colors.textMuted}
+                    autoFocus
+                  />
+                  <TouchableOpacity onPress={async () => {
+                    if (!newGroupName.trim()) return;
+                    try {
+                      await db.collection('chats').doc(chatId).update({ name: newGroupName.trim() });
+                      await db.collection('groups').doc(chatId).update({ name: newGroupName.trim() }).catch(() => {});
+                      setChatDocName(newGroupName.trim());
+                      setEditingGroupName(false);
+                    } catch { Alert.alert('Erro', 'Não foi possível alterar o nome'); }
+                  }}>
+                    <Text style={styles.saveNameText}>Salvar</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -839,6 +1352,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
   },
+  mediaBubble: {
+    maxWidth: '82%',
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+  },
   myBubble: {
     backgroundColor: colors.accentDeep,
   },
@@ -864,10 +1382,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   mediaImage: {
-    width: 200,
-    height: 150,
+    width: '100%',
+    aspectRatio: 1.33,
     borderRadius: 8,
     marginBottom: 4,
+    alignSelf: 'flex-start',
   },
   sendingOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -880,6 +1399,30 @@ const styles = StyleSheet.create({
   sendingText: {
     color: colors.white,
     fontSize: 12,
+  },
+  downloadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+  },
+  downloadingText: {
+    color: colors.white,
+    fontSize: 11,
+  },
+  downloadingBarTrack: {
+    width: '60%',
+    height: 3,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  downloadingBarFill: {
+    height: '100%',
+    backgroundColor: colors.accent,
+    borderRadius: 2,
   },
   uploadingIndicator: {
     padding: 20,
@@ -968,14 +1511,19 @@ const styles = StyleSheet.create({
   viewOnceButtonTextActive: {
     opacity: 1,
   },
+  stickerBubble: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 4,
+    paddingVertical: 4,
+  },
   deletedText: {
     color: colors.textMuted,
     fontSize: 13,
     fontStyle: 'italic',
   },
   viewOnceBlur: {
-    width: 200,
-    height: 150,
+    width: '100%',
+    aspectRatio: 1.33,
     borderRadius: 8,
     backgroundColor: colors.elevated,
     justifyContent: 'center',
@@ -984,11 +1532,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   viewOnceIcon: {
-    fontSize: 32,
+    fontSize: 40,
   },
   viewOnceLabel: {
     color: colors.accent,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
   },
   viewOnceBadge: {
@@ -1005,14 +1553,16 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   viewOncePlaceholder: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
   },
   viewOncePlaceholderText: {
     color: colors.textMuted,
     fontSize: 13,
-    fontStyle: 'italic',
   },
   viewOnceHint: {
     color: colors.textMuted,
@@ -1032,31 +1582,64 @@ const styles = StyleSheet.create({
   },
   mediaPreviewContainer: {
     flex: 1,
+  },
+  mediaPreviewImageWrap: {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: 1.4,
+    maxHeight: 260,
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 8,
+    backgroundColor: colors.elevated,
+  },
+  mediaPreviewImage: {
+    width: '100%',
+    height: '100%',
+  },
+  mediaPreviewCancel: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  viewOnceToggleBtn: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.4)',
+    zIndex: 2,
+  },
+  viewOnceToggleBtnActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  viewOnceToggleNum: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    opacity: 0.7,
+  },
+  viewOnceToggleNumActive: {
+    opacity: 1,
+  },
+  mediaInputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
-  mediaPreview: {
-    width: 40,
-    height: 40,
-    borderRadius: 6,
-  },
-  cancelMediaButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: colors.destructive,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: -6,
-    left: -6,
-    zIndex: 1,
-  },
-  cancelMediaText: {
-    color: colors.white,
-    fontSize: 10,
-    fontWeight: 'bold',
   },
   mediaInput: {
     flex: 1,
@@ -1067,13 +1650,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 15,
     maxHeight: 100,
-  },
-  sendButton: {
-    marginLeft: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
   },
   sendMediaButton: {
     backgroundColor: colors.accent,
@@ -1201,6 +1777,48 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
+  reactionBarOverlay: {
+    position: 'absolute',
+    zIndex: 10,
+    top: -48,
+  },
+  reactionBarOverlayMine: {
+    right: 0,
+  },
+  reactionBarOverlayOther: {
+    left: 0,
+  },
+  reactionBadgeRow: {
+    flexDirection: 'row',
+    gap: 2,
+    marginTop: 4,
+    flexWrap: 'wrap',
+  },
+  reactionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 10,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    gap: 2,
+  },
+  reactionBadgeEmoji: {
+    fontSize: 12,
+  },
+  reactionBadgeCount: {
+    color: colors.textMuted,
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  stickerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stickerAnim: {
+    width: 120,
+    height: 120,
+  },
   swipeContainer: {
     position: 'relative',
   },
@@ -1221,5 +1839,148 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     marginTop: 2,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'flex-end',
+  },
+  forwardModal: {
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    maxHeight: '60%',
+    paddingBottom: 24,
+  },
+  forwardModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  forwardModalTitle: {
+    color: colors.text,
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  forwardEmpty: {
+    padding: 40,
+    alignItems: 'center',
+  },
+  forwardChatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  forwardAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  forwardAvatarText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  forwardChatName: {
+    color: colors.text,
+    fontSize: 16,
+  },
+  groupInfoSection: {
+    padding: 16,
+  },
+  groupInfoLabel: {
+    color: colors.textMuted,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  groupParticipantRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 8,
+  },
+  removeParticipantBtn: {
+    marginLeft: 'auto',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addParticipantBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  addParticipantText: {
+    color: colors.accent,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  groupSearchInput: {
+    backgroundColor: colors.elevated,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: colors.text,
+    fontSize: 14,
+    marginTop: 8,
+  },
+  editNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  saveNameText: {
+    color: colors.accent,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  readStatusRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 2,
+  },
+  readStatusText: {
+    fontSize: 12,
+    color: colors.textMuted,
+  },
+  readStatusRead: {
+    color: colors.accent,
+  },
+  forwardedLabel: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontStyle: 'italic',
+    marginBottom: 2,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginHorizontal: 12,
+    marginVertical: 8,
+    backgroundColor: colors.elevated,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  searchInput: {
+    flex: 1,
+    color: colors.text,
+    fontSize: 15,
+    paddingVertical: 0,
   },
 });
