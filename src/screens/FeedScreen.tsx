@@ -76,7 +76,10 @@ export default function FeedScreen() {
       .map((p) =>
         decryptAndCache(p.mediaUrl!, p.mediaKey!, p.mediaIv!, p.mediaType || 'image/jpeg')
           .then((uri) => ({ id: p.id, uri }))
-          .catch(() => ({ id: p.id, uri: null }))
+          .catch((err) => {
+            console.error('decryptAndCache failed for post', p.id, err);
+            return { id: p.id, uri: p.mediaUrl };
+          })
       );
     if (pending.length > 0) {
       Promise.all(pending).then((results) => {
@@ -168,8 +171,7 @@ export default function FeedScreen() {
 
   const renderPost = ({ item }: { item: Post }) => {
     const liked = item.likedBy?.includes(user?.uid || '') ?? false;
-    const isEncrypted = !!(item.mediaKey && item.mediaIv);
-    const postUri = decryptedUris[item.id] || (!isEncrypted ? item.mediaUrl : null);
+    const postUri = decryptedUris[item.id] || item.mediaUrl;
     return (
     <View style={styles.postCard}>
       <View style={styles.postHeader}>
@@ -209,10 +211,6 @@ export default function FeedScreen() {
             )}
           </View>
         </TouchableOpacity>
-      ) : isEncrypted ? (
-        <View style={styles.decryptingContainer}>
-          <ActivityIndicator color={colors.accent} />
-        </View>
       ) : null}
       {item.text ? (
         <Text style={styles.postText}>{item.text}</Text>
@@ -394,12 +392,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 12,
     fontWeight: '600',
-  },
-  decryptingContainer: {
-    width: '100%',
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
   },
 });
