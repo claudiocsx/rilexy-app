@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AvatarImage from '../components/AvatarImage';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
@@ -31,11 +33,22 @@ export default function ChatsScreen() {
   const navigation = useNavigation<ChatNav>();
   const [chats, setChats] = useState<Chat[]>([]);
   const [userNames, setUserNames] = useState<Record<string, string>>({});
+  const [userPhotos, setUserPhotos] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryKey, setRetryKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setRetryKey((k) => k + 1);
+    setTimeout(() => setRefreshing(false), 500);
+  }, []);
 
   useEffect(() => {
     if (!user) return;
+    setLoading(true);
+    setError(null);
     return db.collection('chats')
       .where('participants', 'array-contains', user.uid)
       .orderBy('lastMessageTime', 'desc')
@@ -52,7 +65,7 @@ export default function ChatsScreen() {
       setError('Erro ao carregar conversas');
       console.error('Chats onSnapshot error:', err);
     });
-  }, [user]);
+  }, [user, retryKey]);
 
   useEffect(() => {
     if (!user || chats.length === 0) return;
@@ -73,6 +86,7 @@ export default function ChatsScreen() {
         for (let i = 0; i < uniqueIds.length; i += 10) {
           chunks.push(uniqueIds.slice(i, i + 10));
         }
+        const photoMap: Record<string, string> = {};
         for (const chunk of chunks) {
           const snap = await db
             .collection('users')
@@ -81,9 +95,11 @@ export default function ChatsScreen() {
           snap.docs.forEach((doc) => {
             const data = doc.data();
             nameMap[doc.id] = data.displayName || 'Usuário';
+            if (data.photoURL) photoMap[doc.id] = data.photoURL;
           });
         }
         setUserNames((prev) => ({ ...prev, ...nameMap }));
+        setUserPhotos((prev) => ({ ...prev, ...photoMap }));
       } catch (e) {
         console.error('fetchNames error:', e);
       }
@@ -97,6 +113,12 @@ export default function ChatsScreen() {
     return userNames[otherId || ''] || 'Usuário';
   };
 
+  const getChatPhoto = (chat: Chat): string | null => {
+    if (chat.name) return null;
+    const otherId = chat.participants.find((id) => id !== user?.uid);
+    return userPhotos[otherId || ''] || null;
+  };
+
   const renderChat = ({ item }: { item: Chat }) => (
     <TouchableOpacity
       style={styles.chatItem}
@@ -105,9 +127,7 @@ export default function ChatsScreen() {
       }
     >
       <View style={styles.avatar}>
-        <Text style={styles.avatarText}>
-          {getChatName(item)[0].toUpperCase()}
-        </Text>
+        <AvatarImage photoURL={getChatPhoto(item)} name={getChatName(item)} size={48} />
       </View>
       <View style={styles.chatInfo}>
         <Text style={styles.chatName}>{getChatName(item)}</Text>
@@ -122,14 +142,14 @@ export default function ChatsScreen() {
 
   return (
     <View style={styles.container}>
-      {loading ? (
+      {loading && !refreshing ? (
         <View style={styles.center}>
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
       ) : error ? (
         <View style={styles.center}>
           <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity onPress={() => setError(null)}>
+          <TouchableOpacity onPress={() => onRefresh()}>
             <Text style={styles.retryText}>Tentar novamente</Text>
           </TouchableOpacity>
         </View>
@@ -146,6 +166,7 @@ export default function ChatsScreen() {
           data={chats}
           keyExtractor={(item) => item.id}
           renderItem={renderChat}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}
         />
       )}
       <TouchableOpacity

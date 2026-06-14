@@ -4,13 +4,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
   Dimensions,
   Animated,
   Easing,
   AccessibilityInfo,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { useAuth } from '../contexts/AuthContext';
 import { StoryGroup, markViewed } from '../services/stories';
 import { colors } from '../theme/colors';
@@ -195,9 +195,10 @@ export default function StoryViewer({ visible, groups, startIndex, onClose }: Pr
         >
           {currentStory?.mediaUrl ? (
             <Image
-              source={{ uri: currentStory.mediaUrl }}
+              source={currentStory.mediaUrl}
               style={styles.media}
-              resizeMode="contain"
+              contentFit="contain"
+              transition={300}
             />
           ) : (
             <Animated.View style={[styles.textStory, { backgroundColor: currentStory?.bgColor || colors.bg, opacity: fadeAnim }]}>

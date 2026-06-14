@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../theme/colors';
+import { getColors } from '../theme/colors';
 import { getCacheSize, clearCache } from '../services/mediaCache';
 import { useSettingsStore, AutoDownload } from '../store/settingsStore';
 
@@ -23,8 +17,11 @@ const AUTO_DOWNLOAD_OPTIONS: AutoDownload[] = ['always', 'wifi', 'never'];
 export default function SettingsScreen() {
   const autoDownload = useSettingsStore((s) => s.autoDownload);
   const setAutoDownload = useSettingsStore((s) => s.setAutoDownload);
+  const theme = useSettingsStore((s) => s.theme);
+  const toggleTheme = useSettingsStore((s) => s.toggleTheme);
   const [cacheSize, setCacheSize] = useState(0);
   const [clearing, setClearing] = useState(false);
+  const c = getColors(theme);
 
   useEffect(() => {
     getCacheSize().then(setCacheSize).catch(() => {});
@@ -62,22 +59,50 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Mídia</Text>
+    <View style={{ flex: 1, backgroundColor: c.bg, padding: 16 }}>
+      <View style={{
+        backgroundColor: c.surface, borderRadius: 12, padding: 16, marginBottom: 16,
+        borderWidth: 1, borderColor: c.borderLight,
+      }}>
+        <Text style={{
+          color: c.accent, fontSize: 14, fontWeight: 'bold', letterSpacing: 1,
+          marginBottom: 16, textTransform: 'uppercase',
+        }}>Aparência</Text>
+        <TouchableOpacity onPress={toggleTheme} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Ionicons name={theme === 'dark' ? 'moon-outline' : 'sunny-outline'} size={22} color={c.accent} />
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Modo {theme === 'dark' ? 'escuro' : 'claro'}</Text>
+          <Text style={{ color: c.textMuted, fontSize: 14 }}>{theme === 'dark' ? '🌙' : '☀️'}</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.row}>
-          <Ionicons name="download-outline" size={22} color={colors.accent} />
-          <Text style={styles.rowLabel}>Download automático</Text>
+      <View style={{
+        backgroundColor: c.surface, borderRadius: 12, padding: 16, marginBottom: 16,
+        borderWidth: 1, borderColor: c.borderLight,
+      }}>
+        <Text style={{
+          color: c.accent, fontSize: 14, fontWeight: 'bold', letterSpacing: 1,
+          marginBottom: 16, textTransform: 'uppercase',
+        }}>Mídia</Text>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+          <Ionicons name="download-outline" size={22} color={c.accent} />
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Download automático</Text>
         </View>
-        <View style={styles.optionsRow}>
+        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
           {AUTO_DOWNLOAD_OPTIONS.map((opt) => (
             <TouchableOpacity
               key={opt}
-              style={[styles.optionChip, autoDownload === opt && styles.optionChipActive]}
+              style={{
+                paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+                backgroundColor: autoDownload === opt ? c.accentDark : c.elevated,
+                borderWidth: 1, borderColor: autoDownload === opt ? c.accent : c.borderLight,
+              }}
               onPress={() => setAutoDownload(opt)}
             >
-              <Text style={[styles.optionChipText, autoDownload === opt && styles.optionChipTextActive]}>
+              <Text style={{
+                color: autoDownload === opt ? c.text : c.textMuted, fontSize: 14,
+                fontWeight: autoDownload === opt ? 'bold' : 'normal',
+              }}>
                 {autoLabel[opt]}
               </Text>
             </TouchableOpacity>
@@ -85,117 +110,52 @@ export default function SettingsScreen() {
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Cache</Text>
+      <View style={{
+        backgroundColor: c.surface, borderRadius: 12, padding: 16, marginBottom: 16,
+        borderWidth: 1, borderColor: c.borderLight,
+      }}>
+        <Text style={{
+          color: c.accent, fontSize: 14, fontWeight: 'bold', letterSpacing: 1,
+          marginBottom: 16, textTransform: 'uppercase',
+        }}>Cache</Text>
 
-        <View style={styles.row}>
-          <Ionicons name="archive-outline" size={22} color={colors.accent} />
-          <Text style={styles.rowLabel}>Mídias em cache</Text>
-          <Text style={styles.rowValue}>{formatBytes(cacheSize)}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+          <Ionicons name="archive-outline" size={22} color={c.accent} />
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Mídias em cache</Text>
+          <Text style={{ color: c.textMuted, fontSize: 14 }}>{formatBytes(cacheSize)}</Text>
         </View>
 
         <TouchableOpacity
-          style={[styles.clearButton, clearing && styles.disabled]}
+          style={{
+            flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+            paddingVertical: 12, borderRadius: 8, borderWidth: 1, borderColor: c.destructive, marginTop: 8,
+            opacity: (clearing || cacheSize === 0) ? 0.5 : 1,
+          }}
           onPress={handleClearCache}
           disabled={clearing || cacheSize === 0}
         >
-          <Ionicons name="trash-outline" size={18} color={colors.destructive} />
-          <Text style={styles.clearButtonText}>
+          <Ionicons name="trash-outline" size={18} color={c.destructive} />
+          <Text style={{ color: c.destructive, fontSize: 15, fontWeight: '600' }}>
             {clearing ? 'Limpando...' : 'Limpar cache'}
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Sobre</Text>
-        <View style={styles.row}>
-          <Text style={styles.rowLabel}>Versão</Text>
-          <Text style={styles.rowValue}>1.0.0</Text>
+      <View style={{
+        backgroundColor: c.surface, borderRadius: 12, padding: 16, marginBottom: 16,
+        borderWidth: 1, borderColor: c.borderLight,
+      }}>
+        <Text style={{
+          color: c.accent, fontSize: 14, fontWeight: 'bold', letterSpacing: 1,
+          marginBottom: 16, textTransform: 'uppercase',
+        }}>Sobre</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Versão</Text>
+          <Text style={{ color: c.textMuted, fontSize: 14 }}>1.0.0</Text>
         </View>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.bg,
-    padding: 16,
-  },
-  section: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-  },
-  sectionTitle: {
-    color: colors.accent,
-    fontSize: 14,
-    fontWeight: 'bold',
-    letterSpacing: 1,
-    marginBottom: 16,
-    textTransform: 'uppercase',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 12,
-  },
-  rowLabel: {
-    flex: 1,
-    color: colors.text,
-    fontSize: 16,
-  },
-  rowValue: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  optionsRow: {
-    flexDirection: 'row',
-    gap: 8,
-    flexWrap: 'wrap',
-  },
-  optionChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: colors.elevated,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-  },
-  optionChipActive: {
-    backgroundColor: colors.accentDark,
-    borderColor: colors.accent,
-  },
-  optionChipText: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  optionChipTextActive: {
-    color: colors.text,
-    fontWeight: 'bold',
-  },
-  clearButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.destructive,
-    marginTop: 8,
-  },
-  clearButtonText: {
-    color: colors.destructive,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-});
+

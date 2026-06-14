@@ -4,13 +4,15 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
   ScrollView,
   StyleSheet,
   Alert,
   ActivityIndicator,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 import { useMediaPicker } from '../hooks/useMediaPicker';
@@ -64,11 +66,11 @@ export default function CreateStoryScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={[styles.preview, media ? null : { backgroundColor: bgColor }]}>
           {media ? (
-            <Image source={{ uri: media.uri }} style={styles.previewImage} resizeMode="cover" />
+            <Image source={media.uri} style={styles.previewImage} contentFit="cover" transition={200} />
           ) : (
             <Text style={[styles.previewText, { color: isLightColor(bgColor) ? '#1a1a2e' : '#fff' }]}>
               {text || 'Toque abaixo\ne digite algo'}
@@ -141,7 +143,7 @@ export default function CreateStoryScreen() {
           )}
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

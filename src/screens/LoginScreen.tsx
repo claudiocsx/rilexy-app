@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
-import { loginUser } from '../services/auth';
+import { loginUser, resetPassword } from '../services/auth';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors } from '../theme/colors';
 
@@ -78,6 +78,17 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>
             {loading ? 'Entrando...' : 'Entrar'}
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          if (!email) { Alert.alert('Erro', 'Digite seu email primeiro'); return; }
+          setLoading(true);
+          resetPassword(email)
+            .then(() => Alert.alert('Sucesso', 'Email de redefinição enviado'))
+            .catch((err) => Alert.alert('Erro', err.message))
+            .finally(() => setLoading(false));
+        }}>
+          <Text style={styles.link}>Esqueci minha senha</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>

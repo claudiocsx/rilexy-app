@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
-import { colors } from '../theme/colors';
+import { getColors } from '../theme/colors';
+import { useSettingsStore } from '../store/settingsStore';
 import CallService from '../services/callService';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -19,6 +21,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import CreateStoryScreen from '../screens/CreateStoryScreen';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import CallScreen from '../screens/CallScreen';
+import EditImageScreen from '../screens/EditImageScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -30,6 +33,7 @@ export type RootStackParamList = {
   CreatePost: undefined;
   CreateStory: undefined;
   Call: { peerId: string; peerName: string; audioOnly: boolean };
+  EditImage: { imageUri: string; chatId: string; name: string };
 };
 
 export type TabParamList = {
@@ -44,78 +48,42 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
 function RelaxyHeader() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const theme = useSettingsStore((s) => s.theme);
+  const c = getColors(theme);
+  const insets = useSafeAreaInsets();
   return (
-    <View style={headerStyles.container}>
-      <View style={headerStyles.left}>
-        <View style={headerStyles.logo}>
-          <Text style={headerStyles.logoText}>♀♂</Text>
+    <View style={{ paddingTop: insets.top, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingBottom: 12, backgroundColor: c.surface, borderBottomWidth: 1, borderBottomColor: c.borderLight }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{ width: 32, height: 32, borderRadius: 16, borderWidth: 2, borderColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: c.accent, fontSize: 12, fontWeight: 'bold' }}>♀♂</Text>
         </View>
-        <Text style={headerStyles.title}>Relaxy</Text>
+        <Text style={{ color: c.accent, fontSize: 20, fontWeight: 'bold', letterSpacing: 2 }}>Relaxy</Text>
       </View>
-      <TouchableOpacity>
-        <Text style={headerStyles.searchIcon}>⌕</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('NewChat')}>
+        <Text style={{ color: c.textMuted, fontSize: 22 }}>⌕</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const headerStyles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
-  },
-  left: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  logo: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoText: {
-    color: colors.accent,
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  title: {
-    color: colors.accent,
-    fontSize: 20,
-    fontWeight: 'bold',
-    letterSpacing: 2,
-  },
-  searchIcon: {
-    color: colors.textMuted,
-    fontSize: 22,
-  },
-});
-
 function HomeTabs() {
+  const theme = useSettingsStore((s) => s.theme);
+  const cHome = getColors(theme);
   return (
     <Tab.Navigator
       screenOptions={{
         header: () => <RelaxyHeader />,
         tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.borderLight,
+          backgroundColor: cHome.surface,
+          borderTopColor: cHome.borderLight,
           borderTopWidth: 1,
           height: 64,
           paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: colors.textMuted,
+        tabBarActiveTintColor: cHome.accent,
+        tabBarInactiveTintColor: cHome.textMuted,
         tabBarShowLabel: false,
       }}
     >
@@ -158,29 +126,22 @@ function HomeTabs() {
   );
 }
 
-const tabStyles = StyleSheet.create({
-  centerButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.accentDark,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -20,
-    borderWidth: 4,
-    borderColor: colors.bg,
-  },
-});
-
 function CenterButton() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const theme = useSettingsStore((s) => s.theme);
+  const c = getColors(theme);
   return (
     <TouchableOpacity
-      style={tabStyles.centerButton}
+      style={{
+        width: 52, height: 52, borderRadius: 26,
+        backgroundColor: c.accentDark,
+        justifyContent: 'center', alignItems: 'center',
+        marginTop: -20, borderWidth: 4, borderColor: c.bg,
+      }}
       activeOpacity={0.8}
       onPress={() => navigation.navigate('CreatePost')}
     >
-      <Ionicons name="add-circle" color={colors.white} size={28} />
+      <Ionicons name="add-circle" color={c.white} size={28} />
     </TouchableOpacity>
   );
 }
@@ -190,10 +151,12 @@ function EmptyScreen() {
 }
 
 function LoadingScreen() {
+  const theme = useSettingsStore((s) => s.theme);
+  const c = getColors(theme);
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.bg }}>
-      <View style={{ width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: colors.accent, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: colors.accent, fontSize: 18, fontWeight: 'bold' }}>♀♂</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: c.bg }}>
+      <View style={{ width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ color: c.accent, fontSize: 18, fontWeight: 'bold' }}>♀♂</Text>
       </View>
     </View>
   );
@@ -201,6 +164,8 @@ function LoadingScreen() {
 
 export default function AppNavigator() {
   const { user, loading } = useAuth();
+  const theme = useSettingsStore((s) => s.theme);
+  const c = getColors(theme);
   const navigationRef = useRef<any>(null);
 
   useEffect(() => {
@@ -238,10 +203,10 @@ export default function AppNavigator() {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-          headerTitleStyle: { color: colors.text },
-          contentStyle: { backgroundColor: colors.bg },
+          headerStyle: { backgroundColor: c.surface },
+          headerTintColor: c.text,
+          headerTitleStyle: { color: c.text },
+          contentStyle: { backgroundColor: c.bg },
         }}
       >
         {user ? (
@@ -256,9 +221,9 @@ export default function AppNavigator() {
               component={ChatScreen}
               options={({ route }) => ({
                 title: route.params.name,
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
-                headerTitleStyle: { color: colors.text },
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
+                headerTitleStyle: { color: c.text },
               })}
             />
             <Stack.Screen
@@ -266,8 +231,8 @@ export default function AppNavigator() {
               component={NewChatScreen}
               options={{
                 title: 'Nova Conversa',
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
               }}
             />
             <Stack.Screen
@@ -275,8 +240,8 @@ export default function AppNavigator() {
               component={SettingsScreen}
               options={{
                 title: 'Configurações',
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
               }}
             />
             <Stack.Screen
@@ -284,8 +249,8 @@ export default function AppNavigator() {
               component={CreatePostScreen}
               options={{
                 title: 'Nova Publicação',
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
                 presentation: 'modal',
               }}
             />
@@ -294,8 +259,8 @@ export default function AppNavigator() {
               component={CreateStoryScreen}
               options={{
                 title: 'Meu Status',
-                headerStyle: { backgroundColor: colors.surface },
-                headerTintColor: colors.text,
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
                 presentation: 'modal',
               }}
             />
@@ -305,6 +270,15 @@ export default function AppNavigator() {
               options={{
                 headerShown: false,
                 animation: 'slide_from_bottom',
+              }}
+            />
+            <Stack.Screen
+              name="EditImage"
+              component={EditImageScreen}
+              options={{
+                headerShown: false,
+                animation: 'slide_from_bottom',
+                presentation: 'modal',
               }}
             />
           </>
@@ -320,8 +294,8 @@ export default function AppNavigator() {
               component={RegisterScreen}
               options={{
                 title: 'Criar Conta',
-                headerStyle: { backgroundColor: colors.bg },
-                headerTintColor: colors.text,
+                headerStyle: { backgroundColor: c.bg },
+                headerTintColor: c.text,
               }}
             />
           </>

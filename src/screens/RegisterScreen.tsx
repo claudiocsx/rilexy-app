@@ -16,15 +16,20 @@ export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !confirmPassword) {
       Alert.alert('Erro', 'Preencha todos os campos');
       return;
     }
     if (password.length < 6) {
       Alert.alert('Erro', 'Senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Erro', 'Senhas não conferem');
       return;
     }
     setLoading(true);
@@ -71,6 +76,14 @@ export default function RegisterScreen() {
           placeholderTextColor={colors.textMuted}
           value={password}
           onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirmar senha"
+          placeholderTextColor={colors.textMuted}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
           secureTextEntry
         />
 

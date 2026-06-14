@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TextInput,
   Modal,
+  RefreshControl,
 } from 'react-native';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -35,6 +36,12 @@ export default function GroupsScreen() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
   const [creating, setCreating] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 500);
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -102,7 +109,7 @@ export default function GroupsScreen() {
       <TouchableOpacity style={styles.createButton} onPress={() => setShowCreateModal(true)}>
         <Text style={styles.createButtonText}>+ Criar Grupo</Text>
       </TouchableOpacity>
-      {loading ? (
+      {loading && !refreshing ? (
         <View style={styles.center}>
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
@@ -119,6 +126,7 @@ export default function GroupsScreen() {
           data={groups}
           keyExtractor={(item) => item.id}
           renderItem={renderGroup}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}
         />
       )}
 

@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Image,
   StyleSheet,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';

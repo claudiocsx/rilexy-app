@@ -25,9 +25,11 @@ export default function NewChatScreen() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const handleSearch = useCallback(async (text: string) => {
     setQuery(text);
+    setSearchError(null);
     if (text.trim().length < 2) {
       setResults([]);
       return;
@@ -36,8 +38,12 @@ export default function NewChatScreen() {
     try {
       const users = await searchUsers(text);
       setResults(users.filter((u) => u.uid !== user?.uid));
+      if (users.filter((u) => u.uid !== user?.uid).length === 0) {
+        setSearchError('Nenhum usuário encontrado');
+      }
     } catch {
       setResults([]);
+      setSearchError('Erro ao buscar. Verifique sua conexão.');
     } finally {
       setLoading(false);
     }
@@ -86,17 +92,21 @@ export default function NewChatScreen() {
       />
       {loading ? (
         <ActivityIndicator color={colors.accent} style={styles.loading} />
-      ) : results.length === 0 && query.trim().length >= 2 ? (
+      ) : searchError ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>Nenhum usuário encontrado</Text>
+          <Text style={styles.emptyText}>{searchError}</Text>
         </View>
-      ) : (
+      ) : results.length > 0 ? (
         <FlatList
           data={results}
           keyExtractor={(item) => item.uid}
           renderItem={renderUser}
         />
-      )}
+      ) : query.trim().length < 2 ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>Digite pelo menos 2 caracteres</Text>
+        </View>
+      ) : null}
     </View>
   );
 }

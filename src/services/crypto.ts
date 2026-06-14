@@ -101,8 +101,11 @@ export async function decryptAndCache(
   }
 
   async function blobToArrayBuffer(b: Blob): Promise<ArrayBuffer> {
-    if (typeof b.arrayBuffer === 'function') return b.arrayBuffer();
-    return new Response(b).arrayBuffer();
+    try {
+      return await new Response(b).arrayBuffer();
+    } catch {
+      return b.arrayBuffer();
+    }
   }
 
   const encrypted = new Uint8Array(await blobToArrayBuffer(blob));
@@ -110,7 +113,13 @@ export async function decryptAndCache(
   const nonce = base64ToUint8(ivBase64);
   const decrypted = nacl.secretbox.open(encrypted, nonce, key);
   if (!decrypted) {
-    console.error('Decryption failed');
+    console.error('Decryption failed', {
+      blobSize: blob.size,
+      encryptedLen: encrypted.length,
+      keyLen: key.length,
+      nonceLen: nonce.length,
+      storagePath,
+    });
     return mediaUrl;
   }
 

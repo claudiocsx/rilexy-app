@@ -36,6 +36,7 @@ export function useMediaPicker() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images', 'videos'],
         quality: 0.7,
+        videoMaxDuration: 60,
       });
 
       if (!result.canceled && result.assets.length > 0) {

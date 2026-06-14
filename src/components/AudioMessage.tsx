@@ -10,6 +10,8 @@ interface Props {
   isMine: boolean;
 }
 
+let activePlayerRef: { player: AudioPlayer; pause: () => void } | null = null;
+
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
@@ -78,7 +80,11 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
       if (isPlaying) {
         player.pause();
         setIsPlaying(false);
+        if (activePlayerRef?.player === player) activePlayerRef = null;
       } else {
+        if (activePlayerRef && activePlayerRef.player !== player) {
+          activePlayerRef.pause();
+        }
         if (progress >= 1) {
           await player.seekTo(0);
           setProgress(0);
@@ -86,6 +92,7 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
         }
         player.play();
         setIsPlaying(true);
+        activePlayerRef = { player, pause: () => { player.pause(); setIsPlaying(false); } };
       }
     } catch (e) {
       console.error('Audio play error:', e);

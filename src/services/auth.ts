@@ -52,6 +52,10 @@ export const logoutUser = async () => {
   await auth.signOut();
 };
 
+export const resetPassword = async (email: string) => {
+  await auth.sendPasswordResetEmail(email);
+};
+
 export const onAuthChange = (callback: (user: RilaxyUser | null) => void) => {
   return auth.onIdTokenChanged((user) => {
     if (user) {
