@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Image,
   Alert,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import AvatarImage from '../components/AvatarImage';
 import { db } from '../services/firebase';
 import firebase from 'firebase/compat/app';
 import { useAuth } from '../contexts/AuthContext';
@@ -20,14 +22,22 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors } from '../theme/colors';
 import StoriesRow from '../components/StoriesRow';
 import StoryViewer from '../components/StoryViewer';
+import CommentsModal from '../components/CommentsModal';
+import MediaViewer from '../components/MediaViewer';
+import VideoPlayer from '../components/VideoPlayer';
 import { StoryGroup } from '../services/stories';
+import { decryptAndCache } from '../services/crypto';
 
 interface Post {
   id: string;
   text: string;
   senderId: string;
   senderName: string;
+  senderPhoto?: string;
   mediaUrl?: string;
+  mediaKey?: string;
+  mediaIv?: string;
+  mediaType?: string;
   timestamp: any;
   likesCount: number;
   commentsCount: number;
@@ -54,6 +64,35 @@ export default function FeedScreen() {
   const [commentText, setCommentText] = useState<Record<string, string>>({});
   const [storyGroups, setStoryGroups] = useState<StoryGroup[]>([]);
   const [storyViewerIndex, setStoryViewerIndex] = useState<number | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedPostForComments, setSelectedPostForComments] = useState<string | null>(null);
+  const [selectedMediaUri, setSelectedMediaUri] = useState<string | null>(null);
+  const [selectedVideoUri, setSelectedVideoUri] = useState<string | null>(null);
+  const [decryptedUris, setDecryptedUris] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const pending = posts
+      .filter((p) => p.mediaUrl && p.mediaKey && p.mediaIv)
+      .map((p) =>
+        decryptAndCache(p.mediaUrl!, p.mediaKey!, p.mediaIv!, p.mediaType || 'image/jpeg')
+          .then((uri) => ({ id: p.id, uri }))
+          .catch(() => ({ id: p.id, uri: null }))
+      );
+    if (pending.length > 0) {
+      Promise.all(pending).then((results) => {
+        const map: Record<string, string> = {};
+        for (const r of results) {
+          if (r.uri) map[r.id] = r.uri;
+        }
+        setDecryptedUris((prev) => ({ ...prev, ...map }));
+      });
+    }
+  }, [posts]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 500);
+  }, []);
 
   useEffect(() => {
     return db.collection('posts').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
@@ -91,6 +130,23 @@ export default function FeedScreen() {
     }
   };
 
+  const handleDeletePost = (postId: string) => {
+    Alert.alert('Apagar post', 'Tem certeza?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Apagar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await db.collection('posts').doc(postId).delete();
+          } catch (e: any) {
+            Alert.alert('Erro', e?.message || 'Não foi possível apagar');
+          }
+        },
+      },
+    ]);
+  };
+
   const handleComment = async (postId: string) => {
     const text = commentText[postId]?.trim();
     if (!text || !user) return;
@@ -112,26 +168,50 @@ export default function FeedScreen() {
 
   const renderPost = ({ item }: { item: Post }) => {
     const liked = item.likedBy?.includes(user?.uid || '') ?? false;
+    const isEncrypted = !!(item.mediaKey && item.mediaIv);
+    const postUri = decryptedUris[item.id] || (!isEncrypted ? item.mediaUrl : null);
     return (
     <View style={styles.postCard}>
       <View style={styles.postHeader}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {(item.senderName || '?')[0].toUpperCase()}
-          </Text>
-        </View>
-        <View>
+        <AvatarImage photoURL={item.senderPhoto} name={item.senderName} size={40} />
+        <View style={{ flex: 1 }}>
           <Text style={styles.senderName}>{item.senderName}</Text>
           <Text style={styles.timeAgo}>{formatTimeAgo(item.timestamp)}</Text>
         </View>
+        {item.senderId === user?.uid && (
+          <TouchableOpacity onPress={() => handleDeletePost(item.id)}>
+            <Ionicons name="ellipsis-vertical" size={20} color={colors.textMuted} />
+          </TouchableOpacity>
+        )}
       </View>
-      {item.mediaUrl ? (
-        <View style={styles.mediaContainer}>
-          <Image
-            source={{ uri: item.mediaUrl }}
-            style={styles.postMedia}
-            resizeMode="cover"
-          />
+      {postUri ? (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            if (item.mediaType === 'video' || /\.(mp4|mov|webm)$/i.test(postUri)) {
+              setSelectedVideoUri(postUri);
+            } else {
+              setSelectedMediaUri(postUri);
+            }
+          }}
+        >
+          <View>
+            <Image
+              source={postUri}
+              style={styles.postMedia}
+              contentFit="cover"
+              transition={300}
+            />
+            {(item.mediaType === 'video' || /\.(mp4|mov|webm)$/i.test(postUri)) && (
+              <View style={styles.playOverlay}>
+                <Ionicons name="play-circle" size={48} color="#fff" />
+              </View>
+            )}
+          </View>
+        </TouchableOpacity>
+      ) : isEncrypted ? (
+        <View style={styles.decryptingContainer}>
+          <ActivityIndicator color={colors.accent} />
         </View>
       ) : null}
       {item.text ? (
@@ -142,7 +222,7 @@ export default function FeedScreen() {
           <Ionicons name={liked ? 'heart' : 'heart-outline'} size={20} color={liked ? colors.destructive : colors.accent} />
           <Text style={styles.actionCount}>{item.likesCount || 0}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => setSelectedPostForComments(item.id)}>
           <Ionicons name="chatbubble-outline" size={20} color={colors.textMuted} />
           <Text style={styles.actionCount}>{item.commentsCount || 0}</Text>
         </TouchableOpacity>
@@ -176,6 +256,7 @@ export default function FeedScreen() {
         data={posts}
         keyExtractor={(item) => item.id}
         renderItem={renderPost}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}
         contentContainerStyle={[styles.list, loading && styles.listCenter]}
         ListEmptyComponent={
           loading ? (
@@ -198,6 +279,21 @@ export default function FeedScreen() {
         startIndex={storyViewerIndex ?? 0}
         onClose={() => setStoryViewerIndex(null)}
       />
+      <CommentsModal
+        visible={selectedPostForComments !== null}
+        postId={selectedPostForComments || ''}
+        onClose={() => setSelectedPostForComments(null)}
+      />
+      <MediaViewer
+        visible={selectedMediaUri !== null}
+        uri={selectedMediaUri}
+        onClose={() => setSelectedMediaUri(null)}
+      />
+      <VideoPlayer
+        visible={selectedVideoUri !== null}
+        uri={selectedVideoUri}
+        onClose={() => setSelectedVideoUri(null)}
+      />
     </View>
   );
 }
@@ -208,36 +304,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   list: {
-    padding: 12,
+    padding: 0,
   },
   postCard: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
   },
   postHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.accentDark,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: colors.accent,
-  },
-  avatarText: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: 'bold',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   senderName: {
     color: colors.text,
@@ -249,27 +327,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  mediaContainer: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 8,
-  },
   postMedia: {
     width: '100%',
-    height: 192,
+    aspectRatio: 1,
+  },
+  playOverlay: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.15)',
   },
   postText: {
     color: colors.text,
     fontSize: 15,
     lineHeight: 20,
-    marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingTop: 8,
   },
   postActions: {
     flexDirection: 'row',
     gap: 16,
+    paddingHorizontal: 12,
     paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.borderLight,
   },
   actionButton: {
     flexDirection: 'row',
@@ -283,7 +363,9 @@ const styles = StyleSheet.create({
   commentInputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 12,
     gap: 8,
   },
   commentInput: {
@@ -312,5 +394,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 12,
     fontWeight: '600',
+  },
+  decryptingContainer: {
+    width: '100%',
+    height: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
   },
 });
