@@ -25,8 +25,10 @@ import StoryViewer from '../components/StoryViewer';
 import CommentsModal from '../components/CommentsModal';
 import MediaViewer from '../components/MediaViewer';
 import VideoPlayer from '../components/VideoPlayer';
+import { File, Paths, Directory } from 'expo-file-system';
 import { StoryGroup } from '../services/stories';
-import { decryptAndCache } from '../services/crypto';
+import { decryptAndCache, extractStoragePath, pathHash } from '../services/crypto';
+import { deleteMedia } from '../services/storage';
 
 interface Post {
   id: string;
@@ -133,7 +135,7 @@ export default function FeedScreen() {
     }
   };
 
-  const handleDeletePost = (postId: string) => {
+  const handleDeletePost = (postId: string, mediaUrl?: string, mediaType?: string) => {
     Alert.alert('Apagar post', 'Tem certeza?', [
       { text: 'Cancelar', style: 'cancel' },
       {
@@ -141,6 +143,14 @@ export default function FeedScreen() {
         style: 'destructive',
         onPress: async () => {
           try {
+            if (mediaUrl) {
+              const storagePath = extractStoragePath(mediaUrl);
+              await deleteMedia(storagePath);
+              const cacheDir = new Directory(Paths.cache, 'rilaxy-decrypted');
+              const ext = mediaType?.startsWith('video/') ? 'mp4' : 'jpg';
+              const cacheFile = new File(cacheDir, `${pathHash(mediaUrl)}.${ext}`);
+              if (cacheFile.exists) cacheFile.delete();
+            }
             await db.collection('posts').doc(postId).delete();
           } catch (e: any) {
             Alert.alert('Erro', e?.message || 'Não foi possível apagar');
@@ -181,7 +191,7 @@ export default function FeedScreen() {
           <Text style={styles.timeAgo}>{formatTimeAgo(item.timestamp)}</Text>
         </View>
         {item.senderId === user?.uid && (
-          <TouchableOpacity onPress={() => handleDeletePost(item.id)}>
+          <TouchableOpacity onPress={() => handleDeletePost(item.id, item.mediaUrl, item.mediaType)}>
             <Ionicons name="ellipsis-vertical" size={20} color={colors.textMuted} />
           </TouchableOpacity>
         )}

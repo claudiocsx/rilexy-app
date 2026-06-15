@@ -26,14 +26,15 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useMediaPicker } from '../hooks/useMediaPicker';
-import { uploadEncryptedChatMedia, uploadChatMedia } from '../services/storage';
+import { File, Paths, Directory } from 'expo-file-system';
+import { uploadEncryptedChatMedia, uploadChatMedia, deleteMedia } from '../services/storage';
 import { getMediaUri } from '../services/mediaCache';
 import { colors } from '../theme/colors';
 import { useSettingsStore } from '../store/settingsStore';
 import AvatarImage from '../components/AvatarImage';
 import MediaViewer from '../components/MediaViewer';
 import AudioMessage from '../components/AudioMessage';
-import { decryptAndCache } from '../services/crypto';
+import { decryptAndCache, extractStoragePath, pathHash } from '../services/crypto';
 import { useDecryptedMedia } from '../hooks/useDecryptedMedia';
 import LottieView from 'lottie-react-native';
 import StickerPicker from '../components/StickerPicker';
@@ -745,7 +746,7 @@ export default function ChatScreen() {
             'Esta mensagem será apagada para todos. Esta ação não pode ser desfeita.',
             [
               { text: 'Cancelar', style: 'cancel' },
-              { text: 'Apagar', style: 'destructive', onPress: () => handleDeleteForEveryone(msg.id) },
+              { text: 'Apagar', style: 'destructive', onPress: () => handleDeleteForEveryone(msg) },
             ]
           );
         }});
@@ -817,9 +818,21 @@ export default function ChatScreen() {
     setSelectedMsgId(null);
   };
 
-  const handleDeleteForEveryone = async (messageId: string) => {
+  const handleDeleteForEveryone = async (msg: Message) => {
     try {
-      await db.collection('chats').doc(chatId).collection('messages').doc(messageId).update({
+      if (msg.mediaUrl && msg.mediaUrl !== '__uploading__' && !msg.mediaUrl.startsWith('file://')) {
+        const storagePath = extractStoragePath(msg.mediaUrl);
+        await deleteMedia(storagePath);
+        const cacheDir = new Directory(Paths.cache, 'rilaxy-decrypted');
+        const ext = msg.mediaType?.startsWith('video/') ? 'mp4' : 'jpg';
+        const cacheFile = new File(cacheDir, `${pathHash(msg.mediaUrl)}.${ext}`);
+        if (cacheFile.exists) cacheFile.delete();
+      }
+      if (msg.audioUrl && msg.audioUrl !== '__uploading__' && !msg.audioUrl.startsWith('file://')) {
+        const storagePath = extractStoragePath(msg.audioUrl);
+        await deleteMedia(storagePath);
+      }
+      await db.collection('chats').doc(chatId).collection('messages').doc(msg.id).update({
         deletedForEveryone: true,
       });
     } catch (e: any) {

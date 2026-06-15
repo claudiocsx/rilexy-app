@@ -46,7 +46,7 @@ function getCacheDir(): Directory {
   return new Directory(Paths.cache, CACHE_DIR);
 }
 
-function pathHash(path: string): string {
+export function pathHash(path: string): string {
   let h = 0;
   for (let i = 0; i < path.length; i++) {
     h = ((h << 5) - h) + path.charCodeAt(i);
@@ -60,7 +60,7 @@ function cachedFile(path: string, mimeType: string): File {
   return new File(getCacheDir(), `${pathHash(path)}.${ext}`);
 }
 
-function extractStoragePath(mediaUrl: string): string {
+export function extractStoragePath(mediaUrl: string): string {
   const marker = '/public/';
   const idx = mediaUrl.indexOf(marker);
   if (idx !== -1) {
