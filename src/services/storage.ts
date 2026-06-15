@@ -60,10 +60,13 @@ export const uploadEncryptedMedia = async (
     const ext = extFromUri(path);
     const contentType = mimeMap[ext] || 'image/jpeg';
 
-    const encryptedBlob = new Blob([encrypted]);
+    const safeBuffer = encrypted.buffer.slice(
+      encrypted.byteOffset,
+      encrypted.byteOffset + encrypted.byteLength,
+    );
     const { error } = await supabase.storage
       .from(BUCKET)
-      .upload(path, encryptedBlob, { contentType, upsert: true });
+      .upload(path, safeBuffer, { contentType, upsert: true });
 
     if (error) throw error;
 
