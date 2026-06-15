@@ -8,6 +8,7 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+*.apk
 *.orig.*
 web-build/
 .env

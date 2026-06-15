@@ -6,19 +6,38 @@ import { getSupabase } from './supabase';
 const BUCKET = 'rilaxy-media';
 const CACHE_DIR = 'rilaxy-decrypted';
 
+const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
 function uint8ToBase64(bytes: Uint8Array): string {
-  let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  let result = '';
+  for (let i = 0; i < bytes.length; i += 3) {
+    const a = bytes[i];
+    const b = i + 1 < bytes.length ? bytes[i + 1] : 0;
+    const c = i + 2 < bytes.length ? bytes[i + 2] : 0;
+    result += B64[a >> 2];
+    result += B64[((a & 3) << 4) | (b >> 4)];
+    if (i + 1 >= bytes.length) { result += '=='; break; }
+    result += B64[((b & 15) << 2) | (c >> 6)];
+    if (i + 2 >= bytes.length) { result += '='; break; }
+    result += B64[c & 63];
   }
-  return btoa(binary);
+  return result;
 }
 
 function base64ToUint8(base64: string): Uint8Array {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
+  const lookup: Record<string, number> = {};
+  for (let i = 0; i < 64; i++) lookup[B64[i]] = i;
+  const cleaned = base64.replace(/=+/g, '');
+  const bytes = new Uint8Array(Math.floor(cleaned.length * 6 / 8));
+  let pos = 0;
+  for (let i = 0; i < cleaned.length; i += 4) {
+    const a = lookup[cleaned[i]];
+    const b = lookup[cleaned[i + 1]];
+    const c = lookup[cleaned[i + 2]];
+    const d = lookup[cleaned[i + 3]];
+    bytes[pos++] = (a << 2) | (b >> 4);
+    if (c !== undefined) bytes[pos++] = ((b & 15) << 4) | (c >> 2);
+    if (d !== undefined) bytes[pos++] = ((c & 3) << 6) | d;
   }
   return bytes;
 }
