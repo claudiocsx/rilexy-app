@@ -72,6 +72,7 @@ src/
 │   ├── convites.ts            # Sistema de convites
 │   ├── block.ts               # Bloqueio de usuários
 │   ├── mute.ts                # Silenciar usuários (mute/unmute)
+│   ├── report.ts              # Reportar posts (moderação)
 │   ├── lockService.ts         # PIN lock app
 │   ├── linkPreview.ts         # Preview de links
 │   ├── ringtone.ts            # Toques de chamada
@@ -85,7 +86,7 @@ src/
 │   ├── Stories: CreateStoryScreen
 │   ├── Feed: CreatePostScreen
 │   ├── Calls: CallScreen, CallHistoryScreen
-│   ├── Settings: SettingsScreen, BlockedUsersScreen, MutedUsersScreen
+│   ├── Settings: SettingsScreen, BlockedUsersScreen, MutedUsersScreen, ReportsScreen
 │   ├── Media: EditImageScreen, CameraFilterScreen, GroupMediaScreen
 │   ├── Profile: UserProfileScreen, LockScreen
 │   ├── Search: GlobalSearchScreen
@@ -845,7 +846,7 @@ EXPO_PUBLIC_PUSH_API_KEY=...
 6. ~~**Post reactions** — múltiplas reações (❤️😂😢😡👍) em vez de like único~~ (v1.0.5)
 7. ~~**Salvar/Bookmark post** — coleção pessoal~~ (v1.0.5)
 8. ~~**Mute user** — ocultar posts do feed sem bloquear~~ (v1.1.0)
-9. **Reportar post** — moderação (admin pode deletar)
+9. ~~**Reportar post** — moderação (admin pode deletar)~~ (v1.1.1)
 10. ~~**Hashtags #** — clicáveis com busca por tag~~ (v1.0.5)
 11. ~~**@Menções em posts** — marcar usuários~~ (v1.0.5)
 12. ~~**Feed de perfil do usuário** — grid de posts do usuário~~ (pré-existente)
@@ -900,7 +901,7 @@ EXPO_PUBLIC_PUSH_API_KEY=...
 
 ---
 
-*Documento gerado automaticamente a partir da análise do código-fonte (Jul 2025). Última atualização: v1.1.0 (Mute User).*
+*Documento gerado automaticamente a partir da análise do código-fonte (Jul 2025). Última atualização: v1.1.1 (Report Post).*
 
 ---
 
@@ -1289,6 +1290,45 @@ O filtro `(p.mediaKey || p.mediaKeys?.length)` impede que posts sem criptografia
 - Nova seção "Privacidade" com link para "Silenciados" e "Bloqueados"
 
 **Arquivos afetados**: `mute.ts` (novo), `FeedScreen.tsx`, `MutedUsersScreen.tsx` (novo), `AppNavigator.tsx`, `SettingsScreen.tsx`
+
+---
+
+### v1.1.1 — Reportar Post (Moderação de Conteúdo)
+
+**Data**: Jul 2025
+**Motivação**: Permitir que usuários reportem posts inadequados (spam, assédio, violência, fake news) para moderação administrativa.
+
+**Mudanças**:
+
+#### Novo serviço: `src/services/report.ts`
+- `reportPost(postId, postSenderId, reportedBy, reportedByName, reason, postText?, postMediaUrl?)` — cria report com proteção contra duplicatas
+- `getReports()` — lista reports pendentes (admin)
+- `dismissReport(reportId)` — marca como dispensado
+- `deletePostAndReport(reportId, postId)` — deleta post + marca report como reviewed (batch)
+- `REPORT_REASONS` — 6 opções: spam, inappropriate, harassment, misinformation, copyright, other
+
+#### FeedScreen (`src/screens/FeedScreen.tsx`)
+- Menu ••• agora inclui "Reportar post" (além de "Silenciar")
+- Modal com seleção de razão (radio buttons animados)
+- Haptic feedback ao selecionar razão
+- Feedback de sucesso/erro
+
+#### Nova tela: `src/screens/ReportsScreen.tsx`
+- Lista de reports pendentes (admin only)
+- Cada card mostra: razão, preview do texto, quem reportou
+- Ações: "Deletar post" (remove post + report) ou "Dispensar"
+- Verificação de admin via `isAdmin` ou `admins[]` no doc do usuário
+
+#### Navegação (`src/navigation/AppNavigator.tsx`)
+- Adicionada tela `Reports` ao stack
+
+#### SettingsScreen (`src/screens/SettingsScreen.tsx`)
+- Link "Reports" visível apenas para admins na seção Privacidade
+
+#### Firestore Rules (`firestore.rules`)
+- `reports/{reportId}` — create se `reportedBy == auth.uid`; read se autenticado; update/delete se admin
+
+**Arquivos afetados**: `report.ts` (novo), `FeedScreen.tsx`, `ReportsScreen.tsx` (novo), `AppNavigator.tsx`, `SettingsScreen.tsx`, `firestore.rules`
 
 ---
 

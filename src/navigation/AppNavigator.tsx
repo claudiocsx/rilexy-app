@@ -36,6 +36,7 @@ import AguardandoAprovacaoScreen from '../screens/AguardandoAprovacaoScreen';
 import CameraFilterScreen from '../screens/CameraFilterScreen';
 import BlockedUsersScreen from '../screens/BlockedUsersScreen';
 import MutedUsersScreen from '../screens/MutedUsersScreen';
+import ReportsScreen from '../screens/ReportsScreen';
 import CallHistoryScreen from '../screens/CallHistoryScreen';
 import GlobalSearchScreen from '../screens/GlobalSearchScreen';
 import GroupMediaScreen from '../screens/GroupMediaScreen';
@@ -57,6 +58,7 @@ export type RootStackParamList = {
   CreateVideoSticker: undefined;
   BlockedUsers: undefined;
   MutedUsers: undefined;
+  Reports: undefined;
   GroupMedia: { chatId: string };
   UserProfile: { userId: string };
   CameraFilter: undefined;
@@ -533,6 +535,15 @@ export default function AppNavigator() {
               component={MutedUsersScreen}
               options={{
                 title: 'Silenciados',
+                headerStyle: { backgroundColor: c.surface },
+                headerTintColor: c.text,
+              }}
+            />
+            <Stack.Screen
+              name="Reports"
+              component={ReportsScreen}
+              options={{
+                title: 'Reports',
                 headerStyle: { backgroundColor: c.surface },
                 headerTintColor: c.text,
               }}

@@ -1150,6 +1150,56 @@ export default function FeedScreen() {
           </View>
         </View>
       </Modal>
+
+      <Modal visible={reportModalVisible} transparent animationType="fade" onRequestClose={() => { setReportModalVisible(false); setSelectedReason(''); setReportPostData(null); }}>
+        <Pressable style={styles.modalBackdrop} onPress={() => { setReportModalVisible(false); setSelectedReason(''); setReportPostData(null); }}>
+          <Pressable style={[styles.shareModalContent, { backgroundColor: colors.surface }]} onPress={() => {}}>
+            <Text style={[styles.shareModalTitle, { color: colors.text }]}>Reportar post</Text>
+            <Text style={{ color: colors.textMuted, fontSize: 14, marginBottom: 16 }}>Por que está reportando?</Text>
+            {REPORT_REASONS.map((r) => (
+              <Pressable
+                key={r.key}
+                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); setSelectedReason(r.key); }}
+                style={({ pressed }) => [{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 12,
+                  paddingHorizontal: 12,
+                  borderRadius: 8,
+                  marginBottom: 4,
+                  backgroundColor: selectedReason === r.key ? colors.accent + '15' : 'transparent',
+                  opacity: pressed ? 0.7 : 1,
+                }]}
+              >
+                <View style={{
+                  width: 20, height: 20, borderRadius: 10, borderWidth: 2,
+                  borderColor: selectedReason === r.key ? colors.accent : colors.textMuted,
+                  alignItems: 'center', justifyContent: 'center', marginRight: 12,
+                }}>
+                  {selectedReason === r.key && <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.accent }} />}
+                </View>
+                <Text style={{ color: colors.text, fontSize: 15, flex: 1 }}>{r.label}</Text>
+              </Pressable>
+            ))}
+            <Pressable
+              onPress={handleReport}
+              disabled={!selectedReason || reportSending}
+              style={({ pressed }) => [{
+                marginTop: 16,
+                paddingVertical: 14,
+                borderRadius: 12,
+                backgroundColor: selectedReason ? colors.accent : colors.elevated,
+                alignItems: 'center',
+                opacity: pressed || !selectedReason || reportSending ? 0.6 : 1,
+              }]}
+            >
+              <Text style={{ color: selectedReason ? '#fff' : colors.textMuted, fontSize: 16, fontWeight: '600' }}>
+                {reportSending ? 'Enviando...' : 'Enviar report'}
+              </Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }

@@ -7,6 +7,8 @@ import { useSettingsStore, AutoDownload } from '../store/settingsStore';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../services/firebase';
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';
@@ -19,17 +21,28 @@ const AUTO_DOWNLOAD_OPTIONS: AutoDownload[] = ['always', 'wifi', 'never'];
 
 export default function SettingsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { user } = useAuth();
   const autoDownload = useSettingsStore((s) => s.autoDownload);
   const setAutoDownload = useSettingsStore((s) => s.setAutoDownload);
   const theme = useSettingsStore((s) => s.theme);
   const toggleTheme = useSettingsStore((s) => s.toggleTheme);
   const [cacheSize, setCacheSize] = useState(0);
   const [clearing, setClearing] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const c = getColors(theme);
 
   useEffect(() => {
     getCacheSize().then(setCacheSize).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    const unsub = db.collection('users').doc(user.uid).onSnapshot((doc) => {
+      const data = doc.data();
+      setIsAdmin(data?.isAdmin === true || (data?.admins && Array.isArray(data.admins) && data.admins.includes(user.uid)));
+    });
+    return unsub;
+  }, [user?.uid]);
 
   const handleClearCache = () => {
     Alert.alert(
@@ -171,6 +184,17 @@ export default function SettingsScreen() {
           <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Bloqueados</Text>
           <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
         </TouchableOpacity>
+
+        {isAdmin && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Reports')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 12 }}
+          >
+            <Ionicons name="flag-outline" size={22} color={c.destructive} />
+            <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Reports</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={{
