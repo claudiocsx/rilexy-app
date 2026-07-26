@@ -1,15 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
-  Alert,
+  Animated,
   RefreshControl,
+  Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import AvatarImage from '../components/AvatarImage';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -28,12 +28,37 @@ interface Chat {
   name?: string;
 }
 
+function SkeletonChat() {
+  const pulse = useRef(new Animated.Value(0.4)).current;
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1, duration: 800, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0.4, duration: 800, useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, []);
+  return (
+    <View style={styles.chatItem}>
+      <Animated.View style={[styles.skeletonCircle, { opacity: pulse }]} />
+      <View style={{ flex: 1, marginLeft: 12, gap: 8 }}>
+        <Animated.View style={[styles.skeletonLine, { width: '55%', opacity: pulse }]} />
+        <Animated.View style={[styles.skeletonLine, { width: '75%', opacity: pulse, height: 10 }]} />
+      </View>
+      <Animated.View style={[styles.skeletonLine, { width: 40, opacity: pulse, height: 10, borderRadius: 5 }]} />
+    </View>
+  );
+}
+
 export default function ChatsScreen() {
   const { user } = useAuth();
   const navigation = useNavigation<ChatNav>();
   const [chats, setChats] = useState<Chat[]>([]);
   const [userNames, setUserNames] = useState<Record<string, string>>({});
   const [userPhotos, setUserPhotos] = useState<Record<string, string>>({});
+  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
@@ -107,6 +132,32 @@ export default function ChatsScreen() {
     fetchNames();
   }, [chats, user]);
 
+  useEffect(() => {
+    if (!user || chats.length === 0) return;
+    const allIds = new Set<string>();
+    chats.forEach((c) => {
+      c.participants.forEach((id) => {
+        if (id !== user.uid) allIds.add(id);
+      });
+    });
+    if (allIds.size === 0) return;
+
+    const unsubs = [...allIds].map((uid) =>
+      db.collection('presence').doc(uid).onSnapshot((doc) => {
+        if (doc.exists && doc.data()?.online) {
+          setOnlineUsers((prev) => new Set([...prev, uid]));
+        } else {
+          setOnlineUsers((prev) => {
+            const next = new Set(prev);
+            next.delete(uid);
+            return next;
+          });
+        }
+      }, () => {})
+    );
+    return () => unsubs.forEach((u) => u());
+  }, [chats, user]);
+
   const getChatName = (chat: Chat): string => {
     if (chat.name) return chat.name;
     const otherId = chat.participants.find((id) => id !== user?.uid);
@@ -119,43 +170,62 @@ export default function ChatsScreen() {
     return userPhotos[otherId || ''] || null;
   };
 
-  const renderChat = ({ item }: { item: Chat }) => (
-    <TouchableOpacity
-      style={styles.chatItem}
-      onPress={() =>
-        navigation.navigate('Chat', { chatId: item.id, name: getChatName(item) })
-      }
-    >
-      <View style={styles.avatar}>
-        <AvatarImage photoURL={getChatPhoto(item)} name={getChatName(item)} size={48} />
-      </View>
-      <View style={styles.chatInfo}>
-        <Text style={styles.chatName}>{getChatName(item)}</Text>
-        {item.lastMessage && (
-          <Text style={styles.lastMessage} numberOfLines={1}>
-            {item.lastMessage}
-          </Text>
-        )}
-      </View>
-    </TouchableOpacity>
-  );
+  const getOtherUid = (chat: Chat): string | null => {
+    if (chat.name) return null;
+    return chat.participants.find((id) => id !== user?.uid) || null;
+  };
+
+  const renderChat = ({ item }: { item: Chat }) => {
+    const otherUid = getOtherUid(item);
+    const isOnline = otherUid ? onlineUsers.has(otherUid) : false;
+    return (
+      <Pressable
+        style={({ pressed }) => [styles.chatItem, pressed && { backgroundColor: colors.glassHighlight }]}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+          navigation.navigate('Chat', { chatId: item.id, name: getChatName(item) });
+        }}
+      >
+        <View style={styles.avatarWrap}>
+          <AvatarImage photoURL={getChatPhoto(item)} name={getChatName(item)} size={48} />
+          {isOnline && <View style={styles.onlineDot} />}
+        </View>
+        <View style={styles.chatInfo}>
+          <Text style={styles.chatName}>{getChatName(item)}</Text>
+          {item.lastMessage && (
+            <Text style={styles.lastMessage} numberOfLines={1}>
+              {item.lastMessage}
+            </Text>
+          )}
+        </View>
+        <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+      </Pressable>
+    );
+  };
 
   return (
     <View style={styles.container}>
       {loading && !refreshing ? (
-        <View style={styles.center}>
-          <ActivityIndicator size="large" color={colors.accent} />
-        </View>
+        <>
+          <SkeletonChat />
+          <SkeletonChat />
+          <SkeletonChat />
+          <SkeletonChat />
+          <SkeletonChat />
+        </>
       ) : error ? (
         <View style={styles.center}>
+          <Ionicons name="cloud-offline-outline" size={48} color={colors.textMuted} />
           <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity onPress={() => onRefresh()}>
+          <Pressable onPress={onRefresh} style={styles.retryButton}>
             <Text style={styles.retryText}>Tentar novamente</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       ) : chats.length === 0 ? (
         <View style={styles.empty}>
-          <Ionicons name="chatbubble-outline" size={48} color={colors.textMuted} />
+          <View style={styles.emptyIconCircle}>
+            <Ionicons name="chatbubble-outline" size={36} color={colors.accent} />
+          </View>
           <Text style={styles.emptyText}>Nenhuma conversa ainda</Text>
           <Text style={styles.emptySubtext}>
             Toque no botão + abaixo para iniciar uma conversa
@@ -169,12 +239,15 @@ export default function ChatsScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}
         />
       )}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('NewChat')}
+      <Pressable
+        style={({ pressed }) => [styles.fab, pressed && { transform: [{ scale: 0.9 }], opacity: 0.8 }]}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+          navigation.navigate('NewChat');
+        }}
       >
-        <Text style={styles.fabText}>+</Text>
-      </TouchableOpacity>
+        <Ionicons name="add" size={28} color={colors.white} />
+      </Pressable>
     </View>
   );
 }
@@ -191,21 +264,23 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.borderLight,
     alignItems: 'center',
   },
-  avatar: {
+  avatarWrap: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: colors.accentDark,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginRight: 12,
-    borderWidth: 1,
-    borderColor: colors.accent,
+    position: 'relative',
   },
-  avatarText: {
-    color: colors.text,
-    fontSize: 20,
-    fontWeight: 'bold',
+  onlineDot: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: colors.success,
+    borderWidth: 2,
+    borderColor: colors.bg,
   },
   chatInfo: {
     flex: 1,
@@ -226,6 +301,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 32,
     gap: 12,
+  },
+  emptyIconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: colors.accent + '15',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
   emptyText: {
     color: colors.text,
@@ -253,25 +337,38 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  fabText: {
-    color: colors.text,
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: -2,
-  },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 8,
   },
   errorText: {
     color: colors.destructive,
     fontSize: 15,
-    marginBottom: 8,
+    marginTop: 12,
+  },
+  retryButton: {
+    marginTop: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.elevated,
+    borderRadius: 8,
   },
   retryText: {
     color: colors.accent,
     fontSize: 14,
     fontWeight: '600',
+  },
+  skeletonCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.elevated,
+  },
+  skeletonLine: {
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.elevated,
   },
 });
