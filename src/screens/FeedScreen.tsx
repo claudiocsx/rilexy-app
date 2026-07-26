@@ -36,6 +36,8 @@ import { StoryGroup } from '../services/stories';
 import { decryptAndCache, extractStoragePath, pathHash } from '../services/crypto';
 import { deleteMedia } from '../services/storage';
 import { parsePostText, TextSegment } from '../utils/textParser';
+import { observeMutedUids, muteUser } from '../services/mute';
+import { reportPost, REPORT_REASONS } from '../services/report';
 
 const SCREEN_W = Dimensions.get('window').width;
 const REACTION_EMOJIS = ['❤️', '😂', '😢', '😡', '👍'];
@@ -205,6 +207,7 @@ interface PostItemProps {
   onSelectComments: (postId: string) => void;
   onPressHashtag: (tag: string) => void;
   onPressMention: (displayName: string) => void;
+  onMuteUser: (uid: string, name: string) => void;
 }
 
 function PostItem({
@@ -226,6 +229,7 @@ function PostItem({
   onSelectComments,
   onPressHashtag,
   onPressMention,
+  onMuteUser,
 }: PostItemProps) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [showReactionPicker, setShowReactionPicker] = useState(false);
@@ -322,6 +326,8 @@ function PostItem({
     }).start();
   }, [showReactionPicker]);
 
+  const isOwnPost = item.senderId === currentUserId;
+
   return (
     <View style={styles.postCard}>
       <View style={styles.postHeader}>
@@ -334,7 +340,7 @@ function PostItem({
           </Pressable>
           <Text style={styles.timeAgo}>{formatTimeAgo(item.timestamp)}</Text>
         </View>
-        {item.senderId === currentUserId && (
+        {isOwnPost ? (
           <View style={styles.postHeaderActions}>
             <Pressable onPress={() => onEditPost(item)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}>
               <Ionicons name="pencil" size={16} color={colors.textMuted} />
@@ -343,6 +349,31 @@ function PostItem({
               <Ionicons name="trash-outline" size={16} color={colors.destructive} />
             </Pressable>
           </View>
+        ) : (
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+              Alert.alert('Opções', '', [
+                { text: 'Cancelar', style: 'cancel' },
+                {
+                  text: 'Silenciar ' + item.senderName,
+                  onPress: () => onMuteUser(item.senderId, item.senderName),
+                },
+                {
+                  text: 'Reportar post',
+                  style: 'destructive',
+                  onPress: () => {
+                    setReportPostData({ id: item.id, senderId: item.senderId, text: item.text, mediaUrl: item.mediaUrl || item.mediaUrls?.[0] || '' });
+                    setReportModalVisible(true);
+                  },
+                },
+              ]);
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1, padding: 4 }]}
+          >
+            <Ionicons name="ellipsis-horizontal" size={18} color={colors.textMuted} />
+          </Pressable>
         )}
       </View>
 
@@ -560,6 +591,11 @@ export default function FeedScreen() {
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const [followingUids, setFollowingUids] = useState<Set<string>>(new Set());
   const [visiblePostIds, setVisiblePostIds] = useState<Set<string>>(new Set());
+  const [mutedUids, setMutedUids] = useState<Set<string>>(new Set());
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [reportPostData, setReportPostData] = useState<{ id: string; senderId: string; text: string; mediaUrl: string } | null>(null);
+  const [selectedReason, setSelectedReason] = useState<string>('');
+  const [reportSending, setReportSending] = useState(false);
 
   const tabIndicatorX = useRef(new Animated.Value(0)).current;
 
@@ -617,6 +653,13 @@ export default function FeedScreen() {
       }, () => {});
   }, [user?.uid]);
 
+  useEffect(() => {
+    if (!user) return;
+    return observeMutedUids(user.uid, (uids) => {
+      setMutedUids(new Set(uids));
+    });
+  }, [user?.uid]);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 500);
@@ -639,14 +682,17 @@ export default function FeedScreen() {
   }, []);
 
   const filteredPosts = useMemo(() => {
+    let result = posts;
+    if (mutedUids.size > 0) {
+      result = result.filter((p) => !mutedUids.has(p.senderId));
+    }
     if (activeTab === 'following') {
-      return posts.filter((p) => followingUids.has(p.senderId));
+      result = result.filter((p) => followingUids.has(p.senderId));
+    } else if (activeTab === 'favorites') {
+      result = result.filter((p) => p.savedBy?.includes(user?.uid || ''));
     }
-    if (activeTab === 'favorites') {
-      return posts.filter((p) => p.savedBy?.includes(user?.uid || ''));
-    }
-    return posts;
-  }, [posts, activeTab, followingUids, user?.uid]);
+    return result;
+  }, [posts, activeTab, followingUids, mutedUids, user?.uid]);
 
   const handleViewableItemsChanged = useCallback((info: { viewableItems: any[] }) => {
     const ids = new Set(info.viewableItems.map((v: any) => v.item.id));
@@ -849,6 +895,50 @@ export default function FeedScreen() {
       .catch(() => {});
   };
 
+  const handleMuteUser = async (targetUid: string, targetName: string) => {
+    if (!user) return;
+    Alert.alert('Silenciar ' + targetName, 'Você não verá mais posts dessa pessoa no feed.', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Silenciar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await muteUser(user.uid, targetUid);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+          } catch (e: any) {
+            Alert.alert('Erro', e?.message || 'Não foi possível silenciar');
+          }
+        },
+      },
+    ]);
+  };
+
+  const handleReport = async () => {
+    if (!user || !reportPostData || !selectedReason) return;
+    setReportSending(true);
+    try {
+      await reportPost(
+        reportPostData.id,
+        reportPostData.senderId,
+        user.uid,
+        user.displayName || 'Usuário',
+        selectedReason,
+        reportPostData.text,
+        reportPostData.mediaUrl,
+      );
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+      Alert.alert('Obrigado', 'Seu report foi enviado e será analisado.');
+      setReportModalVisible(false);
+      setSelectedReason('');
+      setReportPostData(null);
+    } catch (e: any) {
+      Alert.alert('Erro', e?.message || 'Não foi possível enviar o report');
+    } finally {
+      setReportSending(false);
+    }
+  };
+
   const renderPostItem: ListRenderItem<Post> = useCallback(({ item }) => (
     <PostItem
       item={item}
@@ -869,6 +959,7 @@ export default function FeedScreen() {
       onSelectComments={setSelectedPostForComments}
       onPressHashtag={handlePressHashtag}
       onPressMention={handlePressMention}
+      onMuteUser={handleMuteUser}
     />
   ), [user, decryptedUris, commentText, visiblePostIds]);
 

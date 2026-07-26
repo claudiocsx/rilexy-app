@@ -22,6 +22,14 @@ class CallService {
     this.unsub?.();
     this.unsub = null;
   }
+
+  static async rejectCall(userId: string, callerId: string) {
+    try {
+      await db.collection('calls').doc(userId).delete();
+      // Don't delete caller's doc here - let caller handle cleanup via onSnapshot
+      // If caller doc exists, they'll see status change and clean up themselves
+    } catch {}
+  }
 }
 
 export default CallService;

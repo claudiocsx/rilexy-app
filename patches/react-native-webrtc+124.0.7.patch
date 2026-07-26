@@ -1,0 +1,3913 @@
+diff --git a/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/results.bin b/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/results.bin
+new file mode 100644
+index 0000000..0d259dd
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/results.bin
+@@ -0,0 +1 @@
++o/classes
+diff --git a/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/transformed/classes/classes_dex/classes.dex b/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/transformed/classes/classes_dex/classes.dex
+new file mode 100644
+index 0000000..0ee7da1
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/.transforms/62ebd57884d8724e83fb2eaac738d915/transformed/classes/classes_dex/classes.dex differ
+diff --git a/node_modules/react-native-webrtc/android/build/generated/source/buildConfig/debug/com/oney/WebRTCModule/BuildConfig.java b/node_modules/react-native-webrtc/android/build/generated/source/buildConfig/debug/com/oney/WebRTCModule/BuildConfig.java
+new file mode 100644
+index 0000000..0f35612
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/generated/source/buildConfig/debug/com/oney/WebRTCModule/BuildConfig.java
+@@ -0,0 +1,10 @@
++/**
++ * Automatically generated file. DO NOT MODIFY
++ */
++package com.oney.WebRTCModule;
++
++public final class BuildConfig {
++  public static final boolean DEBUG = Boolean.parseBoolean("true");
++  public static final String LIBRARY_PACKAGE_NAME = "com.oney.WebRTCModule";
++  public static final String BUILD_TYPE = "debug";
++}
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml b/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
+new file mode 100644
+index 0000000..04e2945
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.oney.WebRTCModule" >
++
++    <uses-sdk android:minSdkVersion="24" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json b/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
+new file mode 100644
+index 0000000..5e59225
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
+@@ -0,0 +1,18 @@
++{
++  "version": 3,
++  "artifactType": {
++    "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
++    "kind": "Directory"
++  },
++  "applicationId": "com.oney.WebRTCModule",
++  "variantName": "debug",
++  "elements": [
++    {
++      "type": "SINGLE",
++      "filters": [],
++      "attributes": [],
++      "outputFile": "AndroidManifest.xml"
++    }
++  ],
++  "elementType": "File"
++}
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties b/node_modules/react-native-webrtc/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
+new file mode 100644
+index 0000000..1211b1e
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
+@@ -0,0 +1,6 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
++minCompileSdk=1
++minCompileSdkExtension=0
++minAndroidGradlePluginVersion=1.0.0
++coreLibraryDesugaringEnabled=false
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json b/node_modules/react-native-webrtc/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
+new file mode 100644
+index 0000000..9e26dfe
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
+@@ -0,0 +1 @@
++{}
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/react-native-webrtc/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
+new file mode 100644
+index 0000000..8839fe7
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/react-native-webrtc/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
+new file mode 100644
+index 0000000..a5fc3f1
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt b/node_modules/react-native-webrtc/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt
+new file mode 100644
+index 0000000..6f5f51a
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt
+@@ -0,0 +1,3 @@
++int string media_projection_notification_text 0x0
++int string media_projection_notification_title 0x0
++int string ongoing_notification_channel_name 0x0
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+new file mode 100644
+index 0000000..840628a
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+@@ -0,0 +1 @@
++#Thu Jun 18 18:32:47 BRT 2026
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml
+new file mode 100644
+index 0000000..e15f34c
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merged.dir/values/values.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string name="media_projection_notification_text">Rilaxy is sharing your screen</string>
++    <string name="media_projection_notification_title">Screen Capture Active</string>
++    <string name="ongoing_notification_channel_name">Screen Capture</string>
++</resources>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+new file mode 100644
+index 0000000..6e03a4d
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\res"><file path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\res\values\strings.xml" qualifiers=""><string name="ongoing_notification_channel_name">Screen Capture</string><string name="media_projection_notification_title">Screen Capture Active</string><string name="media_projection_notification_text">Rilaxy is sharing your screen</string></file></source></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\generated\res\resValues\debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\generated\res\resValues\debug"/></dataSet><mergedItems/></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugAssets/merger.xml b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugAssets/merger.xml
+new file mode 100644
+index 0000000..ddbb808
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugAssets/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\assets"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\debug\assets"/></dataSet><dataSet config="generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\shader_assets\debug\compileDebugShaders\out"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+new file mode 100644
+index 0000000..1d6d1e9
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\jniLibs"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\debug\jniLibs"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+new file mode 100644
+index 0000000..e2b4f0f
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\main\shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\src\debug\shaders"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController$CapturerEventsListener.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController$CapturerEventsListener.class
+new file mode 100644
+index 0000000..a90c7e3
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController$CapturerEventsListener.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController.class
+new file mode 100644
+index 0000000..bd89e42
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/AbstractVideoCaptureController.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/BuildConfig.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/BuildConfig.class
+new file mode 100644
+index 0000000..0afd87e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/BuildConfig.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$1.class
+new file mode 100644
+index 0000000..b97879e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$2.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$2.class
+new file mode 100644
+index 0000000..24844f5
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$2.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$CreateCapturerResult.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$CreateCapturerResult.class
+new file mode 100644
+index 0000000..06bb239
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController$CreateCapturerResult.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController.class
+new file mode 100644
+index 0000000..4918969
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraCaptureController.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraEventsHandler.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraEventsHandler.class
+new file mode 100644
+index 0000000..0dae770
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/CameraEventsHandler.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper$1.class
+new file mode 100644
+index 0000000..e5c8bba
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper.class
+new file mode 100644
+index 0000000..d9e26a0
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DataChannelWrapper.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DisplayUtils.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DisplayUtils.class
+new file mode 100644
+index 0000000..56f06b6
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/DisplayUtils.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/EglUtils.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/EglUtils.class
+new file mode 100644
+index 0000000..7e7bb2c
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/EglUtils.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$1.class
+new file mode 100644
+index 0000000..59c6a46
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$2.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$2.class
+new file mode 100644
+index 0000000..2cfd8cb
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$2.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$3.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$3.class
+new file mode 100644
+index 0000000..91a85cc
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$3.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$BiConsumer.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$BiConsumer.class
+new file mode 100644
+index 0000000..78dbf6f
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$BiConsumer.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$TrackPrivate.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$TrackPrivate.class
+new file mode 100644
+index 0000000..5b85907
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl$TrackPrivate.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl.class
+new file mode 100644
+index 0000000..23a8987
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/GetUserMediaImpl.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/LibraryLoader.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/LibraryLoader.class
+new file mode 100644
+index 0000000..eb92071
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/LibraryLoader.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionNotification.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionNotification.class
+new file mode 100644
+index 0000000..90d11a6
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionNotification.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionService.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionService.class
+new file mode 100644
+index 0000000..6548c90
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/MediaProjectionService.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver$1.class
+new file mode 100644
+index 0000000..0df0062
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver.class
+new file mode 100644
+index 0000000..131456c
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/PeerConnectionObserver.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/RTCVideoViewManager.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/RTCVideoViewManager.class
+new file mode 100644
+index 0000000..096b7dd
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/RTCVideoViewManager.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil$1.class
+new file mode 100644
+index 0000000..6227fae
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil.class
+new file mode 100644
+index 0000000..7f70b24
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ReactBridgeUtil.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$1.class
+new file mode 100644
+index 0000000..f6752f4
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$2.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$2.class
+new file mode 100644
+index 0000000..83e2187
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController$2.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController.class
+new file mode 100644
+index 0000000..ac6c5d5
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ScreenCaptureController.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils$1.class
+new file mode 100644
+index 0000000..09afe89
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils.class
+new file mode 100644
+index 0000000..c0c8991
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/SerializeUtils.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/StringUtils.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/StringUtils.class
+new file mode 100644
+index 0000000..9029e9a
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/StringUtils.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ThreadUtils.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ThreadUtils.class
+new file mode 100644
+index 0000000..5147018
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/ThreadUtils.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/TrackCapturerEventsEmitter.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/TrackCapturerEventsEmitter.class
+new file mode 100644
+index 0000000..6e65fab
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/TrackCapturerEventsEmitter.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl$1.class
+new file mode 100644
+index 0000000..c8f9b27
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl.class
+new file mode 100644
+index 0000000..2853fb9
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter$TrackMuteUnmuteImpl.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter.class
+new file mode 100644
+index 0000000..85f519e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/VideoTrackAdapter.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$1.class
+new file mode 100644
+index 0000000..cab31ba
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$2.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$2.class
+new file mode 100644
+index 0000000..02cae63
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$2.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$3.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$3.class
+new file mode 100644
+index 0000000..5099e74
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$3.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$4.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$4.class
+new file mode 100644
+index 0000000..8ff86ab
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$4.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$5.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$5.class
+new file mode 100644
+index 0000000..5ffd371
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$5.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$6.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$6.class
+new file mode 100644
+index 0000000..1eb6aea
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule$6.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule.class
+new file mode 100644
+index 0000000..da6f703
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModule.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModuleOptions.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModuleOptions.class
+new file mode 100644
+index 0000000..f635b17
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModuleOptions.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModulePackage.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModulePackage.class
+new file mode 100644
+index 0000000..6123b1a
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCModulePackage.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$1.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$1.class
+new file mode 100644
+index 0000000..01e5b02
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$1.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$2.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$2.class
+new file mode 100644
+index 0000000..852bfdd
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$2.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$3.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$3.class
+new file mode 100644
+index 0000000..64f3ec3
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView$3.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView.class
+new file mode 100644
+index 0000000..cb59a34
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/WebRTCView.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/ProcessorProvider.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/ProcessorProvider.class
+new file mode 100644
+index 0000000..f7fbf28
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/ProcessorProvider.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoEffectProcessor.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoEffectProcessor.class
+new file mode 100644
+index 0000000..c4e4368
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoEffectProcessor.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessor.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessor.class
+new file mode 100644
+index 0000000..dfdcdca
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessor.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessorFactoryInterface.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessorFactoryInterface.class
+new file mode 100644
+index 0000000..142567e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/videoEffects/VideoFrameProcessorFactoryInterface.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoDecoderFactory.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoDecoderFactory.class
+new file mode 100644
+index 0000000..888ac5b
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoDecoderFactory.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoEncoderFactory.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoEncoderFactory.class
+new file mode 100644
+index 0000000..fbb700d
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/H264AndSoftwareVideoEncoderFactory.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoDecoderFactoryProxy.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoDecoderFactoryProxy.class
+new file mode 100644
+index 0000000..ff2692e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoDecoderFactoryProxy.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoEncoderFactoryProxy.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoEncoderFactoryProxy.class
+new file mode 100644
+index 0000000..8f05184
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/oney/WebRTCModule/webrtcutils/SoftwareVideoEncoderFactoryProxy.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera1Helper.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera1Helper.class
+new file mode 100644
+index 0000000..82161fc
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera1Helper.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera2Helper.class b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera2Helper.class
+new file mode 100644
+index 0000000..e9c3b87
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/org/webrtc/Camera2Helper.class differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt b/node_modules/react-native-webrtc/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
+new file mode 100644
+index 0000000..fd7ca18
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
+@@ -0,0 +1,5 @@
++R_DEF: Internal format may change without notice
++local
++string media_projection_notification_text
++string media_projection_notification_title
++string ongoing_notification_channel_name
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt b/node_modules/react-native-webrtc/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
+new file mode 100644
+index 0000000..1a48ce5
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
+@@ -0,0 +1,7 @@
++1<?xml version="1.0" encoding="utf-8"?>
++2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++3    package="com.oney.WebRTCModule" >
++4
++5    <uses-sdk android:minSdkVersion="24" />
++6
++7</manifest>
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml b/node_modules/react-native-webrtc/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
+new file mode 100644
+index 0000000..04e2945
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.oney.WebRTCModule" >
++
++    <uses-sdk android:minSdkVersion="24" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json b/node_modules/react-native-webrtc/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
+new file mode 100644
+index 0000000..0637a08
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
+@@ -0,0 +1 @@
++[]
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt b/node_modules/react-native-webrtc/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
+new file mode 100644
+index 0000000..08f4ebe
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
+@@ -0,0 +1 @@
++0 Warning/Error
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/packaged_res/debug/packageDebugResources/values/values.xml b/node_modules/react-native-webrtc/android/build/intermediates/packaged_res/debug/packageDebugResources/values/values.xml
+new file mode 100644
+index 0000000..e15f34c
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/packaged_res/debug/packageDebugResources/values/values.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string name="media_projection_notification_text">Rilaxy is sharing your screen</string>
++    <string name="media_projection_notification_title">Screen Capture Active</string>
++    <string name="ongoing_notification_channel_name">Screen Capture</string>
++</resources>
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar b/node_modules/react-native-webrtc/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar
+new file mode 100644
+index 0000000..b5e1c3e
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar differ
+diff --git a/node_modules/react-native-webrtc/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/react-native-webrtc/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
+new file mode 100644
+index 0000000..b75bf15
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
+@@ -0,0 +1,4 @@
++com.oney.WebRTCModule
++string media_projection_notification_text
++string media_projection_notification_title
++string ongoing_notification_channel_name
+diff --git a/node_modules/react-native-webrtc/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/react-native-webrtc/android/build/outputs/logs/manifest-merger-debug-report.txt
+new file mode 100644
+index 0000000..3b5164c
+--- /dev/null
++++ b/node_modules/react-native-webrtc/android/build/outputs/logs/manifest-merger-debug-report.txt
+@@ -0,0 +1,16 @@
++-- Merging decision tree log ---
++manifest
++ADDED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml:2:13-83
++INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml:2:13-83
++	package
++		INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml
++	xmlns:android
++		ADDED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml:2:23-81
++uses-sdk
++INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml reason: use-sdk injection requested
++INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml
++INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml
++	android:targetSdkVersion
++		INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml
++	android:minSdkVersion
++		INJECTED from C:\Users\Ana Claudia\Documents\Rilaxy\Rilaxy\node_modules\react-native-webrtc\android\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest13529995745324253799.xml
+diff --git a/node_modules/react-native-webrtc/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/react-native-webrtc/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
+new file mode 100644
+index 0000000..dd91b89
+Binary files /dev/null and b/node_modules/react-native-webrtc/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
+diff --git a/node_modules/react-native-webrtc/android/src/main/AndroidManifest.xml b/node_modules/react-native-webrtc/android/src/main/AndroidManifest.xml
+deleted file mode 100644
+index 3213151..0000000
+--- a/node_modules/react-native-webrtc/android/src/main/AndroidManifest.xml
++++ /dev/null
+@@ -1,11 +0,0 @@
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-          package="com.oney.WebRTCModule"
+-          xmlns:tools="http://schemas.android.com/tools"
+-    >
+-    <application>
+-        <service
+-                android:name=".MediaProjectionService"
+-                android:foregroundServiceType="mediaProjection">
+-        </service>
+-    </application>
+-</manifest>
+diff --git a/node_modules/react-native-webrtc/android/src/main/res/values/strings.xml b/node_modules/react-native-webrtc/android/src/main/res/values/strings.xml
+index 3c2b315..08aebfa 100644
+--- a/node_modules/react-native-webrtc/android/src/main/res/values/strings.xml
++++ b/node_modules/react-native-webrtc/android/src/main/res/values/strings.xml
+@@ -1,5 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="media_projection_notification_title">Screen sharing</string>
+-    <string name="media_projection_notification_text">You are currently sharing your screen.</string>
+-    <string name="ongoing_notification_channel_name">Screen Sharing Notifications</string>
++    <string name="ongoing_notification_channel_name">Screen Capture</string>
++    <string name="media_projection_notification_title">Screen Capture Active</string>
++    <string name="media_projection_notification_text">Rilaxy is sharing your screen</string>
+ </resources>
+diff --git a/node_modules/react-native-webrtc/android/src/main/res/values/styles.xml b/node_modules/react-native-webrtc/android/src/main/res/values/styles.xml
+deleted file mode 100644
+index 319eb0c..0000000
+--- a/node_modules/react-native-webrtc/android/src/main/res/values/styles.xml
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<resources>
+-
+-    <!-- Base application theme. -->
+-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+-        <!-- Customize your theme here. -->
+-    </style>
+-
+-</resources>
+diff --git a/node_modules/react-native-webrtc/ios/RCTWebRTC.xcworkspace/contents.xcworkspacedata b/node_modules/react-native-webrtc/ios/RCTWebRTC.xcworkspace/contents.xcworkspacedata
+deleted file mode 100644
+index 7ec39d4..0000000
+--- a/node_modules/react-native-webrtc/ios/RCTWebRTC.xcworkspace/contents.xcworkspacedata
++++ /dev/null
+@@ -1,10 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<Workspace
+-   version = "1.0">
+-   <FileRef
+-      location = "group:RCTWebRTC.xcodeproj">
+-   </FileRef>
+-   <FileRef
+-      location = "group:Pods/Pods.xcodeproj">
+-   </FileRef>
+-</Workspace>
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCAudioSession.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCAudioSession.d.ts
+deleted file mode 100644
+index 38acc3b..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCAudioSession.d.ts
++++ /dev/null
+@@ -1,10 +0,0 @@
+-export default class RTCAudioSession {
+-    /**
+-     * To be called when CallKit activates the audio session.
+-     */
+-    static audioSessionDidActivate(): void;
+-    /**
+-     * To be called when CallKit deactivates the audio session.
+-     */
+-    static audioSessionDidDeactivate(): void;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCDataChannel.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCDataChannel.d.ts
+deleted file mode 100644
+index 82addbe..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCDataChannel.d.ts
++++ /dev/null
+@@ -1,43 +0,0 @@
+-import { EventTarget } from 'event-target-shim/index';
+-import MessageEvent from './MessageEvent';
+-import RTCDataChannelEvent from './RTCDataChannelEvent';
+-declare type RTCDataChannelState = 'connecting' | 'open' | 'closing' | 'closed';
+-declare type DataChannelEventMap = {
+-    bufferedamountlow: RTCDataChannelEvent<'bufferedamountlow'>;
+-    close: RTCDataChannelEvent<'close'>;
+-    closing: RTCDataChannelEvent<'closing'>;
+-    error: RTCDataChannelEvent<'error'>;
+-    message: MessageEvent<'message'>;
+-    open: RTCDataChannelEvent<'open'>;
+-};
+-export default class RTCDataChannel extends EventTarget<DataChannelEventMap> {
+-    _peerConnectionId: number;
+-    _reactTag: string;
+-    _bufferedAmount: number;
+-    _id: number;
+-    _label: string;
+-    _maxPacketLifeTime?: number;
+-    _maxRetransmits?: number;
+-    _negotiated: boolean;
+-    _ordered: boolean;
+-    _protocol: string;
+-    _readyState: RTCDataChannelState;
+-    binaryType: string;
+-    bufferedAmountLowThreshold: number;
+-    constructor(info: any);
+-    get bufferedAmount(): number;
+-    get label(): string;
+-    get id(): number;
+-    get ordered(): boolean;
+-    get maxPacketLifeTime(): number | undefined;
+-    get maxRetransmits(): number | undefined;
+-    get protocol(): string;
+-    get negotiated(): boolean;
+-    get readyState(): string;
+-    send(data: string): void;
+-    send(data: ArrayBuffer): void;
+-    send(data: ArrayBufferView): void;
+-    close(): void;
+-    _registerEvents(): void;
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCDataChannelEvent.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCDataChannelEvent.d.ts
+deleted file mode 100644
+index 5612c63..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCDataChannelEvent.d.ts
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-import type RTCDataChannel from './RTCDataChannel';
+-declare type DATA_CHANNEL_EVENTS = 'open' | 'message' | 'bufferedamountlow' | 'closing' | 'close' | 'error' | 'datachannel';
+-interface IRTCDataChannelEventInitDict extends Event.EventInit {
+-    channel: RTCDataChannel;
+-}
+-/**
+- * @eventClass
+- * This event is fired whenever the RTCDataChannel has changed in any way.
+- * @param {DATA_CHANNEL_EVENTS} type - The type of event.
+- * @param {IRTCDataChannelEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel#events MDN} for details.
+- */
+-export default class RTCDataChannelEvent<TEventType extends DATA_CHANNEL_EVENTS> extends Event<TEventType> {
+-    /** @eventProperty */
+-    channel: RTCDataChannel;
+-    constructor(type: TEventType, eventInitDict: IRTCDataChannelEventInitDict);
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCErrorEvent.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCErrorEvent.d.ts
+deleted file mode 100644
+index e52d544..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCErrorEvent.d.ts
++++ /dev/null
+@@ -1,12 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-declare type RTCPeerConnectionErrorFunc = 'addTransceiver' | 'getTransceivers' | 'addTrack' | 'removeTrack';
+-/**
+- * @brief This class Represents internal error happening on the native side as
+- * part of asynchronous invocations to synchronous web APIs.
+- */
+-export default class RTCErrorEvent<TEventType extends RTCPeerConnectionErrorFunc> extends Event<TEventType> {
+-    readonly func: RTCPeerConnectionErrorFunc;
+-    readonly message: string;
+-    constructor(type: TEventType, func: RTCPeerConnectionErrorFunc, message: string);
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidate.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidate.d.ts
+deleted file mode 100644
+index f4b3a0b..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidate.d.ts
++++ /dev/null
+@@ -1,17 +0,0 @@
+-interface RTCIceCandidateInfo {
+-    candidate?: string;
+-    sdpMLineIndex?: number | null;
+-    sdpMid?: string | null;
+-}
+-export default class RTCIceCandidate {
+-    candidate: string;
+-    sdpMLineIndex?: number | null;
+-    sdpMid?: string | null;
+-    constructor({ candidate, sdpMLineIndex, sdpMid }: RTCIceCandidateInfo);
+-    toJSON(): {
+-        candidate: string;
+-        sdpMLineIndex: number | null | undefined;
+-        sdpMid: string | null | undefined;
+-    };
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidateEvent.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidateEvent.d.ts
+deleted file mode 100644
+index 518cbd5..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCIceCandidateEvent.d.ts
++++ /dev/null
+@@ -1,20 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-import type RTCIceCandidate from './RTCIceCandidate';
+-declare type RTC_ICECANDIDATE_EVENTS = 'icecandidate' | 'icecandidateerror';
+-interface IRTCDataChannelEventInitDict extends Event.EventInit {
+-    candidate: RTCIceCandidate | null;
+-}
+-/**
+- * @eventClass
+- * This event is fired whenever the icecandidate related RTC_EVENTS changed.
+- * @type {RTCIceCandidateEvent} for icecandidate related.
+- * @param {RTC_ICECANDIDATE_EVENTS} type - The type of event.
+- * @param {IRTCDataChannelEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection#events MDN} for details.
+- */
+-export default class RTCIceCandidateEvent<TEventType extends RTC_ICECANDIDATE_EVENTS> extends Event<TEventType> {
+-    /** @eventProperty */
+-    candidate: RTCIceCandidate | null;
+-    constructor(type: TEventType, eventInitDict: IRTCDataChannelEventInitDict);
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCPIPView.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCPIPView.d.ts
+deleted file mode 100644
+index 0ea9d68..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCPIPView.d.ts
++++ /dev/null
+@@ -1,15 +0,0 @@
+-import { Component } from 'react';
+-import ReactNative from 'react-native';
+-import { RTCIOSPIPOptions, RTCVideoViewProps } from './RTCView';
+-export interface RTCPIPViewProps extends RTCVideoViewProps {
+-    iosPIP?: RTCIOSPIPOptions & {
+-        fallbackView?: Component;
+-    };
+-}
+-/**
+- * A convenience wrapper around RTCView to handle the fallback view as a prop.
+- */
+-declare const RTCPIPView: import("react").ForwardRefExoticComponent<RTCPIPViewProps & import("react").RefAttributes<Component<RTCVideoViewProps, {}, any> & Readonly<ReactNative.NativeMethods>>>;
+-export declare function startIOSPIP(ref: any): void;
+-export declare function stopIOSPIP(ref: any): void;
+-export default RTCPIPView;
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCPeerConnection.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCPeerConnection.d.ts
+deleted file mode 100644
+index c20fdba..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCPeerConnection.d.ts
++++ /dev/null
+@@ -1,117 +0,0 @@
+-import { EventTarget, Event } from 'event-target-shim/index';
+-import MediaStream from './MediaStream';
+-import MediaStreamTrack from './MediaStreamTrack';
+-import RTCDataChannel from './RTCDataChannel';
+-import RTCDataChannelEvent from './RTCDataChannelEvent';
+-import RTCIceCandidateEvent from './RTCIceCandidateEvent';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpSender from './RTCRtpSender';
+-import RTCRtpTransceiver from './RTCRtpTransceiver';
+-import RTCSessionDescription, { RTCSessionDescriptionInit } from './RTCSessionDescription';
+-import RTCTrackEvent from './RTCTrackEvent';
+-import { RTCOfferOptions } from './RTCUtil';
+-declare type RTCSignalingState = 'stable' | 'have-local-offer' | 'have-remote-offer' | 'have-local-pranswer' | 'have-remote-pranswer' | 'closed';
+-declare type RTCIceGatheringState = 'new' | 'gathering' | 'complete';
+-declare type RTCPeerConnectionState = 'new' | 'connecting' | 'connected' | 'disconnected' | 'failed' | 'closed';
+-declare type RTCIceConnectionState = 'new' | 'checking' | 'connected' | 'completed' | 'failed' | 'disconnected' | 'closed';
+-declare type RTCDataChannelInit = {
+-    ordered?: boolean;
+-    maxPacketLifeTime?: number;
+-    maxRetransmits?: number;
+-    protocol?: string;
+-    negotiated?: boolean;
+-    id?: number;
+-};
+-declare type RTCIceServer = {
+-    credential?: string;
+-    url?: string;
+-    urls?: string | string[];
+-    username?: string;
+-};
+-declare type RTCConfiguration = {
+-    bundlePolicy?: 'balanced' | 'max-compat' | 'max-bundle';
+-    iceCandidatePoolSize?: number;
+-    iceServers?: RTCIceServer[];
+-    iceTransportPolicy?: 'all' | 'relay';
+-    rtcpMuxPolicy?: 'negotiate' | 'require';
+-};
+-declare type RTCPeerConnectionEventMap = {
+-    connectionstatechange: Event<'connectionstatechange'>;
+-    icecandidate: RTCIceCandidateEvent<'icecandidate'>;
+-    icecandidateerror: RTCIceCandidateEvent<'icecandidateerror'>;
+-    iceconnectionstatechange: Event<'iceconnectionstatechange'>;
+-    icegatheringstatechange: Event<'icegatheringstatechange'>;
+-    negotiationneeded: Event<'negotiationneeded'>;
+-    signalingstatechange: Event<'signalingstatechange'>;
+-    datachannel: RTCDataChannelEvent<'datachannel'>;
+-    track: RTCTrackEvent<'track'>;
+-    error: Event<'error'>;
+-};
+-export default class RTCPeerConnection extends EventTarget<RTCPeerConnectionEventMap> {
+-    localDescription: RTCSessionDescription | null;
+-    remoteDescription: RTCSessionDescription | null;
+-    signalingState: RTCSignalingState;
+-    iceGatheringState: RTCIceGatheringState;
+-    connectionState: RTCPeerConnectionState;
+-    iceConnectionState: RTCIceConnectionState;
+-    _pcId: number;
+-    _transceivers: {
+-        order: number;
+-        transceiver: RTCRtpTransceiver;
+-    }[];
+-    _remoteStreams: Map<string, MediaStream>;
+-    _pendingTrackEvents: any[];
+-    constructor(configuration?: RTCConfiguration);
+-    createOffer(options?: RTCOfferOptions): Promise<any>;
+-    createAnswer(): Promise<any>;
+-    setConfiguration(configuration: any): void;
+-    setLocalDescription(sessionDescription?: RTCSessionDescription | RTCSessionDescriptionInit): Promise<void>;
+-    setRemoteDescription(sessionDescription: RTCSessionDescription | RTCSessionDescriptionInit): Promise<void>;
+-    addIceCandidate(candidate: any): Promise<void>;
+-    /**
+-     * @brief Adds a new track to the {@link RTCPeerConnection},
+-     * and indicates that it is contained in the specified {@link MediaStream}s.
+-     * This method has to be synchronous as the W3C API expects a track to be returned
+-     * @param {MediaStreamTrack} track The track to be added
+-     * @param {...MediaStream} streams One or more {@link MediaStream}s the track needs to be added to
+-     * https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-addtrack
+-     */
+-    addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender;
+-    addTransceiver(source: 'audio' | 'video' | MediaStreamTrack, init: any): RTCRtpTransceiver;
+-    removeTrack(sender: RTCRtpSender): void;
+-    getStats(selector?: MediaStreamTrack): Promise<any>;
+-    getTransceivers(): RTCRtpTransceiver[];
+-    getSenders(): RTCRtpSender[];
+-    getReceivers(): RTCRtpReceiver[];
+-    close(): void;
+-    restartIce(): void;
+-    _registerEvents(): void;
+-    /**
+-     * Creates a new RTCDataChannel object with the given label. The
+-     * RTCDataChannelInit dictionary can be used to configure properties of the
+-     * underlying channel such as data reliability.
+-     *
+-     * @param {string} label - the value with which the label attribute of the new
+-     * instance is to be initialized
+-     * @param {RTCDataChannelInit} dataChannelDict - an optional dictionary of
+-     * values with which to initialize corresponding attributes of the new
+-     * instance such as id
+-     */
+-    createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
+-    /**
+-     * Check whether a media stream track exists already in a sender.
+-     * See https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-addtrack for more information
+-     */
+-    _trackExists(track: MediaStreamTrack): boolean;
+-    /**
+-     * Updates transceivers after offer/answer updates if necessary.
+-     */
+-    _updateTransceivers(transceiverUpdates: any, removeStopped?: boolean): void;
+-    /**
+-     * Inserts transceiver into the transceiver array in the order they are created (timestamp).
+-     * @param order an index that refers to when it it was created relatively.
+-     * @param transceiver the transceiver object to be inserted.
+-     */
+-    _insertTransceiverSorted(order: number, transceiver: RTCRtpTransceiver): void;
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtcpParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtcpParameters.d.ts
+deleted file mode 100644
+index af00051..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtcpParameters.d.ts
++++ /dev/null
+@@ -1,10 +0,0 @@
+-export interface RTCRtcpParametersInit {
+-    cname: string;
+-    reducedSize: boolean;
+-}
+-export default class RTCRtcpParameters {
+-    readonly cname: string;
+-    readonly reducedSize: boolean;
+-    constructor(init: RTCRtcpParametersInit);
+-    toJSON(): RTCRtcpParametersInit;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCapabilities.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpCapabilities.d.ts
+deleted file mode 100644
+index 17b799f..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCapabilities.d.ts
++++ /dev/null
+@@ -1,9 +0,0 @@
+-import RTCRtpCodecCapability from './RTCRtpCodecCapability';
+-/**
+- * @brief represents codec capabilities for senders and receivers.
+- */
+-export default class RTCRtpCapabilities {
+-    _codecs: RTCRtpCodecCapability[];
+-    constructor(codecs: RTCRtpCodecCapability[]);
+-    get codecs(): RTCRtpCodecCapability[];
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecCapability.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecCapability.d.ts
+deleted file mode 100644
+index 8953e12..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecCapability.d.ts
++++ /dev/null
+@@ -1,7 +0,0 @@
+-export default class RTCRtpCodecCapability {
+-    _mimeType: string;
+-    constructor(init: {
+-        mimeType: string;
+-    });
+-    get mimeType(): string;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecParameters.d.ts
+deleted file mode 100644
+index 7e48c46..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpCodecParameters.d.ts
++++ /dev/null
+@@ -1,16 +0,0 @@
+-export interface RTCRtpCodecParametersInit {
+-    payloadType: number;
+-    clockRate: number;
+-    mimeType: string;
+-    channels?: number;
+-    sdpFmtpLine?: string;
+-}
+-export default class RTCRtpCodecParameters {
+-    readonly payloadType: number;
+-    readonly clockRate: number;
+-    readonly mimeType: string;
+-    readonly channels: number | null;
+-    readonly sdpFmtpLine: string | null;
+-    constructor(init: RTCRtpCodecParametersInit);
+-    toJSON(): RTCRtpCodecParametersInit;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpEncodingParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpEncodingParameters.d.ts
+deleted file mode 100644
+index 234b3a0..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpEncodingParameters.d.ts
++++ /dev/null
+@@ -1,23 +0,0 @@
+-export interface RTCRtpEncodingParametersInit {
+-    active: boolean;
+-    rid?: string;
+-    maxFramerate?: number;
+-    maxBitrate?: number;
+-    scaleResolutionDownBy?: number;
+-}
+-export default class RTCRtpEncodingParameters {
+-    active: boolean;
+-    _rid: string | null;
+-    _maxFramerate: number | null;
+-    _maxBitrate: number | null;
+-    _scaleResolutionDownBy: number | null;
+-    constructor(init: RTCRtpEncodingParametersInit);
+-    get rid(): string | null;
+-    get maxFramerate(): number | null;
+-    set maxFramerate(framerate: number | null);
+-    get maxBitrate(): number | null;
+-    set maxBitrate(bitrate: number | null);
+-    get scaleResolutionDownBy(): number | null;
+-    set scaleResolutionDownBy(resolutionScale: number | null);
+-    toJSON(): RTCRtpEncodingParametersInit;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpHeaderExtension.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpHeaderExtension.d.ts
+deleted file mode 100644
+index 1ad064a..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpHeaderExtension.d.ts
++++ /dev/null
+@@ -1,12 +0,0 @@
+-export interface RTCRtpHeaderExtensionInit {
+-    id: number;
+-    uri: string;
+-    encrypted: boolean;
+-}
+-export default class RTCRtpHeaderExtension {
+-    readonly id: number;
+-    readonly uri: string;
+-    readonly encrypted: boolean;
+-    constructor(init: RTCRtpHeaderExtensionInit);
+-    toJSON(): RTCRtpHeaderExtensionInit;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpParameters.d.ts
+deleted file mode 100644
+index 112d1e4..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpParameters.d.ts
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import RTCRtcpParameters, { RTCRtcpParametersInit } from './RTCRtcpParameters';
+-import RTCRtpCodecParameters, { RTCRtpCodecParametersInit } from './RTCRtpCodecParameters';
+-import RTCRtpHeaderExtension, { RTCRtpHeaderExtensionInit } from './RTCRtpHeaderExtension';
+-export interface RTCRtpParametersInit {
+-    codecs: RTCRtpCodecParametersInit[];
+-    headerExtensions: RTCRtpHeaderExtensionInit[];
+-    rtcp: RTCRtcpParametersInit;
+-}
+-export default class RTCRtpParameters {
+-    codecs: (RTCRtpCodecParameters | RTCRtpCodecParametersInit)[];
+-    readonly headerExtensions: RTCRtpHeaderExtension[];
+-    readonly rtcp: RTCRtcpParameters;
+-    constructor(init: RTCRtpParametersInit);
+-    toJSON(): {
+-        codecs: (RTCRtpCodecParametersInit | RTCRtpCodecParameters)[];
+-        headerExtensions: RTCRtpHeaderExtension[];
+-        rtcp: RTCRtcpParameters;
+-    };
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiveParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiveParameters.d.ts
+deleted file mode 100644
+index 81c1e8d..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiveParameters.d.ts
++++ /dev/null
+@@ -1,4 +0,0 @@
+-import RTCRtpParameters, { RTCRtpParametersInit } from './RTCRtpParameters';
+-export default class RTCRtpReceiveParameters extends RTCRtpParameters {
+-    constructor(init: RTCRtpParametersInit);
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiver.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiver.d.ts
+deleted file mode 100644
+index 41fb953..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpReceiver.d.ts
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpCapabilities from './RTCRtpCapabilities';
+-import { RTCRtpParametersInit } from './RTCRtpParameters';
+-import RTCRtpReceiveParameters from './RTCRtpReceiveParameters';
+-export default class RTCRtpReceiver {
+-    _id: string;
+-    _peerConnectionId: number;
+-    _track: MediaStreamTrack | null;
+-    _rtpParameters: RTCRtpReceiveParameters;
+-    constructor(info: {
+-        peerConnectionId: number;
+-        id: string;
+-        track?: MediaStreamTrack;
+-        rtpParameters: RTCRtpParametersInit;
+-    });
+-    static getCapabilities(kind: 'audio' | 'video'): RTCRtpCapabilities;
+-    getStats(): any;
+-    getParameters(): RTCRtpReceiveParameters;
+-    get id(): string;
+-    get track(): MediaStreamTrack | null;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpSendParameters.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpSendParameters.d.ts
+deleted file mode 100644
+index dc27b24..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpSendParameters.d.ts
++++ /dev/null
+@@ -1,20 +0,0 @@
+-import RTCRtpEncodingParameters, { RTCRtpEncodingParametersInit } from './RTCRtpEncodingParameters';
+-import RTCRtpParameters, { RTCRtpParametersInit } from './RTCRtpParameters';
+-declare type DegradationPreferenceType = 'maintain-framerate' | 'maintain-resolution' | 'balanced' | 'disabled';
+-export interface RTCRtpSendParametersInit extends RTCRtpParametersInit {
+-    transactionId: string;
+-    encodings: RTCRtpEncodingParametersInit[];
+-    degradationPreference?: string;
+-}
+-export default class RTCRtpSendParameters extends RTCRtpParameters {
+-    readonly transactionId: string;
+-    encodings: (RTCRtpEncodingParameters | RTCRtpEncodingParametersInit)[];
+-    degradationPreference: DegradationPreferenceType | null;
+-    constructor(init: RTCRtpSendParametersInit);
+-    toJSON(): {
+-        codecs: (import("./RTCRtpCodecParameters").RTCRtpCodecParametersInit | import("./RTCRtpCodecParameters").default)[];
+-        headerExtensions: import("./RTCRtpHeaderExtension").default[];
+-        rtcp: import("./RTCRtcpParameters").default;
+-    };
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpSender.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpSender.d.ts
+deleted file mode 100644
+index 64def3e..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpSender.d.ts
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpCapabilities from './RTCRtpCapabilities';
+-import RTCRtpSendParameters, { RTCRtpSendParametersInit } from './RTCRtpSendParameters';
+-export default class RTCRtpSender {
+-    _id: string;
+-    _track: MediaStreamTrack | null;
+-    _peerConnectionId: number;
+-    _rtpParameters: RTCRtpSendParameters;
+-    constructor(info: {
+-        peerConnectionId: number;
+-        id: string;
+-        track?: MediaStreamTrack;
+-        rtpParameters: RTCRtpSendParametersInit;
+-    });
+-    replaceTrack(track: MediaStreamTrack | null): Promise<void>;
+-    static getCapabilities(kind: 'audio' | 'video'): RTCRtpCapabilities;
+-    getParameters(): RTCRtpSendParameters;
+-    setParameters(parameters: RTCRtpSendParameters): Promise<void>;
+-    getStats(): any;
+-    get track(): MediaStreamTrack | null;
+-    get id(): string;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCRtpTransceiver.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCRtpTransceiver.d.ts
+deleted file mode 100644
+index 5656cf9..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCRtpTransceiver.d.ts
++++ /dev/null
+@@ -1,31 +0,0 @@
+-import RTCRtpCodecCapability from './RTCRtpCodecCapability';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpSender from './RTCRtpSender';
+-export default class RTCRtpTransceiver {
+-    _peerConnectionId: number;
+-    _sender: RTCRtpSender;
+-    _receiver: RTCRtpReceiver;
+-    _mid: string | null;
+-    _direction: string;
+-    _currentDirection: string;
+-    _stopped: boolean;
+-    constructor(args: {
+-        peerConnectionId: number;
+-        isStopped: boolean;
+-        direction: string;
+-        currentDirection: string;
+-        mid?: string;
+-        sender: RTCRtpSender;
+-        receiver: RTCRtpReceiver;
+-    });
+-    get mid(): string | null;
+-    get stopped(): boolean;
+-    get direction(): string;
+-    set direction(val: string);
+-    get currentDirection(): string;
+-    get sender(): RTCRtpSender;
+-    get receiver(): RTCRtpReceiver;
+-    stop(): void;
+-    setCodecPreferences(codecs: RTCRtpCodecCapability[]): void;
+-    _setStopped(): void;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCSessionDescription.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCSessionDescription.d.ts
+deleted file mode 100644
+index c834fb9..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCSessionDescription.d.ts
++++ /dev/null
+@@ -1,12 +0,0 @@
+-export interface RTCSessionDescriptionInit {
+-    sdp: string;
+-    type: string | null;
+-}
+-export default class RTCSessionDescription {
+-    _sdp: string;
+-    _type: string | null;
+-    constructor(info?: RTCSessionDescriptionInit);
+-    get sdp(): string;
+-    get type(): string | null;
+-    toJSON(): RTCSessionDescriptionInit;
+-}
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCTrackEvent.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCTrackEvent.d.ts
+deleted file mode 100644
+index b87c7ae..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCTrackEvent.d.ts
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-import MediaStream from './MediaStream';
+-import type MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpTransceiver from './RTCRtpTransceiver';
+-declare type TRACK_EVENTS = 'track';
+-interface IRTCTrackEventInitDict extends Event.EventInit {
+-    streams: MediaStream[];
+-    transceiver: RTCRtpTransceiver;
+-}
+-/**
+- * @eventClass
+- * This event is fired whenever the Track is changed in PeerConnection.
+- * @param {TRACK_EVENTS} type - The type of event.
+- * @param {IRTCTrackEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/track_event MDN} for details.
+- */
+-export default class RTCTrackEvent<TEventType extends TRACK_EVENTS> extends Event<TEventType> {
+-    /** @eventProperty */
+-    readonly streams: MediaStream[];
+-    /** @eventProperty */
+-    readonly transceiver: RTCRtpTransceiver;
+-    /** @eventProperty */
+-    readonly receiver: RTCRtpReceiver | null;
+-    /** @eventProperty */
+-    readonly track: MediaStreamTrack | null;
+-    constructor(type: TEventType, eventInitDict: IRTCTrackEventInitDict);
+-}
+-export {};
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCUtil.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCUtil.d.ts
+deleted file mode 100644
+index 6b96048..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCUtil.d.ts
++++ /dev/null
+@@ -1,37 +0,0 @@
+-export declare type RTCOfferOptions = {
+-    iceRestart?: boolean;
+-    offerToReceiveAudio?: boolean;
+-    offerToReceiveVideo?: boolean;
+-    voiceActivityDetection?: boolean;
+-};
+-/**
+- * Put together a random string in UUIDv4 format {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+- *
+- * @return {String} uuidv4
+- */
+-export declare function uniqueID(): string;
+-/**
+- * Utility for deep cloning an object. Object.assign() only does a shallow copy.
+- *
+- * @param {Object} obj - object to be cloned
+- * @return {Object} cloned obj
+- */
+-export declare function deepClone<T>(obj: T): T;
+-/**
+- * Checks whether an SDP type is valid or not.
+- *
+- * @param type SDP type to check.
+- * @returns Whether the SDP type is valid or not.
+- */
+-export declare function isSdpTypeValid(type: string): boolean;
+-/**
+- * Normalize options passed to createOffer().
+- *
+- * @param options - user supplied options
+- * @return Normalized options
+- */
+-export declare function normalizeOfferOptions(options?: RTCOfferOptions): Record<string, string>;
+-/**
+- * Normalize the given constraints in something we can work with.
+- */
+-export declare function normalizeConstraints(constraints: any): any;
+diff --git a/node_modules/react-native-webrtc/lib/typescript/RTCView.d.ts b/node_modules/react-native-webrtc/lib/typescript/RTCView.d.ts
+deleted file mode 100644
+index e316524..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/RTCView.d.ts
++++ /dev/null
+@@ -1,117 +0,0 @@
+-import { ViewProps } from 'react-native';
+-/**
+- * Native prop validation was removed from RN in:
+- * https://github.com/facebook/react-native/commit/8dc3ba0444c94d9bbb66295b5af885bff9b9cd34
+- *
+- * So we list them here for documentation purposes.
+- */
+-export interface RTCVideoViewProps extends ViewProps {
+-    /**
+-     * Indicates whether the video specified by {@link #streamURL} should be
+-     * mirrored during rendering. Commonly, applications choose to mirror the
+-     * user-facing camera.
+-     *
+-     * mirror: boolean
+-     */
+-    mirror?: boolean;
+-    /**
+-     * In the fashion of
+-     * https://www.w3.org/TR/html5/embedded-content-0.html#dom-video-videowidth
+-     * and https://www.w3.org/TR/html5/rendering.html#video-object-fit,
+-     * resembles the CSS style object-fit.
+-     *
+-     * objectFit: 'contain' | 'cover'
+-     *
+-     * Defaults to 'cover'.
+-     */
+-    objectFit?: 'contain' | 'cover';
+-    /**
+-     * URL / id of the stream that should be rendered.
+-     *
+-     * streamURL: string
+-     */
+-    streamURL?: string;
+-    /**
+-     * Similarly to the CSS property z-index, specifies the z-order of this
+-     * RTCView in the stacking space of all RTCViews. When RTCViews overlap,
+-     * zOrder determines which one covers the other. An RTCView with a larger
+-     * zOrder generally covers an RTCView with a lower one.
+-     *
+-     * Non-overlapping RTCViews may safely share a z-order (because one does not
+-     * have to cover the other).
+-     *
+-     * The support for zOrder is platform-dependent and/or
+-     * implementation-specific. Thus, specifying a value for zOrder is to be
+-     * thought of as giving a hint rather than as imposing a requirement. For
+-     * example, video renderers such as RTCView are commonly implemented using
+-     * OpenGL and OpenGL views may have different numbers of layers in their
+-     * stacking space. Android has three: a layer bellow the window (aka
+-     * default), a layer bellow the window again but above the previous layer
+-     * (aka media overlay), and above the window. Consequently, it is advisable
+-     * to limit the number of utilized layers in the stacking space to the
+-     * minimum sufficient for the desired display. For example, a video call
+-     * application usually needs a maximum of two zOrder values: 0 for the
+-     * remote video(s) which appear in the background, and 1 for the local
+-     * video(s) which appear above the remote video(s).
+-     *
+-     * zOrder: number
+-     */
+-    zOrder?: number;
+-    /**
+-     * Picture in picture options for this view. Disabled if not supplied.
+-     *
+-     * Note: this should only be generally only used with remote video tracks,
+-     * as the local camera may stop while in the background.
+-     *
+-     * iOS only. Requires iOS 15.0 or above, and the PIP background mode capability.
+-     */
+-    iosPIP?: RTCIOSPIPOptions;
+-    /**
+-     * Callback function that is called when the dimensions of the video change.
+-     *
+-     * @param {Object} event - The event object containing the new dimensions.
+-     * @param {Object} event.nativeEvent - The native event data.
+-     * @param {number} event.nativeEvent.width - The width of the video.
+-     * @param {number} event.nativeEvent.height - The height of the video.
+-     */
+-    onDimensionsChange?: (event: {
+-        nativeEvent: {
+-            width: number;
+-            height: number;
+-        };
+-    }) => void;
+-}
+-export interface RTCIOSPIPOptions {
+-    /**
+-     * Whether PIP can be launched from this view.
+-     *
+-     * Defaults to true.
+-     */
+-    enabled?: boolean;
+-    /**
+-     * The preferred size of the PIP window.
+-     */
+-    preferredSize?: {
+-        width: number;
+-        height: number;
+-    };
+-    /**
+-     * Indicates whether Picture in Picture starts automatically
+-     * when the controller embeds its content inline and the app
+-     * transitions to the background.
+-     *
+-     * Defaults to true.
+-     *
+-     * See: AVPictureInPictureController.canStartPictureInPictureAutomaticallyFromInline
+-     */
+-    startAutomatically?: boolean;
+-    /**
+-     * Indicates whether Picture in Picture should stop automatically
+-     * when the app returns to the foreground.
+-     *
+-     * Defaults to true.
+-     */
+-    stopAutomatically?: boolean;
+-}
+-declare const _default: import("react-native").HostComponent<RTCVideoViewProps>;
+-export default _default;
+diff --git a/node_modules/react-native-webrtc/lib/typescript/ScreenCapturePickerView.d.ts b/node_modules/react-native-webrtc/lib/typescript/ScreenCapturePickerView.d.ts
+deleted file mode 100644
+index d39c29e..0000000
+--- a/node_modules/react-native-webrtc/lib/typescript/ScreenCapturePickerView.d.ts
++++ /dev/null
+@@ -1,2 +0,0 @@
+-declare const _default: import("react-native").HostComponent<unknown>;
+-export default _default;
+diff --git a/node_modules/react-native-webrtc/macos/RCTWebRTC.xcodeproj/project.xcworkspace/contents.xcworkspacedata b/node_modules/react-native-webrtc/macos/RCTWebRTC.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+deleted file mode 100644
+index 03a0c8e..0000000
+--- a/node_modules/react-native-webrtc/macos/RCTWebRTC.xcodeproj/project.xcworkspace/contents.xcworkspacedata
++++ /dev/null
+@@ -1,7 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<Workspace
+-   version = "1.0">
+-   <FileRef
+-      location = "self:../../ios/RCTWebRTC">
+-   </FileRef>
+-</Workspace>
+diff --git a/node_modules/react-native-webrtc/src/Permissions.ts b/node_modules/react-native-webrtc/src/Permissions.ts
+index 7c82410..073acb0 100644
+--- a/node_modules/react-native-webrtc/src/Permissions.ts
++++ b/node_modules/react-native-webrtc/src/Permissions.ts
+@@ -1,133 +1,92 @@
+-
+-import { NativeModules, Permission, PermissionsAndroid, Platform } from 'react-native';
++import { NativeModules, Platform, PermissionsAndroid } from 'react-native';
+ 
+ const { WebRTCModule } = NativeModules;
+ 
+-/**
+- * Type declaration for a permissions descriptor.
+- */
+ type PermissionDescriptor = {
+-    name: string;
++  name: string;
+ };
+ 
+-/**
+- * Class implementing a subset of W3C's Permissions API as defined by:
+- * https://www.w3.org/TR/permissions/
+- */
+ class Permissions {
+-    /**
+-     * Possible result values for {@link query}, in accordance with:
+-     * https://www.w3.org/TR/permissions/#status-of-a-permission
+-     */
+-    RESULT = {
+-        DENIED: 'denied',
+-        GRANTED: 'granted',
+-        PROMPT: 'prompt'
+-    };
+-
+-    /**
+-     * This implementation only supports requesting these permissions, a subset
+-     * of: https://www.w3.org/TR/permissions/#permission-registry
+-     */
+-    VALID_PERMISSIONS = [ 'camera', 'microphone' ];
+-
+-    _lastReq: Promise<unknown> = Promise.resolve();
+-
+-    /**
+-     * Helper for requesting Android permissions. On Android only one permission
+-     * can be requested at a time (unless the multi-permission API is used,
+-     * but we are not using that for symmetry with the W3C API for querying)
+-     * so we'll queue them up.
+-     *
+-     * @param perm - The requested permission from
+-     * {@link PermissionsAndroid.PERMISSIONS}
+-     * https://facebook.github.io/react-native/docs/permissionsandroid#permissions-that-require-prompting-the-user
+-     */
+-    _requestPermissionAndroid(perm: Permission) {
+-        return new Promise(resolve => {
+-            PermissionsAndroid.request(perm).then(
+-                granted => resolve(granted === PermissionsAndroid.RESULTS.GRANTED),
+-                () => resolve(false)
+-            );
+-        });
++  RESULT = {
++    DENIED: 'denied',
++    GRANTED: 'granted',
++    PROMPT: 'prompt',
++  };
++
++  VALID_PERMISSIONS = ['camera', 'microphone'];
++
++  _lastReq: Promise<unknown> = Promise.resolve();
++
++  _requestPermissionAndroid(perm: string): Promise<unknown> {
++    return new Promise((resolve) => {
++      PermissionsAndroid.request(perm).then(
++        (granted) => resolve(granted === PermissionsAndroid.RESULTS.GRANTED),
++        () => resolve(false),
++      );
++    });
++  }
++
++  _validatePermissionDescriptor(permissionDesc: any): void {
++    if (typeof permissionDesc !== 'object') {
++      throw new TypeError('Argument 1 of Permissions.query is not an object.');
+     }
+-
+-    /**
+-     * Validates the given permission descriptor.
+-     */
+-    _validatePermissionDescriptor(permissionDesc) {
+-        if (typeof permissionDesc !== 'object') {
+-            throw new TypeError('Argument 1 of Permissions.query is not an object.');
+-        }
+-
+-        if (typeof permissionDesc.name === 'undefined') {
+-            throw new TypeError('Missing required \'name\' member of PermissionDescriptor.');
+-        }
+-
+-        if (this.VALID_PERMISSIONS.indexOf(permissionDesc.name) === -1) {
+-            throw new TypeError(
+-                '\'name\' member of PermissionDescriptor is not a valid value for enumeration PermissionName.'
+-            );
+-        }
++    if (typeof permissionDesc.name === 'undefined') {
++      throw new TypeError(
++        "Missing required 'name' member of PermissionDescriptor.",
++      );
+     }
+-
+-    /**
+-     * Method for querying the status of a permission, according to:
+-     * https://www.w3.org/TR/permissions/#permissions-interface
+-     */
+-    query(permissionDesc: PermissionDescriptor) {
+-        try {
+-            this._validatePermissionDescriptor(permissionDesc);
+-        } catch (e) {
+-            return Promise.reject(e);
+-        }
+-
+-        if (Platform.OS === 'android') {
+-            const perm =
+-                permissionDesc.name === 'camera'
+-                    ? PermissionsAndroid.PERMISSIONS.CAMERA
+-                    : PermissionsAndroid.PERMISSIONS.RECORD_AUDIO;
+-
+-            return new Promise(resolve => {
+-                PermissionsAndroid.check(perm).then(
+-                    granted => resolve(granted ? this.RESULT.GRANTED : this.RESULT.PROMPT),
+-                    () => resolve(this.RESULT.PROMPT)
+-                );
+-            });
+-        } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
+-            return WebRTCModule.checkPermission(permissionDesc.name);
+-        } else {
+-            return Promise.reject(new TypeError('Unsupported platform.'));
+-        }
++    if (this.VALID_PERMISSIONS.indexOf(permissionDesc.name) === -1) {
++      throw new TypeError(
++        "'name' member of PermissionDescriptor is not a valid value for enumeration PermissionName.",
++      );
+     }
++  }
+ 
+-    /**
+-     * Custom method NOT defined by W3C's permissions API, which allows the
+-     * caller to request a permission.
+-     */
+-    request(permissionDesc: PermissionDescriptor) {
+-        try {
+-            this._validatePermissionDescriptor(permissionDesc);
+-        } catch (e) {
+-            return Promise.reject(e);
+-        }
+-
+-        if (Platform.OS === 'android') {
+-            const perm =
+-                permissionDesc.name === 'camera'
+-                    ? PermissionsAndroid.PERMISSIONS.CAMERA
+-                    : PermissionsAndroid.PERMISSIONS.RECORD_AUDIO;
+-            const requestPermission = () => this._requestPermissionAndroid(perm);
+-
+-            this._lastReq = this._lastReq.then(requestPermission, requestPermission);
++  query(permissionDesc: PermissionDescriptor): any {
++    try {
++      this._validatePermissionDescriptor(permissionDesc);
++    } catch (e) {
++      return Promise.reject(e);
++    }
++    if (Platform.OS === 'android') {
++      const perm =
++        permissionDesc.name === 'camera'
++          ? PermissionsAndroid.PERMISSIONS.CAMERA
++          : PermissionsAndroid.PERMISSIONS.RECORD_AUDIO;
++      return new Promise((resolve) => {
++        PermissionsAndroid.check(perm).then(
++          (granted) =>
++            resolve(granted ? this.RESULT.GRANTED : this.RESULT.PROMPT),
++          () => resolve(this.RESULT.PROMPT),
++        );
++      });
++    } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
++      return WebRTCModule.checkPermission(permissionDesc.name);
++    } else {
++      return Promise.reject(new TypeError('Unsupported platform.'));
++    }
++  }
+ 
+-            return this._lastReq;
+-        } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
+-            return WebRTCModule.requestPermission(permissionDesc.name);
+-        } else {
+-            return Promise.reject(new TypeError('Unsupported platform.'));
+-        }
++  request(permissionDesc: PermissionDescriptor): any {
++    try {
++      this._validatePermissionDescriptor(permissionDesc);
++    } catch (e) {
++      return Promise.reject(e);
++    }
++    if (Platform.OS === 'android') {
++      const perm =
++        permissionDesc.name === 'camera'
++          ? PermissionsAndroid.PERMISSIONS.CAMERA
++          : PermissionsAndroid.PERMISSIONS.RECORD_AUDIO;
++      const requestPermission = () => this._requestPermissionAndroid(perm);
++      this._lastReq = this._lastReq.then(requestPermission, requestPermission);
++      return this._lastReq;
++    } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
++      return WebRTCModule.requestPermission(permissionDesc.name);
++    } else {
++      return Promise.reject(new TypeError('Unsupported platform.'));
+     }
++  }
+ }
+ 
+ export default new Permissions();
+diff --git a/node_modules/react-native-webrtc/src/RTCAudioSession.ts b/node_modules/react-native-webrtc/src/RTCAudioSession.ts
+deleted file mode 100644
+index f2996e7..0000000
+--- a/node_modules/react-native-webrtc/src/RTCAudioSession.ts
++++ /dev/null
+@@ -1,25 +0,0 @@
+-import { NativeModules, Platform } from 'react-native';
+-
+-const { WebRTCModule } = NativeModules;
+-
+-export default class RTCAudioSession {
+-    /**
+-     * To be called when CallKit activates the audio session.
+-     */
+-    static audioSessionDidActivate() {
+-        // Only valid for iOS
+-        if (Platform.OS === 'ios') {
+-            WebRTCModule.audioSessionDidActivate();
+-        }
+-    }
+-
+-    /**
+-     * To be called when CallKit deactivates the audio session.
+-     */
+-    static audioSessionDidDeactivate() {
+-        // Only valid for iOS
+-        if (Platform.OS === 'ios') {
+-            WebRTCModule.audioSessionDidDeactivate();
+-        }
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCDataChannel.ts b/node_modules/react-native-webrtc/src/RTCDataChannel.ts
+deleted file mode 100644
+index a99ed1e..0000000
+--- a/node_modules/react-native-webrtc/src/RTCDataChannel.ts
++++ /dev/null
+@@ -1,190 +0,0 @@
+-import * as base64 from 'base64-js';
+-import { EventTarget, defineEventAttribute } from 'event-target-shim/index';
+-import { NativeModules } from 'react-native';
+-
+-import { addListener, removeListener } from './EventEmitter';
+-import MessageEvent from './MessageEvent';
+-import RTCDataChannelEvent from './RTCDataChannelEvent';
+-
+-const { WebRTCModule } = NativeModules;
+-
+-type RTCDataChannelState = 'connecting' | 'open' | 'closing' | 'closed';
+-
+-type DataChannelEventMap = {
+-    bufferedamountlow: RTCDataChannelEvent<'bufferedamountlow'>;
+-    close: RTCDataChannelEvent<'close'>;
+-    closing: RTCDataChannelEvent<'closing'>;
+-    error: RTCDataChannelEvent<'error'>;
+-    message: MessageEvent<'message'>;
+-    open: RTCDataChannelEvent<'open'>;
+-};
+-
+-export default class RTCDataChannel extends EventTarget<DataChannelEventMap> {
+-    _peerConnectionId: number;
+-    _reactTag: string;
+-
+-    _bufferedAmount: number;
+-    _id: number;
+-    _label: string;
+-    _maxPacketLifeTime?: number;
+-    _maxRetransmits?: number;
+-    _negotiated: boolean;
+-    _ordered: boolean;
+-    _protocol: string;
+-    _readyState: RTCDataChannelState;
+-
+-    binaryType = 'arraybuffer'; // we only support 'arraybuffer'
+-    bufferedAmountLowThreshold = 0;
+-
+-    constructor(info) {
+-        super();
+-
+-        this._peerConnectionId = info.peerConnectionId;
+-        this._reactTag = info.reactTag;
+-
+-        this._bufferedAmount = 0;
+-        this._label = info.label;
+-        this._id = info.id === -1 ? null : info.id; // null until negotiated.
+-        this._ordered = Boolean(info.ordered);
+-        this._maxPacketLifeTime = info.maxPacketLifeTime;
+-        this._maxRetransmits = info.maxRetransmits;
+-        this._protocol = info.protocol || '';
+-        this._negotiated = Boolean(info.negotiated);
+-        this._readyState = info.readyState;
+-
+-        this._registerEvents();
+-    }
+-
+-    get bufferedAmount(): number {
+-        return this._bufferedAmount;
+-    }
+-
+-    get label(): string {
+-        return this._label;
+-    }
+-
+-    get id(): number {
+-        return this._id;
+-    }
+-
+-    get ordered(): boolean {
+-        return this._ordered;
+-    }
+-
+-    get maxPacketLifeTime(): number | undefined {
+-        return this._maxPacketLifeTime;
+-    }
+-
+-    get maxRetransmits(): number | undefined {
+-        return this._maxRetransmits;
+-    }
+-
+-    get protocol(): string {
+-        return this._protocol;
+-    }
+-
+-    get negotiated(): boolean {
+-        return this._negotiated;
+-    }
+-
+-    get readyState(): string {
+-        return this._readyState;
+-    }
+-
+-    send(data: string): void;
+-    send(data: ArrayBuffer): void;
+-    send(data: ArrayBufferView): void;
+-    send(data: string | ArrayBuffer | ArrayBufferView): void {
+-        if (typeof data === 'string') {
+-            WebRTCModule.dataChannelSend(this._peerConnectionId, this._reactTag, data, 'text');
+-
+-            return;
+-        }
+-
+-        // Safely convert the buffer object to an Uint8Array for base64-encoding
+-        if (ArrayBuffer.isView(data)) {
+-            data = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+-        } else if (data instanceof ArrayBuffer) {
+-            data = new Uint8Array(data);
+-        } else {
+-            throw new TypeError('Data must be either string, ArrayBuffer, or ArrayBufferView');
+-        }
+-
+-        const base64data = base64.fromByteArray(data as Uint8Array);
+-
+-        WebRTCModule.dataChannelSend(this._peerConnectionId, this._reactTag, base64data, 'binary');
+-    }
+-
+-    close(): void {
+-        if (this._readyState === 'closing' || this._readyState === 'closed') {
+-            return;
+-        }
+-
+-        WebRTCModule.dataChannelClose(this._peerConnectionId, this._reactTag);
+-    }
+-
+-    _registerEvents(): void {
+-        addListener(this, 'dataChannelStateChanged', (ev: any) => {
+-            if (ev.reactTag !== this._reactTag) {
+-                return;
+-            }
+-
+-            this._readyState = ev.state;
+-
+-            if (this._id === null && ev.id !== -1) {
+-                this._id = ev.id;
+-            }
+-
+-            if (this._readyState === 'open') {
+-                this.dispatchEvent(new RTCDataChannelEvent('open', { channel: this }));
+-            } else if (this._readyState === 'closing') {
+-                this.dispatchEvent(new RTCDataChannelEvent('closing', { channel: this }));
+-            } else if (this._readyState === 'closed') {
+-                this.dispatchEvent(new RTCDataChannelEvent('close', { channel: this }));
+-
+-                // This DataChannel is done, clean up event handlers.
+-                removeListener(this);
+-
+-                WebRTCModule.dataChannelDispose(this._peerConnectionId, this._reactTag);
+-            }
+-        });
+-
+-        addListener(this, 'dataChannelReceiveMessage', (ev: any) => {
+-            if (ev.reactTag !== this._reactTag) {
+-                return;
+-            }
+-
+-            let data = ev.data;
+-
+-            if (ev.type === 'binary') {
+-                data = base64.toByteArray(ev.data).buffer;
+-            }
+-
+-            this.dispatchEvent(new MessageEvent('message', { data }));
+-        });
+-
+-        addListener(this, 'dataChannelDidChangeBufferedAmount', (ev: any) => {
+-            if (ev.reactTag !== this._reactTag) {
+-                return;
+-            }
+-
+-            this._bufferedAmount = ev.bufferedAmount;
+-
+-            if (this._bufferedAmount < this.bufferedAmountLowThreshold) {
+-                this.dispatchEvent(new RTCDataChannelEvent('bufferedamountlow', { channel: this }));
+-            }
+-        });
+-    }
+-}
+-
+-/**
+- * Define the `onxxx` event handlers.
+- */
+-const proto = RTCDataChannel.prototype;
+-
+-defineEventAttribute(proto, 'bufferedamountlow');
+-defineEventAttribute(proto, 'close');
+-defineEventAttribute(proto, 'closing');
+-defineEventAttribute(proto, 'error');
+-defineEventAttribute(proto, 'message');
+-defineEventAttribute(proto, 'open');
+diff --git a/node_modules/react-native-webrtc/src/RTCDataChannelEvent.ts b/node_modules/react-native-webrtc/src/RTCDataChannelEvent.ts
+deleted file mode 100644
+index 956d059..0000000
+--- a/node_modules/react-native-webrtc/src/RTCDataChannelEvent.ts
++++ /dev/null
+@@ -1,28 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-
+-import type RTCDataChannel from './RTCDataChannel';
+-
+-type DATA_CHANNEL_EVENTS =  'open'| 'message'| 'bufferedamountlow'| 'closing'| 'close'| 'error' | 'datachannel';
+-
+-interface IRTCDataChannelEventInitDict extends Event.EventInit {
+-    channel: RTCDataChannel;
+-}
+-
+-
+-/**
+- * @eventClass
+- * This event is fired whenever the RTCDataChannel has changed in any way.
+- * @param {DATA_CHANNEL_EVENTS} type - The type of event.
+- * @param {IRTCDataChannelEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel#events MDN} for details.
+- */
+-export default class RTCDataChannelEvent<
+-TEventType extends DATA_CHANNEL_EVENTS
+-> extends Event<TEventType> {
+-    /** @eventProperty */
+-    channel: RTCDataChannel;
+-    constructor(type: TEventType, eventInitDict: IRTCDataChannelEventInitDict) {
+-        super(type, eventInitDict);
+-        this.channel = eventInitDict.channel;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCErrorEvent.ts b/node_modules/react-native-webrtc/src/RTCErrorEvent.ts
+deleted file mode 100644
+index 6a0a286..0000000
+--- a/node_modules/react-native-webrtc/src/RTCErrorEvent.ts
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-
+-type RTCPeerConnectionErrorFunc =
+-    | 'addTransceiver'
+-    | 'getTransceivers'
+-    | 'addTrack'
+-    | 'removeTrack';
+-
+-/**
+- * @brief This class Represents internal error happening on the native side as
+- * part of asynchronous invocations to synchronous web APIs.
+- */
+-export default class RTCErrorEvent<TEventType extends RTCPeerConnectionErrorFunc> extends Event<TEventType> {
+-    readonly func: RTCPeerConnectionErrorFunc;
+-    readonly message: string;
+-    constructor(type: TEventType, func: RTCPeerConnectionErrorFunc, message: string) {
+-        super(type);
+-        this.func = func;
+-        this.message = message;
+-    }
+-}
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/src/RTCIceCandidate.ts b/node_modules/react-native-webrtc/src/RTCIceCandidate.ts
+deleted file mode 100644
+index e935cc4..0000000
+--- a/node_modules/react-native-webrtc/src/RTCIceCandidate.ts
++++ /dev/null
+@@ -1,29 +0,0 @@
+-interface RTCIceCandidateInfo {
+-    candidate?: string;
+-    sdpMLineIndex?: number | null;
+-    sdpMid?: string | null;
+-}
+-
+-export default class RTCIceCandidate {
+-    candidate: string;
+-    sdpMLineIndex?: number | null;
+-    sdpMid?: string | null;
+-
+-    constructor({ candidate = '', sdpMLineIndex = null, sdpMid = null }: RTCIceCandidateInfo) {
+-        if (sdpMLineIndex === null && sdpMid === null) {
+-            throw new TypeError('`sdpMLineIndex` and `sdpMid` must not be both null');
+-        }
+-
+-        this.candidate = candidate;
+-        this.sdpMLineIndex = sdpMLineIndex;
+-        this.sdpMid = sdpMid;
+-    }
+-
+-    toJSON() {
+-        return {
+-            candidate: this.candidate,
+-            sdpMLineIndex: this.sdpMLineIndex,
+-            sdpMid: this.sdpMid
+-        };
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCIceCandidateEvent.ts b/node_modules/react-native-webrtc/src/RTCIceCandidateEvent.ts
+deleted file mode 100644
+index af4d11a..0000000
+--- a/node_modules/react-native-webrtc/src/RTCIceCandidateEvent.ts
++++ /dev/null
+@@ -1,26 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-
+-import type RTCIceCandidate from './RTCIceCandidate';
+-
+-type RTC_ICECANDIDATE_EVENTS = 'icecandidate' | 'icecandidateerror'
+-
+-interface IRTCDataChannelEventInitDict extends Event.EventInit {
+-    candidate: RTCIceCandidate | null
+-}
+-
+-/**
+- * @eventClass
+- * This event is fired whenever the icecandidate related RTC_EVENTS changed.
+- * @type {RTCIceCandidateEvent} for icecandidate related.
+- * @param {RTC_ICECANDIDATE_EVENTS} type - The type of event.
+- * @param {IRTCDataChannelEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection#events MDN} for details.
+- */
+-export default class RTCIceCandidateEvent<TEventType extends RTC_ICECANDIDATE_EVENTS> extends Event<TEventType> {
+-    /** @eventProperty */
+-    candidate: RTCIceCandidate | null;
+-    constructor(type: TEventType, eventInitDict: IRTCDataChannelEventInitDict) {
+-        super(type, eventInitDict);
+-        this.candidate = eventInitDict?.candidate ?? null;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCPIPView.tsx b/node_modules/react-native-webrtc/src/RTCPIPView.tsx
+deleted file mode 100644
+index 462f888..0000000
+--- a/node_modules/react-native-webrtc/src/RTCPIPView.tsx
++++ /dev/null
+@@ -1,47 +0,0 @@
+-import { Component, forwardRef } from 'react';
+-import ReactNative, { UIManager } from 'react-native';
+-
+-import RTCView, { RTCIOSPIPOptions, RTCVideoViewProps } from './RTCView';
+-
+-export interface RTCPIPViewProps extends RTCVideoViewProps {
+-  iosPIP?: RTCIOSPIPOptions & {
+-    fallbackView?: Component;
+-  };
+-}
+-
+-type RTCViewInstance = InstanceType<typeof RTCView>;
+-
+-/**
+- * A convenience wrapper around RTCView to handle the fallback view as a prop.
+- */
+-const RTCPIPView = forwardRef<RTCViewInstance, RTCPIPViewProps>((props, ref) => {
+-    const rtcViewProps = { ...props };
+-    const fallbackView = rtcViewProps.iosPIP?.fallbackView;
+-
+-    delete rtcViewProps.iosPIP?.fallbackView;
+-
+-    return (
+-        <RTCView ref={ref}
+-            {...rtcViewProps}>
+-            {fallbackView}
+-        </RTCView>
+-    );
+-});
+-
+-export function startIOSPIP(ref) {
+-    UIManager.dispatchViewManagerCommand(
+-        ReactNative.findNodeHandle(ref.current),
+-        UIManager.getViewManagerConfig('RTCVideoView').Commands.startIOSPIP,
+-        []
+-    );
+-}
+-
+-export function stopIOSPIP(ref) {
+-    UIManager.dispatchViewManagerCommand(
+-        ReactNative.findNodeHandle(ref.current),
+-        UIManager.getViewManagerConfig('RTCVideoView').Commands.stopIOSPIP,
+-        []
+-    );
+-}
+-
+-export default RTCPIPView;
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/src/RTCPeerConnection.ts b/node_modules/react-native-webrtc/src/RTCPeerConnection.ts
+deleted file mode 100644
+index 9cfe1a5..0000000
+--- a/node_modules/react-native-webrtc/src/RTCPeerConnection.ts
++++ /dev/null
+@@ -1,832 +0,0 @@
+-import { EventTarget, Event, defineEventAttribute } from 'event-target-shim/index';
+-import { NativeModules } from 'react-native';
+-
+-import { addListener, removeListener } from './EventEmitter';
+-import Logger from './Logger';
+-import MediaStream from './MediaStream';
+-import MediaStreamTrack from './MediaStreamTrack';
+-import MediaStreamTrackEvent from './MediaStreamTrackEvent';
+-import RTCDataChannel from './RTCDataChannel';
+-import RTCDataChannelEvent from './RTCDataChannelEvent';
+-import RTCIceCandidate from './RTCIceCandidate';
+-import RTCIceCandidateEvent from './RTCIceCandidateEvent';
+-import RTCRtpReceiveParameters from './RTCRtpReceiveParameters';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpSendParameters from './RTCRtpSendParameters';
+-import RTCRtpSender from './RTCRtpSender';
+-import RTCRtpTransceiver from './RTCRtpTransceiver';
+-import RTCSessionDescription, { RTCSessionDescriptionInit } from './RTCSessionDescription';
+-import RTCTrackEvent from './RTCTrackEvent';
+-import * as RTCUtil from './RTCUtil';
+-import { RTCOfferOptions } from './RTCUtil';
+-
+-const log = new Logger('pc');
+-const { WebRTCModule } = NativeModules;
+-
+-type RTCSignalingState =
+-    | 'stable'
+-    | 'have-local-offer'
+-    | 'have-remote-offer'
+-    | 'have-local-pranswer'
+-    | 'have-remote-pranswer'
+-    | 'closed';
+-
+-type RTCIceGatheringState = 'new' | 'gathering' | 'complete';
+-
+-type RTCPeerConnectionState = 'new' | 'connecting' | 'connected' | 'disconnected' | 'failed' | 'closed';
+-
+-type RTCIceConnectionState = 'new' | 'checking' | 'connected' | 'completed' | 'failed' | 'disconnected' | 'closed';
+-
+-type RTCDataChannelInit = {
+-    ordered?: boolean,
+-    maxPacketLifeTime?: number,
+-    maxRetransmits?: number,
+-    protocol?: string,
+-    negotiated?: boolean,
+-    id?: number
+-};
+-
+-type RTCIceServer = {
+-    credential?: string,
+-    url?: string, // Deprecated.
+-    urls?: string | string[],
+-    username?: string
+-};
+-
+-type RTCConfiguration = {
+-    bundlePolicy?: 'balanced' | 'max-compat' | 'max-bundle',
+-    iceCandidatePoolSize?: number,
+-    iceServers?: RTCIceServer[],
+-    iceTransportPolicy?: 'all' | 'relay',
+-    rtcpMuxPolicy?: 'negotiate' | 'require'
+-};
+-
+-type RTCPeerConnectionEventMap = {
+-    connectionstatechange: Event<'connectionstatechange'>
+-    icecandidate: RTCIceCandidateEvent<'icecandidate'>
+-    icecandidateerror: RTCIceCandidateEvent<'icecandidateerror'>
+-    iceconnectionstatechange: Event<'iceconnectionstatechange'>
+-    icegatheringstatechange: Event<'icegatheringstatechange'>
+-    negotiationneeded: Event<'negotiationneeded'>
+-    signalingstatechange: Event<'signalingstatechange'>
+-    datachannel: RTCDataChannelEvent<'datachannel'>
+-    track: RTCTrackEvent<'track'>
+-    error: Event<'error'>
+-}
+-
+-let nextPeerConnectionId = 0;
+-
+-export default class RTCPeerConnection extends EventTarget<RTCPeerConnectionEventMap> {
+-    localDescription: RTCSessionDescription | null = null;
+-    remoteDescription: RTCSessionDescription | null = null;
+-    signalingState: RTCSignalingState = 'stable';
+-    iceGatheringState: RTCIceGatheringState = 'new';
+-    connectionState: RTCPeerConnectionState = 'new';
+-    iceConnectionState: RTCIceConnectionState = 'new';
+-
+-    _pcId: number;
+-    _transceivers: { order: number, transceiver: RTCRtpTransceiver }[];
+-    _remoteStreams: Map<string, MediaStream>;
+-    _pendingTrackEvents: any[];
+-
+-    constructor(configuration?: RTCConfiguration) {
+-        super();
+-
+-        this._pcId = nextPeerConnectionId++;
+-
+-        // Sanitize ICE servers.
+-        if (configuration) {
+-            const servers = configuration?.iceServers ?? [];
+-
+-            for (const server of servers) {
+-                let urls = server.url || server.urls;
+-
+-                delete server.url;
+-                delete server.urls;
+-
+-                if (!urls) {
+-                    continue;
+-                }
+-
+-                if (!Array.isArray(urls)) {
+-                    urls = [ urls ];
+-                }
+-
+-                // Native WebRTC does case sensitive parsing.
+-                server.urls = urls.map(url => url.toLowerCase());
+-            }
+-
+-            // Filter out bogus servers.
+-            configuration.iceServers = servers.filter(s => s.urls);
+-        }
+-
+-        if (!WebRTCModule.peerConnectionInit(configuration, this._pcId)) {
+-            throw new Error('Failed to initialize PeerConnection, check the native logs!');
+-        }
+-
+-        this._transceivers = [];
+-        this._remoteStreams = new Map();
+-        this._pendingTrackEvents = [];
+-
+-        this._registerEvents();
+-
+-        log.debug(`${this._pcId} ctor`);
+-    }
+-
+-    async createOffer(options?:RTCOfferOptions) {
+-        log.debug(`${this._pcId} createOffer`);
+-
+-        const {
+-            sdpInfo,
+-            newTransceivers,
+-            transceiversInfo
+-        } = await WebRTCModule.peerConnectionCreateOffer(this._pcId, RTCUtil.normalizeOfferOptions(options));
+-
+-        log.debug(`${this._pcId} createOffer OK`);
+-
+-        newTransceivers?.forEach(t => {
+-            const { transceiverOrder, transceiver } = t;
+-            const newSender = new RTCRtpSender({ ...transceiver.sender, track: null });
+-            const remoteTrack
+-                = transceiver.receiver.track ? new MediaStreamTrack(transceiver.receiver.track) : null;
+-            const newReceiver = new RTCRtpReceiver({ ...transceiver.receiver, track: remoteTrack });
+-            const newTransceiver = new RTCRtpTransceiver({
+-                ...transceiver,
+-                sender: newSender,
+-                receiver: newReceiver,
+-            });
+-
+-            this._insertTransceiverSorted(transceiverOrder, newTransceiver);
+-        });
+-
+-        this._updateTransceivers(transceiversInfo);
+-
+-        return sdpInfo;
+-    }
+-
+-    async createAnswer() {
+-        log.debug(`${this._pcId} createAnswer`);
+-
+-        const {
+-            sdpInfo,
+-            transceiversInfo
+-        } = await WebRTCModule.peerConnectionCreateAnswer(this._pcId, {});
+-
+-        this._updateTransceivers(transceiversInfo);
+-
+-        return sdpInfo;
+-    }
+-
+-    setConfiguration(configuration): void {
+-        WebRTCModule.peerConnectionSetConfiguration(configuration, this._pcId);
+-    }
+-
+-    async setLocalDescription(sessionDescription?: RTCSessionDescription | RTCSessionDescriptionInit): Promise<void> {
+-        log.debug(`${this._pcId} setLocalDescription`);
+-
+-        let desc;
+-
+-        if (sessionDescription) {
+-            desc = {
+-                type: sessionDescription.type,
+-                sdp: sessionDescription.sdp ?? ''
+-            };
+-
+-            if (!RTCUtil.isSdpTypeValid(desc.type)) {
+-                throw new Error(`Invalid session description: invalid type: ${desc.type}`);
+-            }
+-        } else {
+-            desc = null;
+-        }
+-
+-        const {
+-            sdpInfo,
+-            transceiversInfo
+-        } = await WebRTCModule.peerConnectionSetLocalDescription(this._pcId, desc);
+-
+-        if (sdpInfo.type && sdpInfo.sdp) {
+-            this.localDescription = new RTCSessionDescription(sdpInfo);
+-        } else {
+-            this.localDescription = null;
+-        }
+-
+-        this._updateTransceivers(transceiversInfo, /* removeStopped */ desc?.type === 'answer');
+-
+-        log.debug(`${this._pcId} setLocalDescription OK`);
+-    }
+-
+-    async setRemoteDescription(sessionDescription: RTCSessionDescription | RTCSessionDescriptionInit): Promise<void> {
+-        log.debug(`${this._pcId} setRemoteDescription`);
+-
+-        if (!sessionDescription) {
+-            return Promise.reject(new Error('No session description provided'));
+-        }
+-
+-        const desc = {
+-            type: sessionDescription.type,
+-            sdp: sessionDescription.sdp ?? ''
+-        };
+-
+-        if (!RTCUtil.isSdpTypeValid(desc.type ?? '')) {
+-            throw new Error(`Invalid session description: invalid type: ${desc.type}`);
+-        }
+-
+-        const {
+-            sdpInfo,
+-            newTransceivers,
+-            transceiversInfo
+-        } = await WebRTCModule.peerConnectionSetRemoteDescription(this._pcId, desc);
+-
+-        if (sdpInfo.type && sdpInfo.sdp) {
+-            this.remoteDescription = new RTCSessionDescription(sdpInfo);
+-        } else {
+-            this.remoteDescription = null;
+-        }
+-
+-        newTransceivers?.forEach(t => {
+-            const { transceiverOrder, transceiver } = t;
+-            const newSender = new RTCRtpSender({ ...transceiver.sender, track: null });
+-            const remoteTrack
+-                = transceiver.receiver.track ? new MediaStreamTrack(transceiver.receiver.track) : null;
+-            const newReceiver = new RTCRtpReceiver({ ...transceiver.receiver, track: remoteTrack });
+-            const newTransceiver = new RTCRtpTransceiver({
+-                ...transceiver,
+-                sender: newSender,
+-                receiver: newReceiver,
+-            });
+-
+-            this._insertTransceiverSorted(transceiverOrder, newTransceiver);
+-        });
+-
+-        this._updateTransceivers(transceiversInfo, /* removeStopped */ desc.type === 'answer');
+-
+-        // Fire track events. They must fire before sRD resolves.
+-        const pendingTrackEvents = this._pendingTrackEvents;
+-
+-        this._pendingTrackEvents = [];
+-
+-        for (const ev of pendingTrackEvents) {
+-            const [ transceiver ] = this
+-                .getTransceivers()
+-                .filter(t => t.receiver.id ===  ev.receiver.id);
+-
+-            // We need to fire this event for an existing track sometimes, like
+-            // when the transceiver direction (on the sending side) switches from
+-            // sendrecv to recvonly and then back.
+-
+-            // @ts-ignore
+-            const track: MediaStreamTrack = transceiver.receiver.track;
+-
+-            transceiver._mid = ev.transceiver.mid;
+-            transceiver._currentDirection = ev.transceiver.currentDirection;
+-            transceiver._direction = ev.transceiver.direction;
+-
+-            // Get the stream object from the event. Create if necessary.
+-            const streams: MediaStream[] = ev.streams.map(streamInfo => {
+-                // Here we are making sure that we don't create stream objects that already exist
+-                // So that event listeners do get the same object if it has been created before.
+-                if (!this._remoteStreams.has(streamInfo.streamId)) {
+-                    const stream = new MediaStream({
+-                        streamId: streamInfo.streamId,
+-                        streamReactTag: streamInfo.streamReactTag,
+-                        tracks: []
+-                    });
+-
+-                    this._remoteStreams.set(streamInfo.streamId, stream);
+-                }
+-
+-                const stream = this._remoteStreams.get(streamInfo.streamId);
+-
+-                if (!stream?._tracks.includes(track)) {
+-                    stream?._tracks.push(track);
+-                }
+-
+-                return stream;
+-            });
+-
+-            const eventData = {
+-                streams,
+-                transceiver,
+-                track,
+-                receiver: transceiver.receiver
+-            };
+-
+-
+-            this.dispatchEvent(new RTCTrackEvent('track', eventData));
+-
+-            streams.forEach(stream => {
+-                stream.dispatchEvent(new MediaStreamTrackEvent('addtrack', { track }));
+-            });
+-
+-            // Dispatch an unmute event for the track.
+-            track._setMutedInternal(false);
+-        }
+-
+-        log.debug(`${this._pcId} setRemoteDescription OK`);
+-    }
+-
+-    async addIceCandidate(candidate): Promise<void> {
+-        log.debug(`${this._pcId} addIceCandidate`);
+-
+-        if (!candidate || !candidate.candidate) {
+-            // XXX end-of candidates is not implemented: https://bugs.chromium.org/p/webrtc/issues/detail?id=9218
+-            return;
+-        }
+-
+-        if ((candidate.sdpMLineIndex === null ||
+-             candidate.sdpMLineIndex === undefined) &&
+-            (candidate.sdpMid === null ||
+-             candidate.sdpMid === undefined)
+-        ) {
+-            throw new TypeError('`sdpMLineIndex` and `sdpMid` must not be both null or undefined');
+-        }
+-
+-        const newSdp = await WebRTCModule.peerConnectionAddICECandidate(
+-            this._pcId,
+-            RTCUtil.deepClone(candidate)
+-        );
+-
+-        this.remoteDescription = new RTCSessionDescription(newSdp);
+-    }
+-
+-    /**
+-     * @brief Adds a new track to the {@link RTCPeerConnection},
+-     * and indicates that it is contained in the specified {@link MediaStream}s.
+-     * This method has to be synchronous as the W3C API expects a track to be returned
+-     * @param {MediaStreamTrack} track The track to be added
+-     * @param {...MediaStream} streams One or more {@link MediaStream}s the track needs to be added to
+-     * https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-addtrack
+-     */
+-    addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender {
+-        log.debug(`${this._pcId} addTrack`);
+-
+-        if (this.connectionState === 'closed') {
+-            throw new Error('Peer Connection is closed');
+-        }
+-
+-        if (this._trackExists(track)) {
+-            throw new Error('Track already exists in a sender');
+-        }
+-
+-        const streamIds = streams.map(s => s.id);
+-        const result = WebRTCModule.peerConnectionAddTrack(this._pcId, track.id, { streamIds });
+-
+-        if (result === null) {
+-            throw new Error('Could not add sender');
+-        }
+-
+-        const { transceiverOrder, transceiver, sender } = result;
+-
+-        // According to the W3C docs, the sender could have been reused, and
+-        // so we check if that is the case, and update accordingly.
+-        const [ existingSender ] = this
+-            .getSenders()
+-            .filter(s => s.id === sender.id);
+-
+-        if (existingSender) {
+-            // Update sender
+-            existingSender._track = track;
+-
+-            // Update the corresponding transceiver as well
+-            const [ existingTransceiver ] = this
+-                .getTransceivers()
+-                .filter(t => t.sender.id === existingSender.id);
+-
+-            existingTransceiver._direction = transceiver.direction;
+-            existingTransceiver._currentDirection = transceiver.currentDirection;
+-
+-            return existingSender;
+-        }
+-
+-        // This is a new transceiver, should create a transceiver for it and add it
+-        const newSender = new RTCRtpSender({ ...transceiver.sender, track });
+-        const remoteTrack = transceiver.receiver.track ? new MediaStreamTrack(transceiver.receiver.track) : null;
+-        const newReceiver = new RTCRtpReceiver({ ...transceiver.receiver, track: remoteTrack });
+-        const newTransceiver = new RTCRtpTransceiver({
+-            ...transceiver,
+-            sender: newSender,
+-            receiver: newReceiver,
+-        });
+-
+-        this._insertTransceiverSorted(transceiverOrder, newTransceiver);
+-
+-        return newSender;
+-    }
+-
+-    addTransceiver(source: 'audio' | 'video' | MediaStreamTrack, init): RTCRtpTransceiver {
+-        log.debug(`${this._pcId} addTransceiver`);
+-
+-        let src = {};
+-
+-        if (source === 'audio') {
+-            src = { type: 'audio' };
+-        } else if (source === 'video') {
+-            src = { type: 'video' };
+-        } else {
+-            src = { trackId: source.id };
+-        }
+-
+-        // Extract the stream ids
+-        if (init && init.streams) {
+-            init.streamIds = init.streams.map(stream => stream.id);
+-        }
+-
+-        const result = WebRTCModule.peerConnectionAddTransceiver(this._pcId, { ...src, init: { ...init } });
+-
+-        if (result === null) {
+-            throw new Error('Transceiver could not be added');
+-        }
+-
+-        const t = result.transceiver;
+-        let track: MediaStreamTrack | null = null;
+-
+-        if (typeof source === 'string') {
+-            if (t.sender.track) {
+-                track = new MediaStreamTrack(t.sender.track);
+-            }
+-        } else {
+-            // 'source' is a MediaStreamTrack
+-            track = source;
+-        }
+-
+-        const sender = new RTCRtpSender({ ...t.sender, track });
+-        const remoteTrack = t.receiver.track ? new MediaStreamTrack(t.receiver.track) : null;
+-        const receiver = new RTCRtpReceiver({ ...t.receiver, track: remoteTrack });
+-        const transceiver = new RTCRtpTransceiver({
+-            ...result.transceiver,
+-            sender,
+-            receiver
+-        });
+-
+-        this._insertTransceiverSorted(result.transceiverOrder, transceiver);
+-
+-        return transceiver;
+-    }
+-
+-    removeTrack(sender: RTCRtpSender) {
+-        log.debug(`${this._pcId} removeTrack`);
+-
+-        if (this._pcId !== sender._peerConnectionId) {
+-            throw new Error('Sender does not belong to this peer connection');
+-        }
+-
+-        if (this.connectionState === 'closed') {
+-            throw new Error('Peer Connection is closed');
+-        }
+-
+-        const existingSender = this
+-            .getSenders()
+-            .find(s => s === sender);
+-
+-        if (!existingSender) {
+-            throw new Error('Sender does not exist');
+-        }
+-
+-        if (existingSender.track === null) {
+-            return;
+-        }
+-
+-        // Blocking!
+-        WebRTCModule.peerConnectionRemoveTrack(this._pcId, sender.id);
+-
+-        existingSender._track = null;
+-
+-        const [ existingTransceiver ] = this
+-            .getTransceivers()
+-            .filter(t => t.sender.id === existingSender.id);
+-
+-        existingTransceiver._direction = existingTransceiver.direction === 'sendrecv' ? 'recvonly' : 'inactive';
+-    }
+-
+-    async getStats(selector?: MediaStreamTrack) {
+-        log.debug(`${this._pcId} getStats`);
+-
+-        if (!selector) {
+-            const data = await WebRTCModule.peerConnectionGetStats(this._pcId);
+-
+-            /**
+-             * On both Android and iOS it is faster to construct a single
+-             * JSON string representing the Map of StatsReports and have it
+-             * pass through the React Native bridge rather than the Map of
+-             * StatsReports. While the implementations do try to be faster in
+-             * general, the stress is on being faster to pass through the React
+-             * Native bridge which is a bottleneck that tends to be visible in
+-             * the UI when there is congestion involving UI-related passing.
+-             */
+-            return new Map(JSON.parse(data));
+-        } else {
+-            const senders = this.getSenders().filter(s => s.track === selector);
+-            const receivers = this.getReceivers().filter(r => r.track === selector);
+-            const matches = senders.length + receivers.length;
+-
+-            if (matches === 0) {
+-                throw new Error('Invalid selector: could not find matching sender / receiver');
+-            } else if (matches > 1) {
+-                throw new Error('Invalid selector: multiple matching senders / receivers');
+-            } else {
+-                const sr = senders[0] || receivers[0];
+-
+-                return sr.getStats();
+-            }
+-        }
+-    }
+-
+-    getTransceivers(): RTCRtpTransceiver[] {
+-        return this._transceivers.map(e => e.transceiver);
+-    }
+-
+-    getSenders(): RTCRtpSender[] {
+-        return this._transceivers.filter(e => !e.transceiver.stopped).map(e => e.transceiver.sender);
+-    }
+-
+-    getReceivers(): RTCRtpReceiver[] {
+-        return this._transceivers.filter(e => !e.transceiver.stopped).map(e => e.transceiver.receiver);
+-    }
+-
+-    close(): void {
+-        log.debug(`${this._pcId} close`);
+-
+-        if (this.connectionState === 'closed') {
+-            return;
+-        }
+-
+-        WebRTCModule.peerConnectionClose(this._pcId);
+-
+-        // Mark transceivers as stopped.
+-        this._transceivers.forEach(({ transceiver })=> {
+-            transceiver._setStopped();
+-        });
+-    }
+-
+-    restartIce(): void {
+-        WebRTCModule.peerConnectionRestartIce(this._pcId);
+-    }
+-
+-    _registerEvents(): void {
+-        addListener(this, 'peerConnectionOnRenegotiationNeeded', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            this.dispatchEvent(new Event('negotiationneeded'));
+-        });
+-
+-        addListener(this, 'peerConnectionIceConnectionChanged', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            this.iceConnectionState = ev.iceConnectionState;
+-
+-            this.dispatchEvent(new Event('iceconnectionstatechange'));
+-        });
+-
+-        addListener(this, 'peerConnectionStateChanged', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            this.connectionState = ev.connectionState;
+-
+-            this.dispatchEvent(new Event('connectionstatechange'));
+-
+-            if (ev.connectionState === 'closed') {
+-                // This PeerConnection is done, clean up.
+-                removeListener(this);
+-
+-                WebRTCModule.peerConnectionDispose(this._pcId);
+-            }
+-        });
+-
+-        addListener(this, 'peerConnectionSignalingStateChanged', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            this.signalingState = ev.signalingState;
+-
+-            this.dispatchEvent(new Event('signalingstatechange'));
+-        });
+-
+-        // Consider moving away from this event: https://github.com/WebKit/WebKit/pull/3953
+-        addListener(this, 'peerConnectionOnTrack', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            log.debug(`${this._pcId} ontrack`);
+-
+-            // NOTE: We need to make sure the track event fires right before sRD completes,
+-            // so we queue them up here and dispatch the events when sRD fires, but before completing it.
+-            // In the future we should probably implement out own logic and drop this event altogether.
+-            this._pendingTrackEvents.push(ev);
+-        });
+-
+-        addListener(this, 'peerConnectionOnRemoveTrack', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            log.debug(`${this._pcId} onremovetrack ${ev.receiverId}`);
+-
+-            const receiver = this.getReceivers().find(r => r.id === ev.receiverId);
+-            const track = receiver?.track;
+-
+-            if (receiver && track) {
+-                // As per the spec:
+-                // - Remove the track from any media streams that were previously passed to the `track` event.
+-                // https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-removetrack,
+-                // - Mark the track as muted:
+-                // https://w3c.github.io/webrtc-pc/#process-remote-track-removal
+-                for (const stream of this._remoteStreams.values()) {
+-                    if (stream._tracks.includes(track)) {
+-                        const trackIdx = stream._tracks.indexOf(track);
+-
+-                        log.debug(`${this._pcId} removetrack ${track.id}`);
+-
+-                        stream._tracks.splice(trackIdx, 1);
+-
+-                        stream.dispatchEvent(new MediaStreamTrackEvent('removetrack', { track }));
+-
+-                        // Dispatch a mute event for the track.
+-                        track._setMutedInternal(true);
+-                    }
+-                }
+-            }
+-        });
+-
+-        addListener(this, 'peerConnectionGotICECandidate', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            const sdpInfo = ev.sdp;
+-
+-            // Can happen when doing a rollback.
+-            if (sdpInfo.type && sdpInfo.sdp) {
+-                this.localDescription = new RTCSessionDescription(sdpInfo);
+-            } else {
+-                this.localDescription = null;
+-            }
+-
+-            const candidate = new RTCIceCandidate(ev.candidate);
+-
+-            this.dispatchEvent(new RTCIceCandidateEvent('icecandidate', { candidate }));
+-        });
+-
+-        addListener(this, 'peerConnectionIceGatheringChanged', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            this.iceGatheringState = ev.iceGatheringState;
+-
+-            if (this.iceGatheringState === 'complete') {
+-                const sdpInfo = ev.sdp;
+-
+-                // Can happen when doing a rollback.
+-                if (sdpInfo.type && sdpInfo.sdp) {
+-                    this.localDescription = new RTCSessionDescription(sdpInfo);
+-                } else {
+-                    this.localDescription = null;
+-                }
+-
+-                this.dispatchEvent(new RTCIceCandidateEvent('icecandidate', { candidate: null }));
+-            }
+-
+-            this.dispatchEvent(new Event('icegatheringstatechange'));
+-        });
+-
+-        addListener(this, 'peerConnectionDidOpenDataChannel', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            const channel = new RTCDataChannel(ev.dataChannel);
+-
+-            this.dispatchEvent(new RTCDataChannelEvent('datachannel', { channel }));
+-
+-            // Send 'open' event. Native doesn't update the state since it's already
+-            // set at this point.
+-            channel.dispatchEvent(new RTCDataChannelEvent('open', { channel }));
+-        });
+-
+-        addListener(this, 'mediaStreamTrackMuteChanged', (ev: any) => {
+-            if (ev.pcId !== this._pcId) {
+-                return;
+-            }
+-
+-            const [
+-                track
+-            ] = this.getReceivers().map(r => r.track).filter(t => t?.id === ev.trackId);
+-
+-            if (track) {
+-                track._setMutedInternal(ev.muted);
+-            }
+-        });
+-    }
+-
+-    /**
+-     * Creates a new RTCDataChannel object with the given label. The
+-     * RTCDataChannelInit dictionary can be used to configure properties of the
+-     * underlying channel such as data reliability.
+-     *
+-     * @param {string} label - the value with which the label attribute of the new
+-     * instance is to be initialized
+-     * @param {RTCDataChannelInit} dataChannelDict - an optional dictionary of
+-     * values with which to initialize corresponding attributes of the new
+-     * instance such as id
+-     */
+-    createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel {
+-        if (arguments.length === 0) {
+-            throw new TypeError('1 argument required, but 0 present');
+-        }
+-
+-        if (dataChannelDict && 'id' in dataChannelDict) {
+-            const id = dataChannelDict.id;
+-
+-            if (typeof id !== 'number') {
+-                throw new TypeError('DataChannel id must be a number: ' + id);
+-            }
+-        }
+-
+-        const channelInfo = WebRTCModule.createDataChannel(this._pcId, String(label), dataChannelDict);
+-
+-        if (channelInfo === null) {
+-            throw new TypeError('Failed to create new DataChannel');
+-        }
+-
+-        return new RTCDataChannel(channelInfo);
+-    }
+-
+-    /**
+-     * Check whether a media stream track exists already in a sender.
+-     * See https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-addtrack for more information
+-     */
+-    _trackExists(track: MediaStreamTrack): boolean {
+-        const [ sender ] = this
+-            .getSenders()
+-            .filter(
+-                sender => sender.track?.id === track.id
+-            );
+-
+-        return sender? true : false;
+-    }
+-
+-    /**
+-     * Updates transceivers after offer/answer updates if necessary.
+-     */
+-    _updateTransceivers(transceiverUpdates, removeStopped = false) {
+-        for (const update of transceiverUpdates) {
+-            const [ transceiver ] = this
+-                .getTransceivers()
+-                .filter(t => t.sender.id === update.transceiverId);
+-
+-            if (!transceiver) {
+-                continue;
+-            }
+-
+-            if (update.currentDirection) {
+-                transceiver._currentDirection = update.currentDirection;
+-            }
+-
+-            transceiver._mid = update.mid;
+-            transceiver._stopped = Boolean(update.isStopped);
+-            transceiver._sender._rtpParameters = new RTCRtpSendParameters(update.senderRtpParameters);
+-            transceiver._receiver._rtpParameters = new RTCRtpReceiveParameters(update.receiverRtpParameters);
+-        }
+-
+-        if (removeStopped) {
+-            const stopped = this.getTransceivers().filter(t => t.stopped);
+-            const newTransceivers = this._transceivers.filter(t => !stopped.includes(t.transceiver));
+-
+-            this._transceivers = newTransceivers;
+-        }
+-    }
+-
+-    /**
+-     * Inserts transceiver into the transceiver array in the order they are created (timestamp).
+-     * @param order an index that refers to when it it was created relatively.
+-     * @param transceiver the transceiver object to be inserted.
+-     */
+-    _insertTransceiverSorted(order: number, transceiver: RTCRtpTransceiver) {
+-        this._transceivers.push({ order, transceiver });
+-        this._transceivers.sort((a, b) => a.order - b.order);
+-    }
+-}
+-
+-/**
+- * Define the `onxxx` event handlers.
+- */
+-const proto = RTCPeerConnection.prototype;
+-
+-defineEventAttribute(proto, 'connectionstatechange');
+-defineEventAttribute(proto, 'icecandidate');
+-defineEventAttribute(proto, 'icecandidateerror');
+-defineEventAttribute(proto, 'iceconnectionstatechange');
+-defineEventAttribute(proto, 'icegatheringstatechange');
+-defineEventAttribute(proto, 'negotiationneeded');
+-defineEventAttribute(proto, 'signalingstatechange');
+-defineEventAttribute(proto, 'datachannel');
+-defineEventAttribute(proto, 'track');
+-defineEventAttribute(proto, 'error');
+diff --git a/node_modules/react-native-webrtc/src/RTCRtcpParameters.ts b/node_modules/react-native-webrtc/src/RTCRtcpParameters.ts
+deleted file mode 100644
+index 37e1f1b..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtcpParameters.ts
++++ /dev/null
+@@ -1,23 +0,0 @@
+-export interface RTCRtcpParametersInit {
+-    cname: string;
+-    reducedSize: boolean;
+-}
+-
+-export default class RTCRtcpParameters {
+-    readonly cname: string;
+-    readonly reducedSize: boolean;
+-
+-    constructor(init: RTCRtcpParametersInit) {
+-        this.cname = init.cname;
+-        this.reducedSize = init.reducedSize;
+-
+-        Object.freeze(this);
+-    }
+-
+-    toJSON(): RTCRtcpParametersInit {
+-        return {
+-            cname: this.cname,
+-            reducedSize: this.reducedSize
+-        };
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpCapabilities.ts b/node_modules/react-native-webrtc/src/RTCRtpCapabilities.ts
+deleted file mode 100644
+index 1d0fbc7..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpCapabilities.ts
++++ /dev/null
+@@ -1,16 +0,0 @@
+-import RTCRtpCodecCapability from './RTCRtpCodecCapability';
+-
+-/**
+- * @brief represents codec capabilities for senders and receivers.
+- */
+-export default class RTCRtpCapabilities {
+-    _codecs: RTCRtpCodecCapability[] = [];
+-    constructor(codecs: RTCRtpCodecCapability[]) {
+-        this._codecs = codecs;
+-        Object.freeze(this);
+-    }
+-
+-    get codecs() {
+-        return this._codecs;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpCodecCapability.ts b/node_modules/react-native-webrtc/src/RTCRtpCodecCapability.ts
+deleted file mode 100644
+index fcb661b..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpCodecCapability.ts
++++ /dev/null
+@@ -1,13 +0,0 @@
+-
+-export default class RTCRtpCodecCapability {
+-    _mimeType: string;
+-
+-    constructor(init: { mimeType: string }) {
+-        this._mimeType = init.mimeType;
+-        Object.freeze(this);
+-    }
+-
+-    get mimeType() {
+-        return this._mimeType;
+-    }
+-}
+\ No newline at end of file
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpCodecParameters.ts b/node_modules/react-native-webrtc/src/RTCRtpCodecParameters.ts
+deleted file mode 100644
+index 67a3430..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpCodecParameters.ts
++++ /dev/null
+@@ -1,44 +0,0 @@
+-export interface RTCRtpCodecParametersInit {
+-    payloadType: number;
+-    clockRate: number;
+-    mimeType: string;
+-    channels?: number;
+-    sdpFmtpLine?: string;
+-}
+-
+-export default class RTCRtpCodecParameters {
+-    readonly payloadType: number;
+-    readonly clockRate: number;
+-    readonly mimeType: string;
+-    readonly channels: number | null;
+-    readonly sdpFmtpLine: string | null;
+-
+-    constructor(init: RTCRtpCodecParametersInit) {
+-        this.payloadType = init.payloadType;
+-        this.clockRate = init.clockRate;
+-        this.mimeType = init.mimeType;
+-
+-        this.channels = init.channels ? init.channels : null;
+-        this.sdpFmtpLine = init.sdpFmtpLine ? init.sdpFmtpLine : null;
+-
+-        Object.freeze(this);
+-    }
+-
+-    toJSON(): RTCRtpCodecParametersInit {
+-        const obj = {
+-            payloadType: this.payloadType,
+-            clockRate: this.clockRate,
+-            mimeType: this.mimeType
+-        };
+-
+-        if (this.channels !== null) {
+-            obj['channels'] = this.channels;
+-        }
+-
+-        if (this.sdpFmtpLine !== null) {
+-            obj['sdpFmtpLine'] = this.sdpFmtpLine;
+-        }
+-
+-        return obj;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpEncodingParameters.ts b/node_modules/react-native-webrtc/src/RTCRtpEncodingParameters.ts
+deleted file mode 100644
+index 320b6b1..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpEncodingParameters.ts
++++ /dev/null
+@@ -1,90 +0,0 @@
+-export interface RTCRtpEncodingParametersInit {
+-    active: boolean,
+-    rid?: string;
+-    maxFramerate?: number;
+-    maxBitrate?: number;
+-    scaleResolutionDownBy?: number;
+-}
+-
+-export default class RTCRtpEncodingParameters {
+-    active: boolean;
+-    _rid: string | null;
+-    _maxFramerate: number | null;
+-    _maxBitrate: number | null;
+-    _scaleResolutionDownBy: number | null;
+-
+-    constructor(init: RTCRtpEncodingParametersInit) {
+-        this.active = init.active;
+-        this._rid = init.rid ?? null;
+-        this._maxBitrate = init.maxBitrate ?? null;
+-        this._maxFramerate = init.maxFramerate ?? null;
+-        this._scaleResolutionDownBy = init.scaleResolutionDownBy ?? null;
+-    }
+-
+-    get rid() {
+-        return this._rid;
+-    }
+-
+-    get maxFramerate() {
+-        return this._maxFramerate;
+-    }
+-
+-    set maxFramerate(framerate) {
+-        // eslint-disable-next-line eqeqeq
+-        if (framerate != null && framerate > 0) {
+-            this._maxFramerate = framerate;
+-        } else {
+-            this._maxFramerate = null;
+-        }
+-    }
+-
+-    get maxBitrate() {
+-        return this._maxBitrate;
+-    }
+-
+-    set maxBitrate(bitrate) {
+-        // eslint-disable-next-line eqeqeq
+-        if (bitrate != null && bitrate >= 0) {
+-            this._maxBitrate = bitrate;
+-        } else {
+-            this._maxBitrate = null;
+-        }
+-    }
+-
+-    get scaleResolutionDownBy() {
+-        return this._scaleResolutionDownBy;
+-    }
+-
+-    set scaleResolutionDownBy(resolutionScale) {
+-        // eslint-disable-next-line eqeqeq
+-        if (resolutionScale != null && resolutionScale >= 1) {
+-            this._scaleResolutionDownBy = resolutionScale;
+-        } else {
+-            this._scaleResolutionDownBy = null;
+-        }
+-    }
+-
+-    toJSON(): RTCRtpEncodingParametersInit {
+-        const obj = {
+-            active: Boolean(this.active),
+-        };
+-
+-        if (this._rid !== null) {
+-            obj['rid'] = this._rid;
+-        }
+-
+-        if (this._maxBitrate !== null) {
+-            obj['maxBitrate'] = this._maxBitrate;
+-        }
+-
+-        if (this._maxFramerate !== null) {
+-            obj['maxFramerate'] = this._maxFramerate;
+-        }
+-
+-        if (this._scaleResolutionDownBy !== null) {
+-            obj['scaleResolutionDownBy'] = this._scaleResolutionDownBy;
+-        }
+-
+-        return obj;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpHeaderExtension.ts b/node_modules/react-native-webrtc/src/RTCRtpHeaderExtension.ts
+deleted file mode 100644
+index fe35cb4..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpHeaderExtension.ts
++++ /dev/null
+@@ -1,27 +0,0 @@
+-export interface RTCRtpHeaderExtensionInit {
+-    id: number;
+-    uri: string;
+-    encrypted: boolean;
+-}
+-
+-export default class RTCRtpHeaderExtension {
+-    readonly id: number;
+-    readonly uri: string;
+-    readonly encrypted: boolean;
+-
+-    constructor(init: RTCRtpHeaderExtensionInit) {
+-        this.id = init.id;
+-        this.uri = init.uri;
+-        this.encrypted = init.encrypted;
+-
+-        Object.freeze(this);
+-    }
+-
+-    toJSON(): RTCRtpHeaderExtensionInit {
+-        return {
+-            id: this.id,
+-            uri: this.uri,
+-            encrypted: this.encrypted
+-        };
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpParameters.ts b/node_modules/react-native-webrtc/src/RTCRtpParameters.ts
+deleted file mode 100644
+index b78dada..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpParameters.ts
++++ /dev/null
+@@ -1,37 +0,0 @@
+-import RTCRtcpParameters, { RTCRtcpParametersInit } from './RTCRtcpParameters';
+-import RTCRtpCodecParameters, { RTCRtpCodecParametersInit } from './RTCRtpCodecParameters';
+-import RTCRtpHeaderExtension, { RTCRtpHeaderExtensionInit } from './RTCRtpHeaderExtension';
+-import { deepClone } from './RTCUtil';
+-
+-
+-export interface RTCRtpParametersInit {
+-    codecs: RTCRtpCodecParametersInit[],
+-    headerExtensions: RTCRtpHeaderExtensionInit[],
+-    rtcp: RTCRtcpParametersInit
+-}
+-
+-export default class RTCRtpParameters {
+-    codecs: (RTCRtpCodecParameters | RTCRtpCodecParametersInit)[] = [];
+-    readonly headerExtensions: RTCRtpHeaderExtension[] = [];
+-    readonly rtcp: RTCRtcpParameters;
+-
+-    constructor(init: RTCRtpParametersInit) {
+-        for (const codec of init.codecs) {
+-            this.codecs.push(new RTCRtpCodecParameters(codec));
+-        }
+-
+-        for (const ext of init.headerExtensions) {
+-            this.headerExtensions.push(new RTCRtpHeaderExtension(ext));
+-        }
+-
+-        this.rtcp = new RTCRtcpParameters(init.rtcp);
+-    }
+-
+-    toJSON() {
+-        return {
+-            codecs: this.codecs.map(c => deepClone(c)),
+-            headerExtensions: this.headerExtensions.map(he => deepClone(he)),
+-            rtcp: deepClone(this.rtcp)
+-        };
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpReceiveParameters.ts b/node_modules/react-native-webrtc/src/RTCRtpReceiveParameters.ts
+deleted file mode 100644
+index d08dd09..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpReceiveParameters.ts
++++ /dev/null
+@@ -1,7 +0,0 @@
+-import RTCRtpParameters, { RTCRtpParametersInit } from './RTCRtpParameters';
+-
+-export default class RTCRtpReceiveParameters extends RTCRtpParameters {
+-    constructor(init: RTCRtpParametersInit) {
+-        super(init);
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpReceiver.ts b/node_modules/react-native-webrtc/src/RTCRtpReceiver.ts
+deleted file mode 100644
+index 228fce0..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpReceiver.ts
++++ /dev/null
+@@ -1,60 +0,0 @@
+-import { NativeModules } from 'react-native';
+-
+-import MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpCapabilities from './RTCRtpCapabilities';
+-import { RTCRtpParametersInit } from './RTCRtpParameters';
+-import RTCRtpReceiveParameters from './RTCRtpReceiveParameters';
+-
+-const { WebRTCModule } = NativeModules;
+-
+-export default class RTCRtpReceiver {
+-    _id: string;
+-    _peerConnectionId: number;
+-    _track: MediaStreamTrack | null = null;
+-    _rtpParameters: RTCRtpReceiveParameters;
+-
+-    constructor(info: {
+-        peerConnectionId: number,
+-        id: string,
+-        track?: MediaStreamTrack,
+-        rtpParameters: RTCRtpParametersInit
+-    }) {
+-        this._id = info.id;
+-        this._peerConnectionId = info.peerConnectionId;
+-        this._rtpParameters = new RTCRtpReceiveParameters(info.rtpParameters);
+-
+-        if (info.track) {
+-            this._track = info.track;
+-        }
+-    }
+-
+-    static getCapabilities(kind: 'audio' | 'video'): RTCRtpCapabilities {
+-        return WebRTCModule.receiverGetCapabilities(kind);
+-    }
+-
+-    getStats() {
+-        return WebRTCModule.receiverGetStats(this._peerConnectionId, this._id).then(data =>
+-            /* On both Android and iOS it is faster to construct a single
+-            JSON string representing the Map of StatsReports and have it
+-            pass through the React Native bridge rather than the Map of
+-            StatsReports. While the implementations do try to be faster in
+-            general, the stress is on being faster to pass through the React
+-            Native bridge which is a bottleneck that tends to be visible in
+-            the UI when there is congestion involving UI-related passing.
+-            */
+-            new Map(JSON.parse(data))
+-        );
+-    }
+-
+-    getParameters(): RTCRtpReceiveParameters {
+-        return this._rtpParameters;
+-    }
+-
+-    get id() {
+-        return this._id;
+-    }
+-
+-    get track() {
+-        return this._track;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpSendParameters.ts b/node_modules/react-native-webrtc/src/RTCRtpSendParameters.ts
+deleted file mode 100644
+index 338c60c..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpSendParameters.ts
++++ /dev/null
+@@ -1,63 +0,0 @@
+-import RTCRtpEncodingParameters, { RTCRtpEncodingParametersInit } from './RTCRtpEncodingParameters';
+-import RTCRtpParameters, { RTCRtpParametersInit } from './RTCRtpParameters';
+-import { deepClone } from './RTCUtil';
+-
+-type DegradationPreferenceType = 'maintain-framerate'
+-    | 'maintain-resolution'
+-    | 'balanced'
+-    | 'disabled'
+-
+-
+-/**
+- * Class to convert degradation preference format. Native has a format such as
+- * MAINTAIN_FRAMERATE whereas the web APIs expect maintain-framerate
+- */
+-class DegradationPreference {
+-    static fromNative(nativeFormat: string): DegradationPreferenceType {
+-        const stringFormat = nativeFormat.toLowerCase().replace('_', '-');
+-
+-        return stringFormat as DegradationPreferenceType;
+-    }
+-
+-    static toNative(format: DegradationPreferenceType): string {
+-        return format.toUpperCase().replace('-', '_');
+-    }
+-}
+-
+-export interface RTCRtpSendParametersInit extends RTCRtpParametersInit {
+-    transactionId: string;
+-    encodings: RTCRtpEncodingParametersInit[];
+-    degradationPreference?: string;
+-}
+-
+-export default class RTCRtpSendParameters extends RTCRtpParameters {
+-    readonly transactionId: string;
+-    encodings: (RTCRtpEncodingParameters | RTCRtpEncodingParametersInit)[];
+-    degradationPreference: DegradationPreferenceType | null;
+-
+-    constructor(init: RTCRtpSendParametersInit) {
+-        super(init);
+-
+-        this.transactionId = init.transactionId;
+-        this.encodings = [];
+-        this.degradationPreference = init.degradationPreference ?
+-            DegradationPreference.fromNative(init.degradationPreference) : null;
+-
+-        for (const enc of init.encodings) {
+-            this.encodings.push(new RTCRtpEncodingParameters(enc));
+-        }
+-    }
+-
+-    toJSON() {
+-        const obj = super.toJSON();
+-
+-        obj['transactionId'] = this.transactionId;
+-        obj['encodings'] = this.encodings.map(e => deepClone(e));
+-
+-        if (this.degradationPreference !== null) {
+-            obj['degradationPreference'] = DegradationPreference.toNative(this.degradationPreference);
+-        }
+-
+-        return obj;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpSender.ts b/node_modules/react-native-webrtc/src/RTCRtpSender.ts
+deleted file mode 100644
+index 4366b32..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpSender.ts
++++ /dev/null
+@@ -1,78 +0,0 @@
+-import { NativeModules } from 'react-native';
+-
+-import MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpCapabilities from './RTCRtpCapabilities';
+-import RTCRtpSendParameters, { RTCRtpSendParametersInit } from './RTCRtpSendParameters';
+-
+-const { WebRTCModule } = NativeModules;
+-
+-
+-export default class RTCRtpSender {
+-    _id: string;
+-    _track: MediaStreamTrack | null = null;
+-    _peerConnectionId: number;
+-    _rtpParameters: RTCRtpSendParameters;
+-
+-    constructor(info: {
+-        peerConnectionId: number,
+-        id: string,
+-        track?: MediaStreamTrack,
+-        rtpParameters: RTCRtpSendParametersInit
+-    }) {
+-        this._peerConnectionId = info.peerConnectionId;
+-        this._id = info.id;
+-        this._rtpParameters = new RTCRtpSendParameters(info.rtpParameters);
+-
+-        if (info.track) {
+-            this._track = info.track;
+-        }
+-    }
+-
+-    async replaceTrack(track: MediaStreamTrack | null): Promise<void> {
+-        try {
+-            await WebRTCModule.senderReplaceTrack(this._peerConnectionId, this._id, track ? track.id : null);
+-        } catch (e) {
+-            return;
+-        }
+-
+-        this._track = track;
+-    }
+-
+-    static getCapabilities(kind: 'audio' | 'video'): RTCRtpCapabilities {
+-        return WebRTCModule.senderGetCapabilities(kind);
+-    }
+-
+-    getParameters(): RTCRtpSendParameters {
+-        return this._rtpParameters;
+-    }
+-
+-    async setParameters(parameters: RTCRtpSendParameters): Promise<void> {
+-        // This allows us to get rid of private "underscore properties"
+-        const _params = JSON.parse(JSON.stringify(parameters));
+-        const newParameters = await WebRTCModule.senderSetParameters(this._peerConnectionId, this._id, _params);
+-
+-        this._rtpParameters = new RTCRtpSendParameters(newParameters);
+-    }
+-
+-    getStats() {
+-        return WebRTCModule.senderGetStats(this._peerConnectionId, this._id).then(data =>
+-            /* On both Android and iOS it is faster to construct a single
+-            JSON string representing the Map of StatsReports and have it
+-            pass through the React Native bridge rather than the Map of
+-            StatsReports. While the implementations do try to be faster in
+-            general, the stress is on being faster to pass through the React
+-            Native bridge which is a bottleneck that tends to be visible in
+-            the UI when there is congestion involving UI-related passing.
+-            */
+-            new Map(JSON.parse(data))
+-        );
+-    }
+-
+-    get track() {
+-        return this._track;
+-    }
+-
+-    get id() {
+-        return this._id;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCRtpTransceiver.ts b/node_modules/react-native-webrtc/src/RTCRtpTransceiver.ts
+deleted file mode 100644
+index ad3d859..0000000
+--- a/node_modules/react-native-webrtc/src/RTCRtpTransceiver.ts
++++ /dev/null
+@@ -1,107 +0,0 @@
+-import { NativeModules } from 'react-native';
+-
+-import RTCRtpCodecCapability from './RTCRtpCodecCapability';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpSender from './RTCRtpSender';
+-
+-const { WebRTCModule } = NativeModules;
+-
+-export default class RTCRtpTransceiver {
+-    _peerConnectionId: number;
+-    _sender: RTCRtpSender;
+-    _receiver: RTCRtpReceiver;
+-
+-    _mid: string | null = null;
+-    _direction: string;
+-    _currentDirection: string;
+-    _stopped: boolean;
+-
+-    constructor(args: {
+-        peerConnectionId: number,
+-        isStopped: boolean,
+-        direction: string,
+-        currentDirection: string,
+-        mid?: string,
+-        sender: RTCRtpSender,
+-        receiver: RTCRtpReceiver,
+-    }) {
+-        this._peerConnectionId = args.peerConnectionId;
+-        this._mid = args.mid ?? null;
+-        this._direction = args.direction;
+-        this._currentDirection = args.currentDirection ?? null;
+-        this._stopped = Boolean(args.isStopped);
+-        this._sender = args.sender;
+-        this._receiver = args.receiver;
+-    }
+-
+-    get mid() {
+-        return this._mid;
+-    }
+-
+-    get stopped() {
+-        return this._stopped;
+-    }
+-
+-    get direction() {
+-        return this._direction;
+-    }
+-
+-    set direction(val) {
+-        if (![ 'sendonly', 'recvonly', 'sendrecv', 'inactive' ].includes(val)) {
+-            throw new TypeError('Invalid direction provided');
+-        }
+-
+-        if (this._stopped) {
+-            throw new Error('Transceiver Stopped');
+-        }
+-
+-        if (this._direction === val) {
+-            return;
+-        }
+-
+-        const oldDirection = this._direction;
+-
+-        WebRTCModule.transceiverSetDirection(this._peerConnectionId, this.sender.id, val)
+-            .catch(() => {
+-                this._direction = oldDirection;
+-            });
+-
+-        this._direction = val;
+-    }
+-
+-    get currentDirection() {
+-        return this._currentDirection;
+-    }
+-
+-    get sender() {
+-        return this._sender;
+-    }
+-
+-    get receiver() {
+-        return this._receiver;
+-    }
+-
+-    stop() {
+-        if (this._stopped) {
+-            return;
+-        }
+-
+-        WebRTCModule.transceiverStop(this._peerConnectionId, this.sender.id)
+-            .then(() => this._setStopped());
+-    }
+-
+-    setCodecPreferences(codecs: RTCRtpCodecCapability[]) {
+-        WebRTCModule.transceiverSetCodecPreferences(
+-            this._peerConnectionId,
+-            this.sender.id,
+-            codecs
+-        );
+-    }
+-
+-    _setStopped() {
+-        this._stopped = true;
+-        this._direction = 'stopped';
+-        this._currentDirection = 'stopped';
+-        this._mid = null;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCSessionDescription.ts b/node_modules/react-native-webrtc/src/RTCSessionDescription.ts
+deleted file mode 100644
+index b381d84..0000000
+--- a/node_modules/react-native-webrtc/src/RTCSessionDescription.ts
++++ /dev/null
+@@ -1,30 +0,0 @@
+-
+-export interface RTCSessionDescriptionInit {
+-    sdp: string;
+-    type: string | null;
+-}
+-
+-export default class RTCSessionDescription {
+-    _sdp: string;
+-    _type: string | null;
+-
+-    constructor(info: RTCSessionDescriptionInit = { type: null, sdp: '' }) {
+-        this._sdp = info.sdp;
+-        this._type = info.type;
+-    }
+-
+-    get sdp(): string {
+-        return this._sdp;
+-    }
+-
+-    get type(): string | null {
+-        return this._type;
+-    }
+-
+-    toJSON(): RTCSessionDescriptionInit {
+-        return {
+-            sdp: this._sdp,
+-            type: this._type
+-        };
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCTrackEvent.ts b/node_modules/react-native-webrtc/src/RTCTrackEvent.ts
+deleted file mode 100644
+index ea9bea4..0000000
+--- a/node_modules/react-native-webrtc/src/RTCTrackEvent.ts
++++ /dev/null
+@@ -1,42 +0,0 @@
+-import { Event } from 'event-target-shim/index';
+-
+-import MediaStream from './MediaStream';
+-import type MediaStreamTrack from './MediaStreamTrack';
+-import RTCRtpReceiver from './RTCRtpReceiver';
+-import RTCRtpTransceiver from './RTCRtpTransceiver';
+-
+-type TRACK_EVENTS = 'track'
+-
+-interface IRTCTrackEventInitDict extends Event.EventInit {
+-    streams: MediaStream[]
+-    transceiver: RTCRtpTransceiver
+-}
+-
+-/**
+- * @eventClass
+- * This event is fired whenever the Track is changed in PeerConnection.
+- * @param {TRACK_EVENTS} type - The type of event.
+- * @param {IRTCTrackEventInitDict} eventInitDict - The event init properties.
+- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/track_event MDN} for details.
+- */
+-export default class RTCTrackEvent<TEventType extends TRACK_EVENTS> extends Event<TEventType> {
+-    /** @eventProperty */
+-    readonly streams: MediaStream[] = [];
+-
+-    /** @eventProperty */
+-    readonly transceiver: RTCRtpTransceiver;
+-
+-    /** @eventProperty */
+-    readonly receiver: RTCRtpReceiver | null;
+-
+-    /** @eventProperty */
+-    readonly track: MediaStreamTrack | null;
+-
+-    constructor(type: TEventType, eventInitDict: IRTCTrackEventInitDict) {
+-        super(type, eventInitDict);
+-        this.streams = eventInitDict.streams;
+-        this.transceiver = eventInitDict.transceiver;
+-        this.receiver = eventInitDict.transceiver.receiver;
+-        this.track = eventInitDict.transceiver.receiver ? eventInitDict.transceiver.receiver.track : null;
+-    }
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCUtil.ts b/node_modules/react-native-webrtc/src/RTCUtil.ts
+deleted file mode 100644
+index 10e8499..0000000
+--- a/node_modules/react-native-webrtc/src/RTCUtil.ts
++++ /dev/null
+@@ -1,211 +0,0 @@
+-
+-const DEFAULT_AUDIO_CONSTRAINTS = {};
+-
+-const DEFAULT_VIDEO_CONSTRAINTS = {
+-    facingMode: 'user',
+-    frameRate: 30,
+-    height: 720,
+-    width: 1280
+-};
+-
+-const FACING_MODES = [ 'user', 'environment' ];
+-
+-const ASPECT_RATIO = 16 / 9;
+-
+-export type RTCOfferOptions  = {
+-    iceRestart?:boolean;
+-    offerToReceiveAudio?: boolean;
+-    offerToReceiveVideo?: boolean;
+-    voiceActivityDetection?:boolean
+-};
+-
+-const STANDARD_OFFER_OPTIONS = {
+-    icerestart: 'IceRestart',
+-    offertoreceiveaudio: 'OfferToReceiveAudio',
+-    offertoreceivevideo: 'OfferToReceiveVideo',
+-    voiceactivitydetection: 'VoiceActivityDetection'
+-};
+-
+-const SDP_TYPES = [
+-    'offer',
+-    'pranswer',
+-    'answer',
+-    'rollback'
+-];
+-
+-function getDefaultMediaConstraints(mediaType) {
+-    switch (mediaType) {
+-        case 'audio':
+-            return DEFAULT_AUDIO_CONSTRAINTS;
+-        case 'video':
+-            return DEFAULT_VIDEO_CONSTRAINTS;
+-        default:
+-            throw new TypeError(`Invalid media type: ${mediaType}`);
+-    }
+-}
+-
+-function extractString(constraints, prop) {
+-    const value = constraints[prop];
+-    const type = typeof value;
+-
+-    if (type === 'object') {
+-        for (const v of [ 'exact', 'ideal' ]) {
+-            if (value[v]) {
+-                return value[v];
+-            }
+-        }
+-    } else if (type === 'string') {
+-        return value;
+-    }
+-}
+-
+-function extractNumber(constraints, prop) {
+-    const value = constraints[prop];
+-    const type = typeof value;
+-
+-    if (type === 'number') {
+-        return Number.parseInt(value);
+-    } else if (type === 'object') {
+-        for (const v of [ 'exact', 'ideal', 'max', 'min' ]) {
+-            if (value[v]) {
+-                return Number.parseInt(value[v]);
+-            }
+-        }
+-    }
+-}
+-
+-function normalizeMediaConstraints(constraints, mediaType) {
+-    switch (mediaType) {
+-        case 'audio':
+-            return constraints;
+-
+-        case 'video': {
+-            const c = {
+-                deviceId: extractString(constraints, 'deviceId'),
+-                facingMode: extractString(constraints, 'facingMode'),
+-                frameRate: extractNumber(constraints, 'frameRate'),
+-                height: extractNumber(constraints, 'height'),
+-                width: extractNumber(constraints, 'width')
+-            };
+-
+-            if (!c.deviceId) {
+-                delete c.deviceId;
+-            }
+-
+-            if (!FACING_MODES.includes(c.facingMode)) {
+-                c.facingMode = DEFAULT_VIDEO_CONSTRAINTS.facingMode;
+-            }
+-
+-            if (!c.frameRate) {
+-                c.frameRate = DEFAULT_VIDEO_CONSTRAINTS.frameRate;
+-            }
+-
+-            if (!c.height && !c.width) {
+-                c.height = DEFAULT_VIDEO_CONSTRAINTS.height;
+-                c.width = DEFAULT_VIDEO_CONSTRAINTS.width;
+-            } else if (!c.height && c.width) {
+-                c.height = Math.round(c.width / ASPECT_RATIO);
+-            } else if (!c.width && c.height) {
+-                c.width = Math.round(c.height * ASPECT_RATIO);
+-            }
+-
+-            return c;
+-        }
+-
+-        default:
+-            throw new TypeError(`Invalid media type: ${mediaType}`);
+-    }
+-}
+-
+-/**
+- * Utility for creating short random strings from float point values.
+- * We take 4 characters from the end after converting to a string.
+- * Conversion to string gives us some letters as we don't want just numbers.
+- * Should be suitable to pass for enough randomness.
+- *
+- * @return {String} 4 random characters
+- */
+-function chr4() {
+-    return Math.random().toString(16).slice(-4);
+-}
+-
+-/**
+- * Put together a random string in UUIDv4 format {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+- *
+- * @return {String} uuidv4
+- */
+-export function uniqueID(): string {
+-    return `${chr4()}${chr4()}-${chr4()}-${chr4()}-${chr4()}-${chr4()}${chr4()}${chr4()}`;
+-}
+-
+-/**
+- * Utility for deep cloning an object. Object.assign() only does a shallow copy.
+- *
+- * @param {Object} obj - object to be cloned
+- * @return {Object} cloned obj
+- */
+-export function deepClone<T>(obj: T): T {
+-    return JSON.parse(JSON.stringify(obj));
+-}
+-
+-/**
+- * Checks whether an SDP type is valid or not.
+- *
+- * @param type SDP type to check.
+- * @returns Whether the SDP type is valid or not.
+- */
+-export function isSdpTypeValid(type: string): boolean {
+-    return SDP_TYPES.includes(type);
+-}
+-
+-/**
+- * Normalize options passed to createOffer().
+- *
+- * @param options - user supplied options
+- * @return Normalized options
+- */
+-export function normalizeOfferOptions(options?: RTCOfferOptions) {
+-    const newOptions: Record<string,string> = {};
+-
+-    if (!options || typeof options !== 'object') {
+-        return newOptions;
+-    }
+-
+-    // Convert standard options into WebRTC internal constant names.
+-    // See: https://github.com/jitsi/webrtc/blob/0cd6ce4de669bed94ba47b88cb71b9be0341bb81/sdk/media_constraints.cc#L113
+-    for (const [ key, value ] of Object.entries(options)) {
+-        const newKey = STANDARD_OFFER_OPTIONS[key.toLowerCase()];
+-
+-        if (newKey) {
+-            newOptions[newKey] = String(Boolean(value));
+-        }
+-    }
+-
+-    return newOptions;
+-}
+-
+-/**
+- * Normalize the given constraints in something we can work with.
+- */
+-export function normalizeConstraints(constraints) {
+-    const c = deepClone(constraints);
+-
+-    for (const mediaType of [ 'audio', 'video' ]) {
+-        const mediaTypeConstraints = c[mediaType];
+-        const typeofMediaTypeConstraints = typeof mediaTypeConstraints;
+-
+-        if (typeofMediaTypeConstraints !== 'undefined') {
+-            if (typeofMediaTypeConstraints === 'boolean') {
+-                if (mediaTypeConstraints) {
+-                    c[mediaType] = getDefaultMediaConstraints(mediaType);
+-                }
+-            } else if (typeofMediaTypeConstraints === 'object') {
+-                c[mediaType] = normalizeMediaConstraints(mediaTypeConstraints, mediaType);
+-            } else {
+-                throw new TypeError(`constraints.${mediaType} is neither a boolean nor a dictionary`);
+-            }
+-        }
+-    }
+-
+-    return c;
+-}
+diff --git a/node_modules/react-native-webrtc/src/RTCView.ts b/node_modules/react-native-webrtc/src/RTCView.ts
+deleted file mode 100644
+index ea97a43..0000000
+--- a/node_modules/react-native-webrtc/src/RTCView.ts
++++ /dev/null
+@@ -1,122 +0,0 @@
+-import { requireNativeComponent, ViewProps } from 'react-native';
+-
+-/**
+- * Native prop validation was removed from RN in:
+- * https://github.com/facebook/react-native/commit/8dc3ba0444c94d9bbb66295b5af885bff9b9cd34
+- *
+- * So we list them here for documentation purposes.
+- */
+-export interface RTCVideoViewProps extends ViewProps {
+-  /**
+-   * Indicates whether the video specified by {@link #streamURL} should be
+-   * mirrored during rendering. Commonly, applications choose to mirror the
+-   * user-facing camera.
+-   *
+-   * mirror: boolean
+-   */
+-  mirror?: boolean;
+-
+-  /**
+-   * In the fashion of
+-   * https://www.w3.org/TR/html5/embedded-content-0.html#dom-video-videowidth
+-   * and https://www.w3.org/TR/html5/rendering.html#video-object-fit,
+-   * resembles the CSS style object-fit.
+-   *
+-   * objectFit: 'contain' | 'cover'
+-   *
+-   * Defaults to 'cover'.
+-   */
+-  objectFit?: 'contain' | 'cover';
+-
+-  /**
+-   * URL / id of the stream that should be rendered.
+-   *
+-   * streamURL: string
+-   */
+-  streamURL?: string;
+-  /**
+-   * Similarly to the CSS property z-index, specifies the z-order of this
+-   * RTCView in the stacking space of all RTCViews. When RTCViews overlap,
+-   * zOrder determines which one covers the other. An RTCView with a larger
+-   * zOrder generally covers an RTCView with a lower one.
+-   *
+-   * Non-overlapping RTCViews may safely share a z-order (because one does not
+-   * have to cover the other).
+-   *
+-   * The support for zOrder is platform-dependent and/or
+-   * implementation-specific. Thus, specifying a value for zOrder is to be
+-   * thought of as giving a hint rather than as imposing a requirement. For
+-   * example, video renderers such as RTCView are commonly implemented using
+-   * OpenGL and OpenGL views may have different numbers of layers in their
+-   * stacking space. Android has three: a layer bellow the window (aka
+-   * default), a layer bellow the window again but above the previous layer
+-   * (aka media overlay), and above the window. Consequently, it is advisable
+-   * to limit the number of utilized layers in the stacking space to the
+-   * minimum sufficient for the desired display. For example, a video call
+-   * application usually needs a maximum of two zOrder values: 0 for the
+-   * remote video(s) which appear in the background, and 1 for the local
+-   * video(s) which appear above the remote video(s).
+-   *
+-   * zOrder: number
+-   */
+-  zOrder?: number;
+-
+-
+-  /**
+-   * Picture in picture options for this view. Disabled if not supplied.
+-   *
+-   * Note: this should only be generally only used with remote video tracks,
+-   * as the local camera may stop while in the background.
+-   *
+-   * iOS only. Requires iOS 15.0 or above, and the PIP background mode capability.
+-   */
+-  iosPIP?: RTCIOSPIPOptions;
+-
+-  /**
+-   * Callback function that is called when the dimensions of the video change.
+-   *
+-   * @param {Object} event - The event object containing the new dimensions.
+-   * @param {Object} event.nativeEvent - The native event data.
+-   * @param {number} event.nativeEvent.width - The width of the video.
+-   * @param {number} event.nativeEvent.height - The height of the video.
+-   */
+-  onDimensionsChange?: (event: { nativeEvent: { width: number; height: number } }) => void;
+-}
+-
+-export interface RTCIOSPIPOptions {
+-
+-  /**
+-   * Whether PIP can be launched from this view.
+-   *
+-   * Defaults to true.
+-   */
+-  enabled?: boolean;
+-
+-  /**
+-   * The preferred size of the PIP window.
+-   */
+-  preferredSize?: {
+-    width: number;
+-    height: number;
+-  },
+-
+-  /**
+-   * Indicates whether Picture in Picture starts automatically
+-   * when the controller embeds its content inline and the app
+-   * transitions to the background.
+-   *
+-   * Defaults to true.
+-   *
+-   * See: AVPictureInPictureController.canStartPictureInPictureAutomaticallyFromInline
+-   */
+-  startAutomatically?: boolean;
+-
+-  /**
+-   * Indicates whether Picture in Picture should stop automatically
+-   * when the app returns to the foreground.
+-   *
+-   * Defaults to true.
+-   */
+-  stopAutomatically?: boolean;
+-}
+-export default requireNativeComponent<RTCVideoViewProps>('RTCVideoView');
+diff --git a/node_modules/react-native-webrtc/src/ScreenCapturePickerView.ts b/node_modules/react-native-webrtc/src/ScreenCapturePickerView.ts
+deleted file mode 100644
+index 6623b51..0000000
+--- a/node_modules/react-native-webrtc/src/ScreenCapturePickerView.ts
++++ /dev/null
+@@ -1,4 +0,0 @@
+-
+-import { requireNativeComponent } from 'react-native';
+-
+-export default requireNativeComponent('ScreenCapturePickerView');

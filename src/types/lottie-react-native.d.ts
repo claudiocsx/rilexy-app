@@ -10,6 +10,7 @@ declare module 'lottie-react-native' {
     resizeMode?: 'contain' | 'cover' | 'center';
     speed?: number;
     onAnimationFinish?: (isCancelled: boolean) => void;
+    onError?: (error: any) => void;
   }
 
   const LottieView: ComponentType<LottieViewProps>;

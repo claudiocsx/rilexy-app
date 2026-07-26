@@ -161,25 +161,26 @@ function MessageBubble({ item, user, isEmojiOnly, uploadingMessages, cachedUris,
     return false;
   };
 
-  if (isDeletedForMe(item)) return null;
-
   const isMine = item.senderId === user.uid;
   const isEmojiMsg = item.text ? isEmojiOnly(item.text) : false;
   const isUploading = item.mediaUrl === '__uploading__';
   const localUri = uploadingMessages[item.id];
   const cachedUri = cachedUris[item.id];
   const isRemoteUrl = item.mediaUrl && !item.mediaUrl.startsWith('file://') && item.mediaUrl !== '__uploading__';
-  const { uri: decryptedUri, loading: decrypting } = useDecryptedMedia({
+  const { uri: decryptedUri, loading: decrypting, error: decryptError } = useDecryptedMedia({
     mediaUrl: isRemoteUrl ? item.mediaUrl : null,
     mediaKey: item.mediaKey,
     mediaIv: item.mediaIv,
     mediaType: item.mediaType,
   });
   const hasEncryption = !!(item.mediaKey && item.mediaIv);
+  const decryptionFailed = isRemoteUrl && hasEncryption && decryptError;
   const displayUri = isUploading && localUri ? localUri
     : !isUploading && decryptedUri ? decryptedUri
     : isRemoteUrl && !hasEncryption && cachedUri ? cachedUri
     : item.mediaUrl;
+
+  if (isDeletedForMe(item)) return null;
 
   const isViewOnceMedia = item.viewOnce && item.mediaUrl && item.mediaUrl !== '__uploading__';
   const wasViewedOnce = isViewOnceMedia && item.viewedOnceBy?.includes(user.uid) && item.senderId !== user.uid;
@@ -451,7 +452,8 @@ export default function ChatScreen() {
     function tryInferParticipants() {
       const ids = chatId.split('_');
       if (ids.length >= 2) {
-        const uids = ids.filter((id) => id.length > 10);
+        // UIDs are typically 28 chars (Firebase Auth), but use a more robust check
+        const uids = ids.filter((id) => id.length >= 20 && /^[a-zA-Z0-9]+$/.test(id));
         if (uids.length >= 2) setParticipants(uids);
       }
     }
@@ -589,14 +591,29 @@ export default function ChatScreen() {
     batch.commit().catch(() => {});
   }, [user, chatId]);
 
+  const lastMarkedIdRef = useRef<string | null>(null);
+  const markAsReadDebounceRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const unread = messages
       .filter((m) => m.senderId !== user?.uid && !(m.readBy || []).includes(user?.uid || ''))
       .map((m) => m.id);
-    if (unread.length > 0 && unread.length <= 20) {
+    if (unread.length === 0) return;
+
+    // Only mark as read for new messages (after the last marked one)
+    const latestUnread = unread[unread.length - 1];
+    if (lastMarkedIdRef.current === latestUnread) return;
+    lastMarkedIdRef.current = latestUnread;
+
+    if (markAsReadDebounceRef.current) clearTimeout(markAsReadDebounceRef.current);
+    markAsReadDebounceRef.current = setTimeout(() => {
       markAsRead(unread);
-    }
-  }, [messages, user?.uid]);
+    }, 500);
+
+    return () => {
+      if (markAsReadDebounceRef.current) clearTimeout(markAsReadDebounceRef.current);
+    };
+  }, [messages, user?.uid, markAsRead]);
 
   useEffect(() => {
     return () => {

@@ -14,6 +14,7 @@ const PIP_SIZE = { width: 120, height: 180 };
 
 export default function VideoView({ remoteStream, localStream, RTCView, peerName, status }: VideoViewProps) {
   const pan = useRef(new Animated.ValueXY({ x: 16, y: 100 })).current;
+  const pipOpacity = useRef(new Animated.Value(1)).current;
 
   const panResponder = useRef(
     PanResponder.create({
@@ -25,8 +26,14 @@ export default function VideoView({ remoteStream, localStream, RTCView, peerName
       onPanResponderMove: (_, gs) => {
         pan.setValue({ x: gs.dx, y: gs.dy });
       },
-      onPanResponderRelease: () => {
+      onPanResponderRelease: (_, gs) => {
         pan.flattenOffset();
+        const screenW = 400;
+        if (gs.moveX < screenW / 2) {
+          Animated.spring(pan.x, { toValue: 8, useNativeDriver: true }).start();
+        } else {
+          Animated.spring(pan.x, { toValue: screenW - PIP_SIZE.width - 8, useNativeDriver: true }).start();
+        }
       },
     })
   ).current;
@@ -47,16 +54,22 @@ export default function VideoView({ remoteStream, localStream, RTCView, peerName
             </View>
           </View>
         )}
+        {status === 'connected' && (
+          <View style={styles.statusBadge}>
+            <View style={styles.statusDot} />
+          </View>
+        )}
       </View>
 
       {localStream && RTCView && (
         <Animated.View
           style={[
             styles.localContainer,
-            { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
+            { transform: [{ translateX: pan.x }, { translateY: pan.y }], opacity: pipOpacity },
           ]}
           {...panResponder.panHandlers}
         >
+          <View style={styles.localGlow} />
           <RTCView
             streamURL={localStream.toURL?.() || ''}
             style={styles.localVideo}
@@ -94,6 +107,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.elevated,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.accent,
   },
   avatarInner: {
     width: 60,
@@ -102,14 +117,44 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     opacity: 0.3,
   },
+  statusBadge: {
+    position: 'absolute',
+    top: 50,
+    right: 16,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#22c55e',
+  },
   localContainer: {
     position: 'absolute',
     top: 60,
     right: 16,
     width: PIP_SIZE.width,
     height: PIP_SIZE.height,
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  localGlow: {
+    ...StyleSheet.absoluteFillObject,
+    borderWidth: 1,
+    borderColor: 'rgba(167, 139, 250, 0.3)',
+    borderRadius: 16,
+    zIndex: 2,
   },
   localVideo: {
     flex: 1,
@@ -118,6 +163,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 12,
+    borderRadius: 16,
   },
 });

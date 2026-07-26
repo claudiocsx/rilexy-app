@@ -47,6 +47,9 @@ export function useMediaPicker() {
         };
       }
       return null;
+    } catch (e: any) {
+      console.error('pickFromGallery error:', e?.message || e);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -75,5 +78,57 @@ export function useMediaPicker() {
     }
   };
 
-  return { pickFromGallery, takePhoto, loading };
+  const recordVideo = async (): Promise<MediaResult | null> => {
+    const hasPermission = await requestPermission('camera');
+    if (!hasPermission) return null;
+
+    setLoading(true);
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ['videos'],
+        videoMaxDuration: 60,
+        quality: 0.7,
+      });
+
+      if (!result.canceled && result.assets.length > 0) {
+        const asset = result.assets[0];
+        return {
+          uri: asset.uri,
+          type: 'video',
+        };
+      }
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pickMultipleFromGallery = async (): Promise<MediaResult[]> => {
+    const hasPermission = await requestPermission('gallery');
+    if (!hasPermission) return [];
+
+    setLoading(true);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images', 'videos'],
+        quality: 0.7,
+        allowsMultipleSelection: true,
+      });
+
+      if (!result.canceled && result.assets.length > 0) {
+        return result.assets.map((asset) => ({
+          uri: asset.uri,
+          type: asset.type === 'video' ? 'video' : 'image',
+        }));
+      }
+      return [];
+    } catch (e: any) {
+      console.error('pickMultipleFromGallery error:', e?.message || e);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { pickFromGallery, pickMultipleFromGallery, takePhoto, recordVideo, loading };
 }

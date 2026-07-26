@@ -1,6 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { BlurView } from 'expo-blur';
 import { colors } from '../../theme/colors';
 
 interface CallControlsProps {
@@ -27,7 +28,7 @@ export default function CallControls({
   onToggleMute, onToggleVideo, onToggleSpeaker, onSwitchCamera, onHangUp,
 }: CallControlsProps) {
   return (
-    <View style={styles.container}>
+    <BlurView intensity={30} tint="dark" style={styles.container}>
       <View style={styles.row}>
         <ControlButton
           icon={muted ? 'mic-off' : 'mic'}
@@ -66,7 +67,7 @@ export default function CallControls({
       >
         <Ionicons name="call" size={32} color="#fff" />
       </TouchableOpacity>
-    </View>
+    </BlurView>
   );
 }
 
@@ -90,25 +91,31 @@ function ControlButton({ icon, label, active, onPress }: {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingBottom: 50,
+    paddingBottom: 40,
     paddingTop: 20,
+    paddingHorizontal: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.08)',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 16,
+    gap: 20,
     marginBottom: 24,
   },
   btn: {
     width: BTN_SIZE,
     height: BTN_SIZE,
     borderRadius: BTN_SIZE / 2,
-    backgroundColor: colors.elevated,
+    backgroundColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   btnActive: {
     backgroundColor: colors.destructive,
+    borderColor: colors.destructive,
   },
   btnLabel: {
     color: colors.textMuted,
@@ -131,8 +138,10 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '135deg' }],
     shadowColor: '#E11D48',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
     elevation: 8,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.15)',
   },
 });

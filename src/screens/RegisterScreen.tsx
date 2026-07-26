@@ -9,10 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import { registerUser } from '../services/auth';
 import { colors } from '../theme/colors';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 export default function RegisterScreen() {
+  const route = useRoute<RouteProp<RootStackParamList, 'Register'>>();
+  const inviteCode = route.params?.inviteCode;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,7 +38,7 @@ export default function RegisterScreen() {
     }
     setLoading(true);
     try {
-      await registerUser(email, password, name);
+      await registerUser(email, password, name, inviteCode);
     } catch (error: any) {
       Alert.alert('Erro', error.message);
     } finally {

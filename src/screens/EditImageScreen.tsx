@@ -11,6 +11,7 @@ import Svg, { Path, Text as SvgText } from 'react-native-svg';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { getColors } from '../theme/colors';
 import { useSettingsStore } from '../store/settingsStore';
+import { useToast } from '../components/Toast';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 const IMAGE_MAX_H = SCREEN_H - 220;
@@ -36,7 +37,8 @@ export default function EditImageScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const theme = useSettingsStore((s) => s.theme);
   const c = getColors(theme);
-  const { imageUri, chatId, name: peerName } = route.params;
+  const { imageUri, chatId, name: peerName, isGroup: isGroupRoute } = route.params;
+  const { showToast } = useToast();
 
   const [imgUri, setImgUri] = useState(imageUri);
   const [imgSize, setImgSize] = useState({ w: SCREEN_W, h: SCREEN_W });
@@ -166,9 +168,9 @@ export default function EditImageScreen() {
         });
         finalUri = shot;
       }
-      navigation.navigate('Chat', { chatId, name: peerName, editedImageUri: finalUri } as any);
+      navigation.navigate('Chat', { chatId, name: peerName, editedImageUri: finalUri, isGroup: isGroupRoute } as any);
     } catch (e: any) {
-      Alert.alert('Erro', e?.message || 'Falha ao processar imagem');
+      showToast(e?.message || 'Falha ao processar imagem', 'error');
     } finally {
       setProcessing(false);
     }

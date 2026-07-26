@@ -18,6 +18,9 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+const WAVE_BARS = 24;
+const WAVE_INDICES = Array.from({ length: WAVE_BARS }, (_, i) => i);
+
 export default function AudioMessage({ uri, duration, isMine }: Props) {
   const [player, setPlayer] = useState<AudioPlayer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,6 +28,7 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
   const progressAnim = useRef(new Animated.Value(0)).current;
   const mountedRef = useRef(true);
   const listenerRef = useRef<any>(null);
+  const waveAnims = useRef(WAVE_INDICES.map(() => new Animated.Value(0.3))).current;
 
   useEffect(() => {
     return () => { mountedRef.current = false; };
@@ -42,6 +46,37 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
       }
     };
   }, [uri]);
+
+  const waveAnim = useRef<Animated.CompositeAnimation | null>(null);
+
+  const startWaveAnim = () => {
+    waveAnim.current?.stop();
+    waveAnim.current = Animated.loop(
+      Animated.parallel(
+        waveAnims.map((anim, i) =>
+          Animated.sequence([
+            Animated.timing(anim, {
+              toValue: 0.8 + Math.random() * 0.5,
+              duration: 300 + Math.random() * 200,
+              useNativeDriver: true,
+            }),
+            Animated.timing(anim, {
+              toValue: 0.3,
+              duration: 300 + Math.random() * 200,
+              useNativeDriver: true,
+            }),
+          ])
+        )
+      )
+    );
+    waveAnim.current.start();
+  };
+
+  const stopWaveAnim = () => {
+    waveAnim.current?.stop();
+    waveAnim.current = null;
+    waveAnims.forEach((anim) => anim.setValue(0.3));
+  };
 
   const loadSound = async () => {
     try {
@@ -71,6 +106,7 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
       setIsPlaying(false);
       setProgress(0);
       progressAnim.setValue(0);
+      stopWaveAnim();
     }
   };
 
@@ -80,6 +116,7 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
       if (isPlaying) {
         player.pause();
         setIsPlaying(false);
+        stopWaveAnim();
         if (activePlayerRef?.player === player) activePlayerRef = null;
       } else {
         if (activePlayerRef && activePlayerRef.player !== player) {
@@ -92,7 +129,8 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
         }
         player.play();
         setIsPlaying(true);
-        activePlayerRef = { player, pause: () => { player.pause(); setIsPlaying(false); } };
+        startWaveAnim();
+        activePlayerRef = { player, pause: () => { player.pause(); setIsPlaying(false); stopWaveAnim(); } };
       }
     } catch (e) {
       console.error('Audio play error:', e);
@@ -117,6 +155,27 @@ export default function AudioMessage({ uri, duration, isMine }: Props) {
         <View style={styles.progressTrack}>
           <Animated.View style={[styles.progressBar, { width: barWidth }, isMine && styles.progressBarMine]} />
         </View>
+        <View style={styles.waveContainer}>
+          {WAVE_INDICES.map((i) => {
+            const anim = waveAnims[i];
+            return (
+              <Animated.View
+                key={i}
+                style={[
+                  styles.waveBar,
+                  {
+                    height: anim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [8, 20],
+                    }),
+                    opacity: anim,
+                    backgroundColor: isMine ? 'rgba(255,255,255,0.5)' : colors.accent,
+                  },
+                ]}
+              />
+            );
+          })}
+        </View>
         <Text style={[styles.duration, isMine && styles.durationMine]}>
           {formatTime(progress * duration)} / {formatTime(duration)}
         </Text>
@@ -131,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingVertical: 4,
-    minWidth: 180,
+    minWidth: 200,
   },
   mine: {},
   playButton: {
@@ -145,18 +204,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressTrack: {
-    height: 4,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 2,
+    height: 3,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressBar: {
     height: '100%',
     backgroundColor: colors.accent,
-    borderRadius: 2,
+    borderRadius: 4,
   },
   progressBarMine: {
     backgroundColor: colors.bg,
+  },
+  waveContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    marginTop: 6,
+    height: 20,
+  },
+  waveBar: {
+    flex: 1,
+    borderRadius: 2,
   },
   duration: {
     color: colors.textMuted,

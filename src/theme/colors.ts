@@ -15,6 +15,12 @@ const darkColors = {
   destructive: '#ef4444',
   white: '#ffffff',
   overlay: 'rgba(2, 6, 23, 0.8)',
+  glassBg: 'rgba(15, 23, 42, 0.85)',
+  glassBorder: 'rgba(167, 139, 250, 0.15)',
+  glassHighlight: 'rgba(167, 139, 250, 0.08)',
+  success: '#22c55e',
+  warning: '#f59e0b',
+  info: '#3b82f6',
 };
 
 const lightColors = {
@@ -32,6 +38,12 @@ const lightColors = {
   destructive: '#dc2626',
   white: '#ffffff',
   overlay: 'rgba(248, 250, 252, 0.8)',
+  glassBg: 'rgba(255, 255, 255, 0.85)',
+  glassBorder: 'rgba(124, 58, 237, 0.15)',
+  glassHighlight: 'rgba(124, 58, 237, 0.08)',
+  success: '#16a34a',
+  warning: '#d97706',
+  info: '#2563eb',
 };
 
 export function getColors(theme: Theme = 'dark') {

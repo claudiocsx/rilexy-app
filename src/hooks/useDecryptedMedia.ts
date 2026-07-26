@@ -31,7 +31,7 @@ export function useDecryptedMedia({
       return;
     }
 
-    const key = `${mediaUrl}|${mediaKey || ''}`;
+    const key = `${mediaUrl}|${mediaKey || ''}|${mediaIv || ''}`;
     if (key === lastKey.current && !loading) return;
     lastKey.current = key;
 
@@ -55,7 +55,7 @@ export function useDecryptedMedia({
         if (!cancelled) {
           setError(err);
           setLoading(false);
-          setUri(mediaUrl);
+          setUri(null);
         }
       });
 

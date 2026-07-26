@@ -4,11 +4,13 @@
     "slug": "rilaxy",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./assets/icone.png",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
-      "backgroundColor": "#0f172a"
+      "image": "./assets/icone-tranparente.png",
+      "backgroundColor": "#020617",
+      "resizeMode": "contain"
     },
     "ios": {
       "supportsTablet": true,
@@ -21,21 +23,34 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0f172a"
+        "foregroundImage": "./assets/icone.png",
+        "backgroundColor": "#020617"
       },
       "package": "com.rilaxy.app",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.MODIFY_AUDIO_SETTINGS"
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.VIBRATE",
+        "android.permission.USE_FULL_SCREEN_INTENT"
       ]
     },
     "plugins": [
       "expo-audio",
       "expo-image-picker",
       "expo-dev-client",
-      "expo-video"
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/notification-icon.png",
+          "color": "#7c3aed"
+        }
+      ],
+      "@config-plugins/react-native-webrtc",
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {

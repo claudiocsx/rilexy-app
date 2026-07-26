@@ -91,9 +91,6 @@ export default function LoginScreen() {
           <Text style={styles.link}>Esqueci minha senha</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.link}>Não tem conta? Criar conta</Text>
-        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );

@@ -4,6 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { getColors } from '../theme/colors';
 import { getCacheSize, clearCache } from '../services/mediaCache';
 import { useSettingsStore, AutoDownload } from '../store/settingsStore';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';
@@ -15,6 +18,7 @@ function formatBytes(bytes: number): string {
 const AUTO_DOWNLOAD_OPTIONS: AutoDownload[] = ['always', 'wifi', 'never'];
 
 export default function SettingsScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const autoDownload = useSettingsStore((s) => s.autoDownload);
   const setAutoDownload = useSettingsStore((s) => s.setAutoDownload);
   const theme = useSettingsStore((s) => s.theme);
@@ -138,6 +142,34 @@ export default function SettingsScreen() {
           <Text style={{ color: c.destructive, fontSize: 15, fontWeight: '600' }}>
             {clearing ? 'Limpando...' : 'Limpar cache'}
           </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{
+        backgroundColor: c.surface, borderRadius: 12, padding: 16, marginBottom: 16,
+        borderWidth: 1, borderColor: c.borderLight,
+      }}>
+        <Text style={{
+          color: c.accent, fontSize: 14, fontWeight: 'bold', letterSpacing: 1,
+          marginBottom: 16, textTransform: 'uppercase',
+        }}>Privacidade</Text>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MutedUsers')}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 }}
+        >
+          <Ionicons name="volume-high-outline" size={22} color={c.accent} />
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Silenciados</Text>
+          <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('BlockedUsers')}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
+        >
+          <Ionicons name="person-remove-outline" size={22} color={c.accent} />
+          <Text style={{ flex: 1, color: c.text, fontSize: 16 }}>Bloqueados</Text>
+          <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
         </TouchableOpacity>
       </View>
 

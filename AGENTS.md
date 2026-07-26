@@ -106,6 +106,14 @@ node scripts/deploy_rules.js <service-account.json>  # deploy Firestore rules
 ### Groups
 - List + create group
 - Real-time messages with media
+- **@Menções**: digitar `@` abre popup com membros; admin vê opção de add externos
+- **Admin system**: campo `admins: string[]` no doc groups — criador é admin inicial
+- **Push ao mencionar**: `sendExpoPush` para cada usuário mencionado na mensagem
+- **Highlight @menções**: renderização em roxo (accent) no `MessageBubble`
+- **Promover/rebaixar admin**: criador pode promover qualquer membro a admin ou rebaixar
+- **Link de convite**: botão copiar link do grupo no info
+- **Aprovação de entrada**: novos membros via link entram como `pendingApprovals` — admin aprova ou rejeita
+- **Member Tags**: cada membro pode definir uma etiqueta (ex: "Técnico") tocando no próprio nome no info do grupo
 
 ### Feed
 - Posts with optional media
@@ -116,6 +124,16 @@ node scripts/deploy_rules.js <service-account.json>  # deploy Firestore rules
 - Firestore signaling (offer/answer/ICE candidates)
 - Requires `expo-dev-client` build (NOT Expo Go)
 - Setup guide: `ANDROID_DEV_SETUP.md`
+
+### Video Stickers (Figurinhas Animadas)
+- Create from gallery video (<5s) via `CreateVideoStickerScreen`
+- Preview with `expo-video` (loop, muted, no controls)
+- Assign emoji + name, save locally + upload to Supabase (`rilaxy-stickers/`)
+- Persisted via expo-file-system JSON index at `Paths.document/rilaxy-stickers/`
+- Shown in StickerPicker under "Suas" tab with VideoView loop preview
+- "+" button in tab bar navigates to create screen
+- Sent in chat: video URL uploaded to Supabase if local, receiver renders with VideoView
+- Falls back to `uploadChatMedia` if remote URL unavailable on send
 
 ### E2E Encryption (Utility)
 - `expo-crypto` AES-256-GCM
@@ -137,6 +155,7 @@ Current rule pattern:
 - `chats/{chatId}/messages/{messageId}` — read if auth; create/update/delete if participant
 - `stories/{storyId}` — read if auth; create if own userId; update/delete if own
 - `posts/{postId}` — read/create if auth; comments/likes open
+- `callHistory/{userId}/logs/{logId}` — read/create if own uid
 - Fallback: `deny all`
 
 ## Firestore Indexes
@@ -146,6 +165,7 @@ Current rule pattern:
 | `chats` | `participants` (array-contains) + `lastMessageTime` (desc) | Created |
 | `stories` | `expiresAt` (asc) | Single-field |
 | `stories` | `userId` (asc) + `createdAt` (desc) | Created |
+| `logs` (callHistory subcollection) | `timestamp` (desc) | Created |
 
 ## Cloud Functions (`functions/`)
 - **Signaling**: WebRTC offer/answer/ICE
@@ -175,6 +195,14 @@ Rule used `stories/{userId}/{storyId}` (subcollection pattern) but stories are s
 
 ### Firebase SDK crash in Expo Go
 Using modular SDK v10+ causes Metro to load ESM and crash. **Fix**: Use `firebase/compat/*` v9.23.0.
+
+### "Decryption failed" (Hermes base64)
+`btoa`/`atob` in Hermes mangles bytes > 127, corrupting encryption keys/nonces stored as base64.
+**Fix**: Use manual base64 encoding (`uint8ToBase64`/`base64ToUint8`) without `btoa`/`atob` or `String.fromCharCode` — see `src/services/crypto.ts:9-43`.
+
+Also:
+- `blob.arrayBuffer()` may not exist or be buggy in Hermes → use `new Response(b).arrayBuffer()` first, fall back to `b.arrayBuffer()`
+- `new Blob([Uint8Array])` fails in Hermes → use `arrayBuffer.slice(byteOffset, byteOffset + byteLength)` for safe byte copy
 
 ### Supabase Storage RLS
 Auto-created bucket policies may reject anon inserts. **Fix**: Run the SQL in `supabase_fix.sql` in Supabase SQL Editor to set public RLS on `rilaxy-media` bucket.

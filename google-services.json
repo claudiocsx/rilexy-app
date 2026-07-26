@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "97043198090",
+    "project_id": "rilaxy-cd8c5",
+    "storage_bucket": "rilaxy-cd8c5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97043198090:android:06aa72e295067b967afd73",
+        "android_client_info": {
+          "package_name": "com.Rilaxy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX58-Xcru7zhIMo-hTQKvwNF1-KXxQJ_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97043198090:android:5522208b0072a3337afd73",
+        "android_client_info": {
+          "package_name": "com.rilaxy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX58-Xcru7zhIMo-hTQKvwNF1-KXxQJ_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

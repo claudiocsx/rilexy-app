@@ -24,7 +24,8 @@ function extFromUri(uri: string, fallback = 'jpg'): string {
 
 export const uploadMedia = async (
   uri: string,
-  path: string
+  path: string,
+  onProgress?: (pct: number) => void
 ): Promise<string | null> => {
   try {
     const supabase = getSupabase();
@@ -41,6 +42,7 @@ export const uploadMedia = async (
     if (error) throw error;
 
     const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    if (onProgress) onProgress(1);
     return data.publicUrl;
   } catch (error: any) {
     console.error('Upload error:', error?.message || error);
@@ -63,7 +65,7 @@ export const uploadEncryptedMedia = async (
     const safeBuffer = encrypted.buffer.slice(
       encrypted.byteOffset,
       encrypted.byteOffset + encrypted.byteLength,
-    );
+    ) as ArrayBuffer;
     const { error } = await supabase.storage
       .from(BUCKET)
       .upload(path, safeBuffer, { contentType, upsert: true });
@@ -120,6 +122,40 @@ export const uploadEncryptedPostMedia = async (
   return uploadEncryptedMedia(uri, path);
 };
 
+export const uploadPostMedias = async (
+  postId: string,
+  uris: string[],
+): Promise<string[]> => {
+  const results: string[] = [];
+  for (let i = 0; i < uris.length; i++) {
+    const ext = /\.(mp4|mov|m4v|webm)$/i.test(uris[i]) ? 'mp4' : 'jpg';
+    const path = `posts/${postId}/media_${i}.${ext}`;
+    const url = await uploadMedia(uris[i], path);
+    if (url) results.push(url);
+  }
+  return results;
+};
+
+export const uploadEncryptedPostMedias = async (
+  postId: string,
+  uris: string[],
+): Promise<{ mediaUrls: string[]; mediaKeys: string[]; mediaIvs: string[] }> => {
+  const mediaUrls: string[] = [];
+  const mediaKeys: string[] = [];
+  const mediaIvs: string[] = [];
+  for (let i = 0; i < uris.length; i++) {
+    const ext = /\.(mp4|mov|m4v|webm)$/i.test(uris[i]) ? 'mp4' : 'jpg';
+    const path = `posts/${postId}/media_${i}.${ext}`;
+    const result = await uploadEncryptedMedia(uris[i], path);
+    if (result) {
+      mediaUrls.push(result.mediaUrl);
+      mediaKeys.push(result.mediaKey);
+      mediaIvs.push(result.mediaIv);
+    }
+  }
+  return { mediaUrls, mediaKeys, mediaIvs };
+};
+
 export const uploadAvatar = async (
   userId: string,
   uri: string
@@ -136,6 +172,17 @@ export const uploadStoryMedia = async (
 ): Promise<string | null> => {
   const ext = uri.split('.').pop() || 'jpg';
   const path = `stories/${userId}/${storyId}.${ext}`;
+  return uploadMedia(uri, path);
+};
+
+export const uploadChatDocument = async (
+  chatId: string,
+  messageId: string,
+  uri: string,
+  fileName: string
+): Promise<string | null> => {
+  const ext = extFromUri(uri, 'bin');
+  const path = `chats/${chatId}/documents/${messageId}.${ext}`;
   return uploadMedia(uri, path);
 };
 

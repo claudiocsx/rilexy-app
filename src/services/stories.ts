@@ -8,6 +8,7 @@ export interface Story {
   id: string;
   userId: string;
   userName: string;
+  photoURL?: string;
   mediaUrl?: string;
   mediaType?: 'image' | 'video';
   text?: string;
@@ -15,11 +16,14 @@ export interface Story {
   createdAt: firebase.firestore.Timestamp;
   expiresAt: firebase.firestore.Timestamp;
   viewedBy: string[];
+  videoSegmentStart?: number;
+  videoSegmentEnd?: number;
 }
 
 export interface StoryGroup {
   userId: string;
   userName: string;
+  photoURL?: string;
   stories: Story[];
   allViewed: boolean;
 }
@@ -32,6 +36,9 @@ export async function postStory(
     mediaType?: 'image' | 'video';
     text?: string;
     bgColor?: string;
+    videoSegmentStart?: number;
+    videoSegmentEnd?: number;
+    mediaUrlOverride?: string;
   }
 ): Promise<string | null> {
   try {
@@ -48,9 +55,13 @@ export async function postStory(
       mediaType: options.mediaType || null,
       text: options.text || '',
       bgColor: options.bgColor || null,
+      videoSegmentStart: options.videoSegmentStart ?? null,
+      videoSegmentEnd: options.videoSegmentEnd ?? null,
     });
 
-    if (options.mediaUri) {
+    if (options.mediaUrlOverride) {
+      await docRef.update({ mediaUrl: options.mediaUrlOverride });
+    } else if (options.mediaUri) {
       const publicUrl = await uploadStoryMedia(userId, docRef.id, options.mediaUri);
       if (publicUrl) {
         await docRef.update({ mediaUrl: publicUrl });
@@ -70,14 +81,31 @@ export function observeStories(
 ): () => void {
   const now = new Date();
 
+  const photoCache: Record<string, string | undefined> = {};
+
   return db.collection(STORIES_COLLECTION)
     .where('expiresAt', '>=', now)
     .orderBy('expiresAt', 'asc')
-    .onSnapshot((snapshot) => {
+    .onSnapshot(async (snapshot) => {
       const allStories = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Story[];
+
+      const userIds = [...new Set(allStories.map((s) => s.userId))];
+      const missing = userIds.filter((id) => !(id in photoCache));
+      if (missing.length > 0) {
+        const results = await Promise.allSettled(
+          missing.map((id) => db.collection('users').doc(id).get())
+        );
+        results.forEach((r, i) => {
+          if (r.status === 'fulfilled') {
+            photoCache[missing[i]] = r.value.data()?.photoURL || undefined;
+          } else {
+            photoCache[missing[i]] = undefined;
+          }
+        });
+      }
 
       const grouped: Record<string, StoryGroup> = {};
       for (const story of allStories) {
@@ -85,6 +113,7 @@ export function observeStories(
           grouped[story.userId] = {
             userId: story.userId,
             userName: story.userName,
+            photoURL: photoCache[story.userId],
             stories: [],
             allViewed: true,
           };

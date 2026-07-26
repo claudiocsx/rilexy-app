@@ -1,14 +1,11 @@
 import { getRandomBytesAsync } from 'expo-crypto';
 import nacl from 'tweetnacl';
 import { Paths, File, Directory } from 'expo-file-system';
-import { getSupabase } from './supabase';
-
-const BUCKET = 'rilaxy-media';
 const CACHE_DIR = 'rilaxy-decrypted';
 
 const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-function uint8ToBase64(bytes: Uint8Array): string {
+export function uint8ToBase64(bytes: Uint8Array): string {
   let result = '';
   for (let i = 0; i < bytes.length; i += 3) {
     const a = bytes[i];
@@ -24,7 +21,7 @@ function uint8ToBase64(bytes: Uint8Array): string {
   return result;
 }
 
-function base64ToUint8(base64: string): Uint8Array {
+export function base64ToUint8(base64: string): Uint8Array {
   const lookup: Record<string, number> = {};
   for (let i = 0; i < 64; i++) lookup[B64[i]] = i;
   const cleaned = base64.replace(/=+/g, '');
@@ -47,12 +44,12 @@ function getCacheDir(): Directory {
 }
 
 export function pathHash(path: string): string {
-  let h = 0;
+  let h = 0x811c9dc5;
   for (let i = 0; i < path.length; i++) {
-    h = ((h << 5) - h) + path.charCodeAt(i);
-    h |= 0;
+    h ^= path.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
   }
-  return Math.abs(h).toString(36);
+  return (h >>> 0).toString(16).padStart(8, '0');
 }
 
 function cachedFile(path: string, mimeType: string): File {
@@ -61,14 +58,15 @@ function cachedFile(path: string, mimeType: string): File {
 }
 
 export function extractStoragePath(mediaUrl: string): string {
+  const clean = mediaUrl.split('?')[0];
   const marker = '/public/';
-  const idx = mediaUrl.indexOf(marker);
+  const idx = clean.indexOf(marker);
   if (idx !== -1) {
-    const afterBucket = mediaUrl.slice(idx + marker.length);
+    const afterBucket = clean.slice(idx + marker.length);
     const slashIdx = afterBucket.indexOf('/');
     if (slashIdx !== -1) return afterBucket.slice(slashIdx + 1);
   }
-  return mediaUrl;
+  return clean;
 }
 
 export async function generateMediaKey(): Promise<{ key: string; iv: string }> {
@@ -108,16 +106,12 @@ export async function decryptAndCache(
   const dir = getCacheDir();
   if (!dir.exists) dir.create({ intermediates: true });
 
-  const supabase = getSupabase();
-  const storagePath = extractStoragePath(mediaUrl);
-  const { data: blob, error } = await supabase.storage
-    .from(BUCKET)
-    .download(storagePath);
-
-  if (error || !blob) {
-    console.error('Download encrypted blob failed:', error);
-    return mediaUrl;
+  const resp = await fetch(mediaUrl);
+  if (!resp.ok) {
+    console.error('Fetch encrypted blob failed:', resp.status, resp.statusText);
+    return null;
   }
+  const blob = await resp.blob();
 
   async function blobToArrayBuffer(b: Blob): Promise<ArrayBuffer> {
     try {
@@ -137,9 +131,9 @@ export async function decryptAndCache(
       encryptedLen: encrypted.length,
       keyLen: key.length,
       nonceLen: nonce.length,
-      storagePath,
+      urlPrefix: mediaUrl.slice(0, 80),
     });
-    return mediaUrl;
+    return null;
   }
 
   cache.write(decrypted);

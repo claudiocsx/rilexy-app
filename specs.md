@@ -71,6 +71,7 @@ src/
 │   ├── postNotifications.ts   # Notificações de posts
 │   ├── convites.ts            # Sistema de convites
 │   ├── block.ts               # Bloqueio de usuários
+│   ├── mute.ts                # Silenciar usuários (mute/unmute)
 │   ├── lockService.ts         # PIN lock app
 │   ├── linkPreview.ts         # Preview de links
 │   ├── ringtone.ts            # Toques de chamada
@@ -84,7 +85,7 @@ src/
 │   ├── Stories: CreateStoryScreen
 │   ├── Feed: CreatePostScreen
 │   ├── Calls: CallScreen, CallHistoryScreen
-│   ├── Settings: SettingsScreen, BlockedUsersScreen
+│   ├── Settings: SettingsScreen, BlockedUsersScreen, MutedUsersScreen
 │   ├── Media: EditImageScreen, CameraFilterScreen, GroupMediaScreen
 │   ├── Profile: UserProfileScreen, LockScreen
 │   ├── Search: GlobalSearchScreen
@@ -840,10 +841,10 @@ EXPO_PUBLIC_PUSH_API_KEY=...
 4. ~~Editar post~~
 5. ~~Compartilhar post no chat~~
 
-### ~~Fase 2 — Engajamento Social~~ ✅ CONCLUÍDA (parcial)
+### ~~Fase 2 — Engajamento Social~~ ✅ CONCLUÍDA
 6. ~~**Post reactions** — múltiplas reações (❤️😂😢😡👍) em vez de like único~~ (v1.0.5)
 7. ~~**Salvar/Bookmark post** — coleção pessoal~~ (v1.0.5)
-8. **Mute user** — ocultar posts do feed sem bloquear
+8. ~~**Mute user** — ocultar posts do feed sem bloquear~~ (v1.1.0)
 9. **Reportar post** — moderação (admin pode deletar)
 10. ~~**Hashtags #** — clicáveis com busca por tag~~ (v1.0.5)
 11. ~~**@Menções em posts** — marcar usuários~~ (v1.0.5)
@@ -899,7 +900,7 @@ EXPO_PUBLIC_PUSH_API_KEY=...
 
 ---
 
-*Documento gerado automaticamente a partir da análise do código-fonte (Jul 2025). Última atualização: v1.0.9 (UX improvements — skeleton, haptics, pressable, animations).*
+*Documento gerado automaticamente a partir da análise do código-fonte (Jul 2025). Última atualização: v1.1.0 (Mute User).*
 
 ---
 
@@ -1254,6 +1255,40 @@ O filtro `(p.mediaKey || p.mediaKeys?.length)` impede que posts sem criptografia
 - Paginação Firestore com `onEndReached`
 - `react-native-reanimated` para heart animation (substituir `Animated.Value` bridge)
 - `prefers-reduced-motion` check
+
+---
+
+### v1.1.0 — Silenciar Usuários (Mute User)
+
+**Data**: Jul 2025
+**Motivação**: Permitir que o usuário silencie其他人 no feed sem precisar bloquear — posts de usuários silenciados são ocultos do feed, mas o bloqueio total continua disponível para casos mais graves.
+
+**Mudanças**:
+
+#### Novo serviço: `src/services/mute.ts`
+- `muteUser(currentUid, targetUid)` — adiciona `targetUid` ao array `mutedUsers` no doc do usuário
+- `unmuteUser(currentUid, targetUid)` — remove do array
+- `getMutedUids(uid)` — retorna lista de UIDs silenciados
+- `observeMutedUids(uid, cb)` — listener em tempo real
+
+#### FeedScreen (`src/screens/FeedScreen.tsx`)
+- Escuta `observeMutedUids` e filtra posts de usuários silenciados
+- Botão **•••** no header de posts de outros usuários abre menu com opção "Silenciar @username"
+- Confirmação via Alert antes de mutar
+- Haptic feedback ao silenciar
+
+#### Nova tela: `src/screens/MutedUsersScreen.tsx`
+- Lista de usuários silenciados com avatar + nome
+- Botão "Desmutar" em cada item
+- Empty state quando ninguém está silenciado
+
+#### Navegação (`src/navigation/AppNavigator.tsx`)
+- Adicionada tela `MutedUsers` ao stack
+
+#### SettingsScreen (`src/screens/SettingsScreen.tsx`)
+- Nova seção "Privacidade" com link para "Silenciados" e "Bloqueados"
+
+**Arquivos afetados**: `mute.ts` (novo), `FeedScreen.tsx`, `MutedUsersScreen.tsx` (novo), `AppNavigator.tsx`, `SettingsScreen.tsx`
 
 ---
 

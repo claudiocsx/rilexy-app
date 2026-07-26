@@ -1,8 +1,12 @@
-import { useRef } from 'react';
-import { Modal, Animated, StyleSheet, Dimensions, PanResponder } from 'react-native';
+import { useRef, useCallback } from 'react';
+import { Modal, Animated, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { Image } from 'expo-image';
+import { BlurView } from 'expo-blur';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
+const MIN_SCALE = 1;
+const MAX_SCALE = 5;
 
 interface Props {
   visible: boolean;
@@ -14,114 +18,134 @@ export default function MediaViewer({ visible, uri, onClose }: Props) {
   const scale = useRef(new Animated.Value(1)).current;
   const translateX = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(0)).current;
+  const bgOpacity = useRef(new Animated.Value(1)).current;
 
-  const zoomed = useRef(false);
-  const lastTapTs = useRef(0);
-  const lastX = useRef(0);
-  const lastY = useRef(0);
-  const startX = useRef(0);
-  const startY = useRef(0);
-  const moved = useRef(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const baseScale = useRef(1);
+  const baseTranslateX = useRef(0);
+  const baseTranslateY = useRef(0);
+  const lastScale = useRef(1);
+  const isZoomed = useRef(false);
 
-  const animateTo = (toScale: number, toX: number, toY: number) => {
+  const clampScale = (s: number) => Math.min(Math.max(s, MIN_SCALE), MAX_SCALE);
+
+  const animateTo = useCallback((toScale: number, toX: number, toY: number) => {
     Animated.parallel([
       Animated.spring(scale, { toValue: toScale, useNativeDriver: true }),
       Animated.spring(translateX, { toValue: toX, useNativeDriver: true }),
       Animated.spring(translateY, { toValue: toY, useNativeDriver: true }),
     ]).start();
-    lastX.current = toX;
-    lastY.current = toY;
-    zoomed.current = toScale > 1;
-  };
+    lastScale.current = toScale;
+    isZoomed.current = toScale > 1;
+  }, [scale, translateX, translateY]);
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (_, gs) => {
-        if (zoomed.current) return Math.abs(gs.dx) > 4 || Math.abs(gs.dy) > 4;
-        return false;
-      },
-
-      onPanResponderGrant: (evt) => {
-        startX.current = evt.nativeEvent.pageX;
-        startY.current = evt.nativeEvent.pageY;
-        moved.current = false;
-        if (closeTimer.current) {
-          clearTimeout(closeTimer.current);
-          closeTimer.current = null;
-        }
-      },
-
-      onPanResponderMove: (evt) => {
-        const dx = evt.nativeEvent.pageX - startX.current;
-        const dy = evt.nativeEvent.pageY - startY.current;
-        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
-          moved.current = true;
-        }
-        if (zoomed.current) {
-          translateX.setValue(lastX.current + dx / 2);
-          translateY.setValue(lastY.current + dy / 2);
-        }
-      },
-
-      onPanResponderRelease: () => {
-        if (!moved.current) {
-          const now = Date.now();
-          if (now - lastTapTs.current < 300) {
-            const toScale = zoomed.current ? 1 : 2;
-            animateTo(toScale, 0, 0);
-            lastTapTs.current = 0;
-          } else {
-            lastTapTs.current = now;
-            closeTimer.current = setTimeout(() => {
-              if (lastTapTs.current === now) {
-                lastTapTs.current = 0;
-                onClose();
-              }
-            }, 300);
-          }
-          return;
-        }
-        if (zoomed.current) {
-          lastX.current = (translateX as any).__getValue();
-          lastY.current = (translateY as any).__getValue();
-        }
-      },
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      const newScale = clampScale(baseScale.current * e.scale);
+      scale.setValue(newScale);
+      isZoomed.current = newScale > 1;
     })
-  ).current;
+    .onEnd(() => {
+      const currentScale = clampScale(baseScale.current * (scale as any).__getValue());
+      if (currentScale <= 1) {
+        animateTo(1, 0, 0);
+        baseScale.current = 1;
+      } else {
+        lastScale.current = currentScale;
+        scale.setValue(currentScale);
+        isZoomed.current = true;
+        baseScale.current = currentScale;
+      }
+    });
+
+  const panGesture = Gesture.Pan()
+    .activeOffsetY([-15, 15])
+    .activeOffsetX([-15, 15])
+    .onUpdate((e) => {
+      if (isZoomed.current) {
+        translateX.setValue(baseTranslateX.current + e.translationX);
+        translateY.setValue(baseTranslateY.current + e.translationY);
+      } else {
+        const pullProgress = Math.min(Math.abs(e.translationY) / SCREEN_H, 1);
+        bgOpacity.setValue(1 - pullProgress * 0.6);
+        translateY.setValue(e.translationY * 0.4);
+        scale.setValue(1 - pullProgress * 0.15);
+      }
+    })
+    .onEnd((e) => {
+      if (isZoomed.current) {
+        baseTranslateX.current += e.translationX;
+        baseTranslateY.current += e.translationY;
+        return;
+      }
+      if (Math.abs(e.translationY) > SCREEN_H * 0.2) {
+        Animated.timing(bgOpacity, { toValue: 0, duration: 200, useNativeDriver: true }).start();
+        Animated.spring(translateY, { toValue: e.translationY > 0 ? SCREEN_H : -SCREEN_H, useNativeDriver: true }).start(() => onClose());
+        return;
+      }
+      Animated.parallel([
+        Animated.spring(translateY, { toValue: 0, useNativeDriver: true }),
+        Animated.spring(scale, { toValue: 1, useNativeDriver: true }),
+        Animated.timing(bgOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
+      ]).start();
+      baseScale.current = 1;
+      baseTranslateX.current = 0;
+      baseTranslateY.current = 0;
+      lastScale.current = 1;
+    });
+
+  const doubleTap = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      const toScale = isZoomed.current ? 1 : 2.5;
+      animateTo(toScale, 0, 0);
+      baseScale.current = toScale;
+      baseTranslateX.current = 0;
+      baseTranslateY.current = 0;
+    });
+
+  const imageGestures = Gesture.Simultaneous(
+    doubleTap,
+    pinchGesture,
+    panGesture
+  );
 
   return (
     <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
-      <Animated.View style={styles.backdrop} {...panResponder.panHandlers}>
-        {uri && (
-          <Animated.View style={[styles.image, { transform: [{ translateX }, { translateY }, { scale }] }]}>
-            <Image
-              source={uri}
-              style={styles.imageInner}
-              contentFit="contain"
-              transition={200}
-            />
+      <BlurView intensity={80} tint="dark" style={StyleSheet.absoluteFill}>
+        <Animated.View style={[styles.backdrop, { opacity: bgOpacity }]} />
+      </BlurView>
+      <Pressable style={StyleSheet.absoluteFill} onPress={onClose}>
+        <GestureDetector gesture={imageGestures}>
+          <Animated.View style={StyleSheet.absoluteFill}>
+            {uri && (
+              <Animated.View style={[styles.imageContainer, { transform: [{ translateX }, { translateY }, { scale }] }]}>
+                <Image
+                  source={uri}
+                  style={styles.image}
+                  contentFit="contain"
+                  transition={200}
+                />
+              </Animated.View>
+            )}
           </Animated.View>
-        )}
-      </Animated.View>
+        </GestureDetector>
+      </Pressable>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  imageContainer: {
     flex: 1,
-    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
     width: SCREEN_W,
     height: SCREEN_H,
-  },
-  imageInner: {
-    width: '100%',
-    height: '100%',
   },
 });

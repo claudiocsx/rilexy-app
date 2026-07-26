@@ -3,6 +3,9 @@ export type Sticker = {
   emoji: string;
   name: string;
   lottieUrl: string;
+  videoUrl?: string;
+  trimStart?: number;
+  trimEnd?: number;
 };
 
 export type StickerPack = {
