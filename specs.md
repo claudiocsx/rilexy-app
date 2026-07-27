@@ -1332,6 +1332,43 @@ O filtro `(p.mediaKey || p.mediaKeys?.length)` impede que posts sem criptografia
 
 ---
 
+### v1.1.2 — ChatsScreen: Timestamp, Preview, Unread, Typing, Pinned, Mute, Swipe
+
+**Data**: Jul 2025
+**Motivação**: A lista de chats estava funcional mas sem indicadores visuais essenciais — sem timestamp, sem preview de mídia, sem badge de não lidas, sem typing indicator, sem fixar/silenciar chats.
+
+**Mudanças**:
+
+#### ChatsScreen (`src/screens/ChatsScreen.tsx`) — Reescrita completa
+
+| # | Feature | Detalhe |
+|---|---------|---------|
+| 1 | **Timestamp formatado** | Hora (14:30), Ontem, Dia da semana (Seg), Data (15/06) — relativo ao momento atual |
+| 2 | **Preview de mídia** | Ícones contextuais: 📷 Foto, 🎥 Vídeo, 🎤 Áudio, 🎨 Figurinha, 🔗 Post, 📄 Arquivo |
+| 3 | **Badge de não lidas** | Badge circular roxo com contagem + nome em bold; usa `unreadCount` map + `lastMessageReadBy` |
+| 4 | **Status lido ✓✓** | Duplo checkmark azul quando peer leu a última mensagem enviada |
+| 5 | **Typing indicator** | "digitando..." em itálico roxo no lugar do preview; TTL 5s do campo `typing` |
+| 6 | **Preview em grupos** | Prefixo "João: Mensagem" usando `lastMessageSender` + `userNames` |
+| 7 | **Pinned chats** | Campo `pinnedAt: { [uid]: Timestamp }` — fixados aparecem no topo da lista; ícone pin ao lado do nome |
+| 8 | **Mute de chat** | Campo `mutedBy: string[]` — ícone sino cortado ao lado do nome; toggle via long-press ou swipe |
+| 9 | **Swipe actions** | `Swipeable` (react-native-gesture-handler) — 3 ações: Fixar (roxo), Silenciar (amarelo/verde), Arquivar (indigo) |
+| 10 | **Long-press menu** | Alert com opções: Fixar/Desafixar, Silenciar/Desmutar, Marcar como lido |
+| 11 | **Ordenação** | Chats fixados (`pinnedAt`) aparecem primeiro, depois por `lastMessageTime` desc |
+| 12 | **Padding FlatList** | `paddingBottom: 80` para FAB não sobrepor último item |
+
+**Campos Firestore utilizados (existentes ou novos):**
+- `lastMessageTime` — Timestamp (já existente via Cloud Function)
+- `lastMessageSender` — uid do remetente (já existente)
+- `lastMessageReadBy` — string[] de quem leu a última mensagem (novo)
+- `unreadCount` — `{ [uid]: number }` (novo)
+- `typing` — `{ [uid]: Timestamp }` (já existente)
+- `pinnedAt` — `{ [uid]: Timestamp }` (novo)
+- `mutedBy` — `string[]` (novo)
+
+**Arquivos afetados**: `ChatsScreen.tsx` (reescrita completa)
+
+---
+
 ## 27. Análise UI/UX — Feed (v1.0)
 
 ### Problemas Identificados vs Skill "UI/UX Pro Max"
@@ -1382,3 +1419,81 @@ O filtro `(p.mediaKey || p.mediaKeys?.length)` impede que posts sem criptografia
 | **P1 — Alta** | ② Skeleton loading + ④ Aspect ratio dinâmico + ⑧ Haptic + ⑩ activeOpacity | 2-3h |
 | **P2 — Média** | ⑤ Font theme + ⑫ Toast feedback + ⑬ Placeholder mídia + ⑯ Bookmark | 3-4h |
 | **P3 — Baixa** | ⑥ Empty state CTA + ⑪ Menu contexto + ⑭ Video overlay + ⑮ Dots + ⑰ Reanimated + ⑱ Paginação | 5-8h |
+
+---
+
+## 28. Análise UI/UX — ChatsScreen (v1.0)
+
+### Problemas Identificados
+
+| # | Severidade | Categoria | Problema Atual | Recomendação |
+|---|------------|-----------|----------------|--------------|
+| 1 | 🔴 Alta | Timestamp | `lastMessageTime` existe no Firestore (via Cloud Function) mas **não é exibido** na lista | Mostrar timestamp formatado à direita do nome (ex: "14:30", "Ontem", "Há 2d") |
+| 2 | 🔴 Alta | Media Preview | Toda mensagem não-texto aparece como `'[Mídia]'` no preview | Usar ícones: 📷 "Foto", 🎥 "Vídeo", 🎤 "Áudio", 🎨 "Figurinha", 📍 "Post compartilhado" |
+| 3 | 🟡 Média | Unread Badge | Sem indicador de mensagens não lidas — chats parecem todos iguais | Badge circular no canto do avatar ou à esquerda com contagem + bold no nome |
+| 4 | 🟡 Média | Read Status | Não mostra se a última mensagem foi lida (✓✓) | Duplo checkmark azul abaixo do preview quando `lastMessage` foi lido |
+| 5 | 🟡 Média | Typing Indicator | ChatScreen já tem `typing` listener, mas **ChatsScreen não consome** | Mostrar "digitando..." no lugar do preview quando peer está digitando |
+| 6 | 🟡 Média | Segurança do Peer | Só a primeira letra do nome é mostrada no chat list — sem fallback para grupos | Grupos já usam `avatarWrap` com nome, mas poderia ter cor de fundo única por chat |
+| 7 | 🟡 Média | Sender Preview | Em grupos, `lastMessage` não mostra quem enviou — confuso | Prefixo "João: Mensagem" no preview de grupos (google chat / telegram pattern) |
+| 8 | 🟡 Média | Pinned Chats | Não há como fixar chats importantes no topo | Adicionar campo `pinnedAt` no doc do chat + seção "Fixados" no topo da lista |
+| 9 | 🟡 Média | Mute Indicator | Não há como silenciar notificações de um chat | Adicionar campo `mutedBy: string[]` + ícone de sino cortado no item |
+| 10 | 🟡 Média | Swipe Actions | Sem swipe para ações rápidas (arquivar, marcar lido, silenciar) | Implementar `Swipeable` da `react-native-gesture-handler` com ações contextuais |
+| 11 | 🟡 Média | Online Dot | Ponto verde 14px é pequeno em telas de alta densidade | Aumentar para 16px com glow sutil (sombra verde) |
+| 12 | 🟡 Média | FAB Posição | FAB fica sobrepondo último item da lista (sem padding inferior) | Adicionar `paddingBottom` no FlatList igual à altura do FAB + 20px |
+| 13 | 🟢 Baixa | Avatar Animação | Nenhum feedback visual ao pressionar o chat | Já tem `pressed && { backgroundColor: colors.glassHighlight }` — mas sem escala |
+| 14 | 🟢 Baixa | Chevron | `chevron-forward` sempre presente, mesmo em grupos sem nome | Substituir ou remover; usar como indicador sutil de "pressionável" |
+| 15 | 🟢 Baixa | Empty State | "Nenhuma conversa ainda" — bom, mas sem CTA visual | Adicionar botão "Iniciar conversa" abaixo do texto (já é o FAB, mas reforçar) |
+| 16 | 🟢 Baixa | Retry Button | Botão "Tentar novamente" no error state sem padding vertical | Adicionar `marginTop: 12` + cor de fundo sutil no hover/press |
+
+### Funcionalidades Já Implementadas (✓)
+
+| # | Funcionalidade | Detalhe |
+|---|----------------|---------|
+| ✅ | **Skeleton loading** | 5 placeholders com pulse animation (linhas 31-53) |
+| ✅ | **Haptic feedback** | `Haptics.impactAsync` ao navegar (linha 185) e abrir FAB (linha 245) |
+| ✅ | **Online presence** | Listener `presence/{uid}` + dot verde (linhas 135-159) |
+| ✅ | **Pressable** | `Pressable` com feedback `glassHighlight` (não `TouchableOpacity`) |
+| ✅ | **Error state** | Ícone cloud-offline + texto + retry button |
+| ✅ | **Empty state** | Ícone circular + texto + subtítulo |
+| ✅ | **FAB animado** | Scale `0.9` + opacity `0.8` no press |
+| ✅ | **Refresh control** | Pull-to-refresh com `tintColor` accent |
+| ✅ | **Nome de usuários** | Busca em lote (`where('uid', 'in', chunk)`) com cache em `userNames` |
+| ✅ | **Group naming** | Chat com `name` field usa nome próprio |
+| ✅ | **Avatar loading** | `AvatarImage` component com fallback para iniciais |
+
+### Cloud Function — `createChatOnFirstMessage`
+
+```js
+// functions/lib/index.js:137-147
+// Toda nova mensagem atualiza lastMessage + lastMessageTime no doc do chat
+exports.createChatOnFirstMessage = functions.firestore
+  .document('chats/{chatId}/messages/{messageId}')
+  .onCreate(async (snap, context) => {
+    const message = snap.data();
+    await db.collection('chats').doc(chatId).update({
+        lastMessage: message.text || '[Mídia]',  // ← Bug: sempre '[Mídia]' para não-texto
+        lastMessageTime: admin.firestore.FieldValue.serverTimestamp(),
+        lastMessageSender: message.senderId,
+    });
+});
+```
+
+**Problema**: `lastMessage` não diferencia entre mídia, sticker, áudio, shared post — sempre `'[Mídia]'`.
+**Fix**: Usar mesma lógica de `sendMessageNotification` (linhas 235-241):
+```js
+lastMessage: message.text
+  || (message.sticker ? '🎨 Figurinha' : '')
+  || (message.mediaUrl ? (message.mediaType?.startsWith('video') ? '🎥 Vídeo' : '📷 Foto') : '')
+  || (message.audioUrl ? '🎤 Áudio' : '')
+  || (message.sharedPost ? '📍 Post' : '')
+  || '[Mídia]'
+```
+
+### Plano de Implementação
+
+| Fase | Items | Esforço |
+|------|-------|---------|
+| **P0 — Imediato** | ① Timestamp + ② Media preview icons | 1h |
+| **P1 — Alta** | ③ Unread badge + ④ Read status + ⑤ Typing indicator | 3-4h |
+| **P2 — Média** | ⑦ Group sender preview + ⑧ Pinned + ⑨ Mute + ⑩ Swipe actions | 5-6h |
+| **P3 — Baixa** | ⑪ Online dot glow + ⑫ FAB padding + ⑬ Avatar animação + ⑭ Chevron + ⑮ Empty CTA + ⑯ Retry style | 2-3h |

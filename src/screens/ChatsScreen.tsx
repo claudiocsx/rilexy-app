@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,11 @@ import {
   Animated,
   RefreshControl,
   Pressable,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { Swipeable } from 'react-native-gesture-handler';
 import AvatarImage from '../components/AvatarImage';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -17,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors } from '../theme/colors';
+import firebase from 'firebase/compat/app';
 
 type ChatNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -24,8 +27,76 @@ interface Chat {
   id: string;
   participants: string[];
   lastMessage?: string;
-  lastMessageTime?: string;
+  lastMessageTime?: any;
+  lastMessageSender?: string;
+  lastMessageReadBy?: string[];
   name?: string;
+  isGroup?: boolean;
+  typing?: Record<string, any>;
+  pinnedAt?: Record<string, any>;
+  mutedBy?: string[];
+  unreadCount?: Record<string, number>;
+  lastMessageType?: string;
+  photoURL?: string;
+}
+
+function formatChatTime(ts: any): string {
+  if (!ts) return '';
+  let date: Date;
+  if (ts?.toDate) {
+    date = ts.toDate();
+  } else if (ts?.seconds) {
+    date = new Date(ts.seconds * 1000);
+  } else if (typeof ts === 'string' || typeof ts === 'number') {
+    date = new Date(ts);
+  } else {
+    return '';
+  }
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffH = Math.floor(diffMs / 3600000);
+  const isToday = date.toDateString() === now.toDateString();
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const isYesterday = date.toDateString() === yesterday.toDateString();
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const time = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+
+  if (isToday) return time;
+  if (isYesterday) return 'Ontem';
+  if (diffH < 168) {
+    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    return days[date.getDay()];
+  }
+  return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}`;
+}
+
+function getMediaPreview(lastMessage?: string, lastMessageType?: string): string | null {
+  if (!lastMessage) return null;
+  const msg = lastMessage.toLowerCase();
+  if (lastMessageType === 'image' || msg.includes('[imagem]') || msg.includes('[foto]') || msg === '📷' || msg.startsWith('📷')) return '📷 Foto';
+  if (lastMessageType === 'video' || msg.includes('[vídeo]') || msg.includes('[video]') || msg === '🎥' || msg.startsWith('🎥')) return '🎥 Vídeo';
+  if (lastMessageType === 'audio' || msg.includes('[áudio]') || msg.includes('[audio]') || msg.includes('[mensagem de voz]') || msg === '🎤' || msg.startsWith('🎤')) return '🎤 Áudio';
+  if (lastMessageType === 'sticker' || msg.includes('[figurinha]')) return '🎨 Figurinha';
+  if (msg.includes('[post compartilhado]')) return '🔗 Post';
+  if (msg.includes('[arquivo]') || msg.includes('[documento]')) return '📄 Arquivo';
+  return null;
+}
+
+function getTypingText(typing?: Record<string, any>, currentUid?: string): string | null {
+  if (!typing || !currentUid) return null;
+  const now = Date.now();
+  for (const [uid, ts] of Object.entries(typing)) {
+    if (uid === currentUid) continue;
+    let tsMs = 0;
+    if (ts?.toDate) tsMs = ts.toDate().getTime();
+    else if (ts?.seconds) tsMs = ts.seconds * 1000;
+    else if (typeof ts === 'number') tsMs = ts;
+    if (now - tsMs < 5000) return 'digitando...';
+  }
+  return null;
 }
 
 function SkeletonChat() {
@@ -78,18 +149,18 @@ export default function ChatsScreen() {
       .where('participants', 'array-contains', user.uid)
       .orderBy('lastMessageTime', 'desc')
       .onSnapshot((snapshot) => {
-      const chatsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Chat[];
-      setChats(chatsData);
-      setLoading(false);
-      setError(null);
-    }, (err) => {
-      setLoading(false);
-      setError('Erro ao carregar conversas');
-      console.error('Chats onSnapshot error:', err);
-    });
+        const chatsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Chat[];
+        setChats(chatsData);
+        setLoading(false);
+        setError(null);
+      }, (err) => {
+        setLoading(false);
+        setError('Erro ao carregar conversas');
+        console.error('Chats onSnapshot error:', err);
+      });
   }, [user, retryKey]);
 
   useEffect(() => {
@@ -98,7 +169,6 @@ export default function ChatsScreen() {
       .filter((c) => !c.name)
       .map((c) => c.participants.find((id) => id !== user.uid))
       .filter(Boolean) as string[];
-
     if (otherIds.length === 0) return;
 
     const uniqueIds = [...new Set(otherIds)].filter((id) => !userNames[id]);
@@ -107,16 +177,11 @@ export default function ChatsScreen() {
     const fetchNames = async () => {
       try {
         const nameMap: Record<string, string> = {};
-        const chunks: string[][] = [];
-        for (let i = 0; i < uniqueIds.length; i += 10) {
-          chunks.push(uniqueIds.slice(i, i + 10));
-        }
         const photoMap: Record<string, string> = {};
+        const chunks: string[][] = [];
+        for (let i = 0; i < uniqueIds.length; i += 10) chunks.push(uniqueIds.slice(i, i + 10));
         for (const chunk of chunks) {
-          const snap = await db
-            .collection('users')
-            .where('uid', 'in', chunk)
-            .get();
+          const snap = await db.collection('users').where('uid', 'in', chunk).get();
           snap.docs.forEach((doc) => {
             const data = doc.data();
             nameMap[doc.id] = data.displayName || 'Usuário';
@@ -165,6 +230,7 @@ export default function ChatsScreen() {
   };
 
   const getChatPhoto = (chat: Chat): string | null => {
+    if (chat.photoURL) return chat.photoURL;
     if (chat.name) return null;
     const otherId = chat.participants.find((id) => id !== user?.uid);
     return userPhotos[otherId || ''] || null;
@@ -175,31 +241,180 @@ export default function ChatsScreen() {
     return chat.participants.find((id) => id !== user?.uid) || null;
   };
 
+  const getUnreadCount = (chat: Chat): number => {
+    if (!user) return 0;
+    if (chat.unreadCount?.[user.uid]) return chat.unreadCount[user.uid];
+    if (chat.lastMessageSender === user.uid) return 0;
+    const readBy = chat.lastMessageReadBy || [];
+    if (readBy.includes(user.uid)) return 0;
+    return chat.lastMessage ? 1 : 0;
+  };
+
+  const isReadByPeer = (chat: Chat): boolean => {
+    if (!user) return false;
+    if (chat.lastMessageSender === user.uid) {
+      const readBy = chat.lastMessageReadBy || [];
+      return readBy.some((id) => id !== user.uid);
+    }
+    return false;
+  };
+
+  const handleArchive = (chat: Chat) => {
+    if (!user) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+    db.collection('chats').doc(chat.id).update({
+      hiddenFor: firebase.firestore.FieldValue.arrayUnion(user.uid),
+    }).catch(() => {});
+  };
+
+  const handleToggleMute = (chat: Chat) => {
+    if (!user) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const isMuted = (chat.mutedBy || []).includes(user.uid);
+    db.collection('chats').doc(chat.id).update({
+      mutedBy: isMuted
+        ? firebase.firestore.FieldValue.arrayRemove(user.uid)
+        : firebase.firestore.FieldValue.arrayUnion(user.uid),
+    }).catch(() => {});
+  };
+
+  const handleMarkAsRead = (chat: Chat) => {
+    if (!user) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    db.collection('chats').doc(chat.id).update({
+      [`unreadCount.${user.uid}`]: 0,
+      lastMessageReadBy: firebase.firestore.FieldValue.arrayUnion(user.uid),
+    }).catch(() => {});
+  };
+
+  const handleTogglePin = (chat: Chat) => {
+    if (!user) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const isPinned = chat.pinnedAt?.[user.uid];
+    db.collection('chats').doc(chat.id).update({
+      [`pinnedAt.${user.uid}`]: isPinned ? firebase.firestore.FieldValue.delete() : firebase.firestore.FieldValue.serverTimestamp(),
+    }).catch(() => {});
+  };
+
+  const renderRightActions = (chat: Chat) => {
+    const isMuted = (chat.mutedBy || []).includes(user?.uid || '');
+    return (
+      <View style={styles.swipeActions}>
+        <Pressable
+          onPress={() => handleTogglePin(chat)}
+          style={[styles.swipeAction, { backgroundColor: colors.accent }]}
+        >
+          <Ionicons name="pin-outline" size={20} color={colors.white} />
+          <Text style={styles.swipeActionText}>Fixar</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => handleToggleMute(chat)}
+          style={[styles.swipeAction, { backgroundColor: isMuted ? colors.success : '#F59E0B' }]}
+        >
+          <Ionicons name={isMuted ? 'volume-high-outline' : 'volume-mute-outline'} size={20} color={colors.white} />
+          <Text style={styles.swipeActionText}>{isMuted ? 'Desmutar' : 'Silenciar'}</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => handleArchive(chat)}
+          style={[styles.swipeAction, { backgroundColor: '#6366F1' }]}
+        >
+          <Ionicons name="archive-outline" size={20} color={colors.white} />
+          <Text style={styles.swipeActionText}>Arquivar</Text>
+        </Pressable>
+      </View>
+    );
+  };
+
+  const sortedChats = useMemo(() => {
+    if (!user) return chats;
+    const pinned = chats.filter((c) => c.pinnedAt?.[user.uid]);
+    const unpinned = chats.filter((c) => !c.pinnedAt?.[user.uid]);
+    return [...pinned, ...unpinned];
+  }, [chats, user]);
+
   const renderChat = ({ item }: { item: Chat }) => {
     const otherUid = getOtherUid(item);
     const isOnline = otherUid ? onlineUsers.has(otherUid) : false;
+    const unread = getUnreadCount(item);
+    const isPinned = item.pinnedAt?.[user?.uid || ''];
+    const isMuted = (item.mutedBy || []).includes(user?.uid || '');
+    const typingText = getTypingText(item.typing, user?.uid);
+    const mediaPreview = getMediaPreview(item.lastMessage, item.lastMessageType);
+    const isMe = item.lastMessageSender === user?.uid;
+    const peerName = !item.isGroup && !isMe ? '' : (userNames[item.lastMessageSender || ''] || '');
+    const readByPeer = isReadByPeer(item);
+
+    const preview = typingText
+      ? typingText
+      : mediaPreview
+        ? (item.isGroup && peerName ? `${peerName}: ${mediaPreview}` : mediaPreview)
+        : (item.isGroup && peerName && item.lastMessage ? `${peerName}: ${item.lastMessage}` : item.lastMessage);
+
     return (
-      <Pressable
-        style={({ pressed }) => [styles.chatItem, pressed && { backgroundColor: colors.glassHighlight }]}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-          navigation.navigate('Chat', { chatId: item.id, name: getChatName(item) });
-        }}
-      >
-        <View style={styles.avatarWrap}>
-          <AvatarImage photoURL={getChatPhoto(item)} name={getChatName(item)} size={48} />
-          {isOnline && <View style={styles.onlineDot} />}
-        </View>
-        <View style={styles.chatInfo}>
-          <Text style={styles.chatName}>{getChatName(item)}</Text>
-          {item.lastMessage && (
-            <Text style={styles.lastMessage} numberOfLines={1}>
-              {item.lastMessage}
+      <Swipeable renderRightActions={() => renderRightActions(item)} overshootRight={false}>
+        <Pressable
+          style={({ pressed }) => [styles.chatItem, pressed && { backgroundColor: colors.glassHighlight }]}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+            navigation.navigate('Chat', { chatId: item.id, name: getChatName(item), isGroup: item.isGroup });
+          }}
+          onLongPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+            Alert.alert(getChatName(item), '', [
+              { text: 'Cancelar', style: 'cancel' },
+              { text: isPinned ? 'Desafixar' : 'Fixar no topo', onPress: () => handleTogglePin(item) },
+              { text: isMuted ? 'Ativar notificações' : 'Silenciar', onPress: () => handleToggleMute(item) },
+              { text: 'Marcar como lido', onPress: () => handleMarkAsRead(item) },
+            ]);
+          }}
+        >
+          <View style={styles.avatarWrap}>
+            <AvatarImage photoURL={getChatPhoto(item)} name={getChatName(item)} size={48} />
+            {isOnline && <View style={styles.onlineDot} />}
+          </View>
+          <View style={styles.chatInfo}>
+            <View style={styles.chatNameRow}>
+              <Text style={[styles.chatName, unread > 0 && { fontWeight: '800' }]} numberOfLines={1}>
+                {getChatName(item)}
+              </Text>
+              {isPinned && <Ionicons name="pin" size={12} color={colors.accent} style={{ marginLeft: 4 }} />}
+              {isMuted && <Ionicons name="volume-mute" size={14} color={colors.textMuted} style={{ marginLeft: 4 }} />}
+            </View>
+            <View style={styles.previewRow}>
+              {typingText ? (
+                <Text style={[styles.lastMessage, { color: colors.accent, fontStyle: 'italic' }]} numberOfLines={1}>
+                  {typingText}
+                </Text>
+              ) : (
+                <Text
+                  style={[styles.lastMessage, unread > 0 && { color: colors.text, fontWeight: '600' }]}
+                  numberOfLines={1}
+                >
+                  {preview}
+                </Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.chatMeta}>
+            <Text style={[styles.timestamp, unread > 0 && { color: colors.accent }]}>
+              {formatChatTime(item.lastMessageTime)}
             </Text>
-          )}
-        </View>
-        <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
-      </Pressable>
+            {unread > 0 && (
+              <View style={styles.unreadBadge}>
+                <Text style={styles.unreadText}>{unread > 99 ? '99+' : unread}</Text>
+              </View>
+            )}
+            {!unread && isMe && item.lastMessage && (
+              <Ionicons
+                name={readByPeer ? 'checkmark-done' : 'checkmark'}
+                size={16}
+                color={readByPeer ? colors.accent : colors.textMuted}
+                style={{ marginTop: 2 }}
+              />
+            )}
+          </View>
+        </Pressable>
+      </Swipeable>
     );
   };
 
@@ -233,10 +448,11 @@ export default function ChatsScreen() {
         </View>
       ) : (
         <FlatList
-          data={chats}
+          data={sortedChats}
           keyExtractor={(item) => item.id}
           renderItem={renderChat}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />}
+          contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
       <Pressable
@@ -253,10 +469,7 @@ export default function ChatsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.bg,
-  },
+  container: { flex: 1, backgroundColor: colors.bg },
   chatItem: {
     flexDirection: 'row',
     padding: 16,
@@ -282,19 +495,31 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.bg,
   },
-  chatInfo: {
-    flex: 1,
+  chatInfo: { flex: 1 },
+  chatNameRow: { flexDirection: 'row', alignItems: 'center' },
+  chatName: { color: colors.text, fontSize: 16, fontWeight: '600', flex: 1 },
+  previewRow: { flexDirection: 'row', alignItems: 'center', marginTop: 2 },
+  lastMessage: { color: colors.textMuted, fontSize: 14, flex: 1 },
+  chatMeta: { alignItems: 'flex-end', marginLeft: 8, gap: 4 },
+  timestamp: { color: colors.textMuted, fontSize: 12 },
+  unreadBadge: {
+    backgroundColor: colors.accent,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6,
   },
-  chatName: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: '600',
+  unreadText: { color: colors.white, fontSize: 11, fontWeight: '700' },
+  swipeActions: { flexDirection: 'row' },
+  swipeAction: {
+    width: 72,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 4,
   },
-  lastMessage: {
-    color: colors.textMuted,
-    fontSize: 14,
-    marginTop: 2,
-  },
+  swipeActionText: { color: colors.white, fontSize: 11, fontWeight: '600' },
   empty: {
     flex: 1,
     justifyContent: 'center',
@@ -311,16 +536,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 8,
   },
-  emptyText: {
-    color: colors.text,
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  emptySubtext: {
-    color: colors.textMuted,
-    fontSize: 14,
-    textAlign: 'center',
-  },
+  emptyText: { color: colors.text, fontSize: 18, fontWeight: '600' },
+  emptySubtext: { color: colors.textMuted, fontSize: 14, textAlign: 'center' },
   fab: {
     position: 'absolute',
     right: 20,
@@ -337,17 +554,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-  },
-  errorText: {
-    color: colors.destructive,
-    fontSize: 15,
-    marginTop: 12,
-  },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 8 },
+  errorText: { color: colors.destructive, fontSize: 15, marginTop: 12 },
   retryButton: {
     marginTop: 8,
     paddingHorizontal: 16,
@@ -355,11 +563,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.elevated,
     borderRadius: 8,
   },
-  retryText: {
-    color: colors.accent,
-    fontSize: 14,
-    fontWeight: '600',
-  },
+  retryText: { color: colors.accent, fontSize: 14, fontWeight: '600' },
   skeletonCircle: {
     width: 48,
     height: 48,
